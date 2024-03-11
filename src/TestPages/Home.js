@@ -18,10 +18,18 @@ function Home() {
           <Link  to="/money"><h1>Click to go to Money Calculator</h1></Link>
         </div>
         <div className="selection">
-          <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><h1 className='choice'>Google</h1></a>
+          <div>
+          <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><h1 className='choice'>Google </h1></a>
+          </div>
+          <div>
           <h1 className='choice'>Projects</h1>
+          </div>
+          <div>
           <h1 className='choice'>Templates</h1>
+          </div>
+          <div>
           <h1 className='choice'>Photography</h1>
+          </div>
         </div>
       </div>
     </div>
