@@ -1,55 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #92CA9B;
-  }
-  
-  .container {
+.container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 100px auto;
     padding: 20px;
-  }
-  
-  .header {
-    background-color: #f2f2f2;
-    padding: 20px;
-    border-bottom: 1px solid #ccc;
     text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for container */
   }
   
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4285f4;
+  .info {
+    display: flex;
   }
-  
-  .content {
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 20px;
-  }
-  
-  .welcome-message {
-    font-size: 24px;
-    color: #333;
+
+  .biography{
+    flex: 2;
+    font-size: 9px;
+    margin: 1vh 10vw;
+    border-radius: 10px;
+    /* background-color:#473a39; */
     margin-bottom: 20px;
   }
   
-  .description {
-    color: #666;
-    margin-bottom: 20px;
+  .choice{
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    display: inline-block; /* Ensure the container only takes up as much width as its content */
+    transition: all 0.15s ease; /* Add transition for smooth animation */
+    text-decoration: none; /* Removes the underline */
+    color: #45474D; /* Heading color */
+  }
+
+  .choice:hover{
+    transform: scale(1.2);
+  }
+
+  .selection{
+    flex: 1;
+    margin: 1vh 10vw;
+    border-radius: 10px;
+    /* background-color:#FFA69E; */
+    font-size:18px;
+  }
+
+  h1 {
+    color: #45474D; /* Heading color */
   }
   
-  .footer {
-    background-color: #f2f2f2;
-    padding: 20px;
-    text-align: center;
-    margin-top: 20px;
+  p {
+    color: #666666; /* Paragraph color */
   }
   
-  .footer p {
-    color: #666;
+  .name{
+    margin: 10vh 10vw
   }
+
+  .button {
+    background-color: #FF7E6B; /* Button background color */
+    color: #ffffff; /* Button text color */
+    padding: 10px 20px;
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Add some rounding to the button */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for button color */
+  }
+  
+  .button:hover {
+    background-color: #FFA69E; /* Button background color on hover */
+  }
+
