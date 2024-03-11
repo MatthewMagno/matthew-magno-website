@@ -68,3 +68,9 @@
     background-color: #FFA69E; /* Button background color on hover */
   }
 
+  @media screen and (max-width: 600px) {
+    .info {
+      flex-direction: column; /* Stack items vertically on small screens */
+    }
+  }
+  
