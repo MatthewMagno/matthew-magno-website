@@ -27,6 +27,7 @@
     transition: all 0.15s ease; /* Add transition for smooth animation */
     text-decoration: none; /* Removes the underline */
     color: #45474D; /* Heading color */
+    flex: 1;
   }
 
   .choice:hover{
