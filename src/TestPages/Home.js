@@ -1,37 +1,99 @@
 import React from 'react';
-import './Home.css';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import './Home.css';
+
+const featuredProjects = [
+  {
+    title: 'Money Calculator API + UI',
+    description:
+      'A full-stack utility for calculating markup percentages, built as a practical tool to support small business pricing decisions.',
+    tags: ['React', 'REST API', 'Full-Stack'],
+    link: '/money'
+  },
+  {
+    title: 'Recruiter-Ready Portfolio Experience',
+    description:
+      'This website was redesigned to communicate my technical strengths, product mindset, and impact in less than 60 seconds.',
+    tags: ['UI/UX', 'Branding', 'Storytelling']
+  },
+  {
+    title: 'Future Build: AI Workflow Assistant',
+    description:
+      'An upcoming project focused on reducing repetitive workflows through LLM-powered automation and thoughtful human-in-the-loop controls.',
+    tags: ['AI', 'Automation', 'Product Thinking']
+  }
+];
+
+const skillGroups = [
+  {
+    category: 'Frontend',
+    items: 'React, JavaScript (ES6+), HTML5, CSS3, Responsive Design'
+  },
+  {
+    category: 'Backend',
+    items: 'Node.js, REST API design, service integration'
+  },
+  {
+    category: 'Engineering',
+    items: 'Debugging, system thinking, rapid prototyping, cross-functional collaboration'
+  }
+];
 
 function Home() {
-
-  const [one, setOne] = useState('');
-  const [two, setTwo] = useState('');
-  const [result, setResult] = useState(null);
-
   return (
-    <div>
-      <div className="info">
-        <div className="biography">
-          <h1>Matthew Magno is a visionary software engineer with a passion for pushing the boundaries of technology. From an early age, he exhibited a keen interest in computers and programming, spending countless hours tinkering with code and exploring the digital realm. His insatiable curiosity and drive for excellence have propelled him to become a prominent figure in the tech industry.</h1>
-          <h1>With a knack for problem-solving and a creative mindset, Matthew has led numerous innovative projects that have revolutionized the way we interact with technology. Whether it's developing cutting-edge applications or diving into the depths of machine learning, he approaches each challenge with determination and a thirst for knowledge. Outside of the digital realm, Matthew enjoys exploring the great outdoors, indulging in culinary adventures, and fostering connections with like-minded individuals. As he continues to make his mark on the world of technology, Matthew Magno remains dedicated to pushing boundaries, inspiring others, and shaping the future of innovation.</h1>
-          <Link  to="/money"><h1>Click to go to Money Calculator</h1></Link>
+    <div className="portfolio-page">
+      <section className="hero-card">
+        <p className="eyebrow">Open to software engineering opportunities</p>
+        <h1>Hi, I&apos;m Matthew — I build useful, polished digital products.</h1>
+        <p className="hero-summary">
+          I enjoy turning complex ideas into intuitive experiences. My work blends clean implementation,
+          practical business value, and relentless curiosity.
+        </p>
+        <div className="hero-cta">
+          <a href="mailto:matthew@example.com" className="btn btn-primary">Contact Me</a>
+          <a href="#projects" className="btn btn-secondary">View Work</a>
         </div>
-        <div className="selection">
-          <div>
-          <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><h1 className='choice'>Google </h1></a>
-          </div>
-          <div>
-          <h1 className='choice'>Projects</h1>
-          </div>
-          <div>
-          <h1 className='choice'>Templates</h1>
-          </div>
-          <div>
-          <h1 className='choice'>Photography</h1>
-          </div>
+      </section>
+
+      <section id="projects" className="section-card">
+        <div className="section-heading">
+          <h2>Featured Work</h2>
+          <p>Projects that show how I think, build, and deliver.</p>
         </div>
-      </div>
+        <div className="project-grid">
+          {featuredProjects.map((project) => (
+            <article className="project-card" key={project.title}>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <div className="tag-row">
+                {project.tags.map((tag) => (
+                  <span className="tag" key={tag}>{tag}</span>
+                ))}
+              </div>
+              {project.link ? (
+                <Link to={project.link} className="inline-link">Explore project →</Link>
+              ) : (
+                <span className="inline-link muted">Case study coming soon</span>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-card">
+        <div className="section-heading">
+          <h2>What I Bring</h2>
+          <p>I focus on impact, communication, and engineering quality.</p>
+        </div>
+        <div className="skills-grid">
+          {skillGroups.map((group) => (
+            <article className="skill-card" key={group.category}>
+              <h3>{group.category}</h3>
+              <p>{group.items}</p>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
