@@ -1,7 +1,7 @@
 import './App.css';
 import './AppRouter.css';
 import React from 'react';
-import Home from './TestPages/Home';
+import AppRouter from './AppRouter';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <span className="brand-title">Matthew Magno</span>
         <span className="brand-subtitle">Software Engineer • Product Builder • Problem Solver</span>
       </header>
-      <Home />
+      <AppRouter />
     </div>
   );
 }
