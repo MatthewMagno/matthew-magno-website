@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
 const featuredProjects = [
@@ -7,7 +8,7 @@ const featuredProjects = [
     description:
       'A full-stack utility for calculating markup percentages, built as a practical tool to support small business pricing decisions.',
     tags: ['React', 'REST API', 'Full-Stack'],
-    href: 'https://github.com/'
+    link: '/money'
   },
   {
     title: 'Recruiter-Ready Portfolio Experience',
@@ -24,9 +25,18 @@ const featuredProjects = [
 ];
 
 const skillGroups = [
-  { category: 'Frontend', items: 'React, JavaScript (ES6+), HTML5, CSS3, Responsive Design' },
-  { category: 'Backend', items: 'Node.js, REST API design, service integration' },
-  { category: 'Engineering', items: 'Debugging, system thinking, rapid prototyping, cross-functional collaboration' }
+  {
+    category: 'Frontend',
+    items: 'React, JavaScript (ES6+), HTML5, CSS3, Responsive Design'
+  },
+  {
+    category: 'Backend',
+    items: 'Node.js, REST API design, service integration'
+  },
+  {
+    category: 'Engineering',
+    items: 'Debugging, system thinking, rapid prototyping, cross-functional collaboration'
+  }
 ];
 
 function Home() {
@@ -60,8 +70,8 @@ function Home() {
                   <span className="tag" key={tag}>{tag}</span>
                 ))}
               </div>
-              {project.href ? (
-                <a href={project.href} className="inline-link" target="_blank" rel="noreferrer">View repository →</a>
+              {project.link ? (
+                <Link to={project.link} className="inline-link">Explore project →</Link>
               ) : (
                 <span className="inline-link muted">Case study coming soon</span>
               )}

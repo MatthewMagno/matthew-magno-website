@@ -1,4 +1,6 @@
 import React from 'react';
+import './Home.css';
+import { useState } from 'react';
 
 function MoneyCalc() {
   return (
