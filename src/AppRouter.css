@@ -1,5 +1,26 @@
-.name {
-     text-decoration: none; /* Removes the underline */
-     margin-top: 2vh;
-     margin-bottom: 2vh;
+.site-shell {
+  min-height: 100vh;
+}
+
+.site-header {
+  width: min(1100px, 90vw);
+  margin: 2rem auto 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.brand-link {
+  text-decoration: none;
+}
+
+.brand-title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: #132238;
+}
+
+.brand-subtitle {
+  color: #4f5e74;
+  font-size: 0.95rem;
 }

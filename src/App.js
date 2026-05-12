@@ -1,17 +1,16 @@
 import './App.css';
+import './AppRouter.css';
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
 import Home from './TestPages/Home';
-import About from './TestPages/About';
-import Contact from './TestPages/Contact';
-import AppRouter from './AppRouter';
 
 function App() {
   return (
-    <div>
-    <div className="app">
-      <AppRouter />
-    </div>
+    <div className="app site-shell">
+      <header className="site-header">
+        <span className="brand-title">Matthew Magno</span>
+        <span className="brand-subtitle">Software Engineer • Product Builder • Problem Solver</span>
+      </header>
+      <Home />
     </div>
   );
 }
