@@ -26,8 +26,8 @@ export default function Hero({ onOpenApp }) {
         </h1>
 
         <p className="hero-lede reveal" style={{ '--i': 2 }}>
-          Software engineer at JPMorganChase in the Bay Area. On nights and weekends I design, build
-          and ship my own iPhone apps.
+          Software engineer at JPMorganChase in the Bay Area. On nights and weekends I ship apps that
+          make my own life more productive.
         </p>
 
         <div className="hero-actions reveal" style={{ '--i': 3 }}>

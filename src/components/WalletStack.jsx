@@ -6,8 +6,8 @@ export default function WalletStack({ openId, onOpen }) {
   return (
     <section className="section" id="apps" aria-labelledby="apps-title">
       <div className="section-head">
-        <h2 id="apps-title">Apps I’ve built</h2>
-        <p>Designed, engineered and shipped on my own time. Tap a card to open it.</p>
+        <h2 id="apps-title">Apps I built for myself</h2>
+        <p>Each one started as a problem in my own life. Tap a card to open it.</p>
       </div>
 
       <div className="wallet">

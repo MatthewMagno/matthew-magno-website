@@ -27,9 +27,10 @@ export default function About() {
             doesn’t stall on a sign-off.
           </p>
           <p>
-            Outside work I build iPhone apps end to end, from the first sketch to App Store review. Lately
-            that means designing products around AI agents, with real guardrails, so they can be trusted
-            with someone’s inbox or bookings.
+            Outside work I build apps to make my own life more productive: one for splitting trip costs with
+            friends, one for planning dates, one that keeps every booking in a single place. I design and
+            build each one end to end, and lately that means putting AI agents to work with real
+            guardrails around them.
           </p>
         </div>
 
