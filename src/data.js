@@ -45,7 +45,6 @@ export const apps = [
     ],
     facts: [
       { value: '1.7', label: 'current version' },
-      { value: '790+', label: 'commits' },
     ],
     stack: ['React Native', 'Expo', 'Node.js', 'Fly.io'],
     link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/memori-for-two/id6792543667' },
@@ -232,13 +231,6 @@ export const school = [
         title: 'B.S. Chemical Engineering',
         dates: 'Graduated Dec 2022',
         points: [],
-      },
-      {
-        title: 'Historian, Philippine Student Association',
-        dates: '2019 – 2020',
-        points: [
-          'Part of the team planning a $150,000 statewide collegiate competition for an expected 5,000+ attendees.',
-        ],
       },
     ],
   },
