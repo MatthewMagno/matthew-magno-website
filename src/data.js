@@ -139,7 +139,7 @@ export const work = [
   },
   {
     org: 'The Chemours Company',
-    field: 'Plant engineering',
+    field: 'Chemical engineering',
     place: 'Belle, West Virginia',
     tint: '#fff',
     logo: './logos/chemours.png',
@@ -217,7 +217,7 @@ export const fields = [
   { name: 'Software engineering', color: '#007aff' },
   { name: 'Research', color: '#af52de' },
   { name: 'Marketing', color: '#34c759' },
-  { name: 'Plant engineering', color: '#30b0c7' },
+  { name: 'Chemical engineering', color: '#30b0c7' },
   { name: 'Project management', color: '#ff9f0a' },
 ];
 
