@@ -4,8 +4,7 @@ const FACTS = [
   { label: 'Studied', value: 'Chemical engineering' },
   { label: 'Day job', value: 'Software Engineer II, JPMorganChase' },
   { label: 'Certified', value: 'AWS Cloud Practitioner' },
-  { label: 'Research', value: 'Aggie Research Scholar, 2019' },
-  { label: 'Building now', value: 'Reservations' },
+  { label: 'Building now', value: 'Productivity Applications' },
 ];
 
 export default function About() {
