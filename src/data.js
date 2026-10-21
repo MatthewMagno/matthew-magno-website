@@ -149,13 +149,14 @@ export const work = [
     ],
   },
   {
-    org: 'Texas A&M, Nutrition and Food Science',
+    org: 'Texas A&M University',
     field: 'Research',
     place: 'College Station',
     tint: '#8e2430',
     roles: [
       {
         title: 'Lead Undergraduate Research Assistant',
+        team: 'Nutrition and Food Science',
         dates: '2020',
         points: [
           'Led weekly research meetings on how diet affected 17th-century European sailors, physically and mentally.',
@@ -165,27 +166,21 @@ export const work = [
       },
       {
         title: 'Undergraduate Research Assistant',
+        team: 'College of Engineering',
+        dates: '2020',
+        points: [
+          'Researched biofuel alternatives made by fermenting organic material, contributing to MixAlco, a patented process for alcohol-based fuel.',
+          'Adapted inoculum on plant biomass to measure acid production, and modeled particle distribution to estimate conversion efficiency.',
+        ],
+      },
+      {
+        title: 'Undergraduate Research Assistant',
+        team: 'Nutrition and Food Science',
         dates: '2019',
         points: [
           'Used gas chromatography, DNA sequencing and Soxhlet extraction to measure bacteria and minerals in foods preserved with 17th-century methods.',
           'Ran the Institute of Nautical Archaeology’s blog, editing and publishing every article.',
           'Presented twice at Texas A&M’s Research Symposium. Named a Spring 2019 Aggie Research Scholar.',
-        ],
-      },
-    ],
-  },
-  {
-    org: 'Texas A&M, College of Engineering',
-    field: 'Research',
-    place: 'College Station',
-    tint: '#8e2430',
-    roles: [
-      {
-        title: 'Undergraduate Research Assistant',
-        dates: '2020',
-        points: [
-          'Researched biofuel alternatives made by fermenting organic material, contributing to MixAlco, a patented process for alcohol-based fuel.',
-          'Adapted inoculum on plant biomass to measure acid production, and modeled particle distribution to estimate conversion efficiency.',
         ],
       },
     ],
