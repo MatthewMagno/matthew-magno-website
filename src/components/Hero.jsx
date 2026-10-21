@@ -24,7 +24,7 @@ export default function Hero() {
           <span className="reveal" style={{ '--i': 1 }}>Magno</span>
         </h1>
 
-        <p className="hero-role reveal" style={{ '--i': 2 }}>Software Engineer at JPMorganChase</p>
+        <p className="hero-role reveal" style={{ '--i': 2 }}>Backend-leaning software engineer at JPMorganChase</p>
         <p className="hero-prev reveal" style={{ '--i': 2 }}>Previously at Wells Fargo, Tillamook and Chemours</p>
 
         <dl className="hero-facts reveal" style={{ '--i': 3 }}>

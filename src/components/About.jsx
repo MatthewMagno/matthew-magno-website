@@ -1,8 +1,7 @@
 import React from 'react';
 
 const FACTS = [
-  { label: 'Based in', value: 'San Francisco' },
-  { label: 'Studied', value: 'Chemical engineering, Texas A&M' },
+  { label: 'Studied', value: 'Chemical engineering, Texas A&M University' },
   { label: 'Day job', value: 'Software Engineer II, JPMorganChase' },
   { label: 'Certified', value: 'AWS Cloud Practitioner' },
   { label: 'Research', value: 'Aggie Research Scholar, 2019' },
@@ -19,14 +18,14 @@ export default function About() {
       <div className="about">
         <div className="about-story">
           <p>
-            I studied chemical engineering at Texas A&M, spent two years in research labs (one of them on
-            what 17th-century sailors ate), and interned at a chemical plant, a creamery and a bank. The
-            bank is where I wrote my first production code, and that’s what stuck.
+            I’m a backend-leaning engineer at JPMorganChase. I started in chemical engineering because I
+            wanted to change the world, and moved to software because it lets me do that faster, and for
+            more people.
           </p>
           <p>
-            Now I work on lending software at JPMorganChase, where I like the unglamorous wins: an index
-            in the right place, a vendor dependency replaced by something my team owns, a sprint that
-            doesn’t stall on a sign-off.
+            I work on commercial real estate lending software, where I like the unglamorous wins: an
+            index in the right place, a vendor dependency replaced by something my team owns, a sprint
+            that doesn’t stall on a sign-off.
           </p>
           <p>
             Outside work I build apps to make my own life more productive: one for splitting trip costs with
