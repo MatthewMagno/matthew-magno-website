@@ -72,6 +72,7 @@ export const apps = [
 export const work = [
   {
     org: 'JPMorganChase',
+    field: 'Software engineering',
     place: 'Palo Alto',
     tint: '#5e5ce6',
     roles: [
@@ -98,6 +99,7 @@ export const work = [
   },
   {
     org: 'Wells Fargo',
+    field: 'Software engineering',
     place: 'San Francisco',
     tint: '#ff453a',
     roles: [
@@ -113,6 +115,7 @@ export const work = [
   },
   {
     org: 'Tillamook',
+    field: 'Project management',
     place: 'New York',
     tint: '#ff9f0a',
     roles: [
@@ -130,6 +133,7 @@ export const work = [
   },
   {
     org: 'The Chemours Company',
+    field: 'Plant engineering',
     place: 'Belle, West Virginia',
     tint: '#30b0c7',
     roles: [
@@ -146,6 +150,7 @@ export const work = [
   },
   {
     org: 'Texas A&M, Nutrition and Food Science',
+    field: 'Research',
     place: 'College Station',
     tint: '#8e2430',
     roles: [
@@ -171,6 +176,7 @@ export const work = [
   },
   {
     org: 'Texas A&M, College of Engineering',
+    field: 'Research',
     place: 'College Station',
     tint: '#8e2430',
     roles: [
@@ -186,6 +192,7 @@ export const work = [
   },
   {
     org: 'ProGoes Probiotics',
+    field: 'Marketing',
     place: 'College Station',
     tint: '#34c759',
     roles: [
@@ -200,6 +207,26 @@ export const work = [
       },
     ],
   },
+];
+
+// Every job as a span on the timeline, grouped by the kind of work. Months are 1–12.
+export const fields = [
+  { name: 'Software engineering', color: '#007aff', spans: [
+    { org: 'Wells Fargo', from: [2022, 6], to: [2022, 8] },
+    { org: 'JPMorganChase', from: [2023, 9], to: null },
+  ] },
+  { name: 'Research', color: '#af52de', spans: [
+    { org: 'Texas A&M research labs', from: [2019, 1], to: [2020, 12] },
+  ] },
+  { name: 'Marketing', color: '#34c759', spans: [
+    { org: 'ProGoes Probiotics', from: [2019, 8], to: [2020, 1] },
+  ] },
+  { name: 'Plant engineering', color: '#30b0c7', spans: [
+    { org: 'Chemours', from: [2021, 1], to: [2021, 5] },
+  ] },
+  { name: 'Project management', color: '#ff9f0a', spans: [
+    { org: 'Tillamook', from: [2021, 6], to: [2021, 8] },
+  ] },
 ];
 
 export const school = [

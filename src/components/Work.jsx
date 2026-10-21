@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { school, toolbox, work } from '../data.js';
+import { fields, school, toolbox, work } from '../data.js';
 
 const TABS = [
   { id: 'work', label: 'Experience', items: work },
@@ -14,9 +14,10 @@ export default function Work() {
     <section className="section" id="work" aria-labelledby="work-title">
       <div className="section-head">
         <h2 id="work-title">Work</h2>
-        <p>Three years as a software engineer at JPMorganChase, and the internships and research that came before it.</p>
+        <p>Software, research labs, a chemical plant, product development and a startup’s marketing team. I’ve learned something different from each.</p>
       </div>
 
+      <RangeChart />
       <SpeedupCard />
 
       <div className="segmented" role="tablist" aria-label="Show">
@@ -40,7 +41,7 @@ export default function Work() {
           <div className="group" key={entry.org}>
             <p className="group-header">
               {entry.org}
-              <span>{entry.place}</span>
+              <span>{entry.field ?? entry.place}</span>
             </p>
             <ul className="list">
               {entry.roles.map((role) => (
@@ -149,6 +150,83 @@ function SpeedupCard() {
           <span className="bar bar-after" style={{ '--w': 35 / 86.4 }} />
           <span className="bar-value">35 s</span>
         </div>
+      </div>
+    </figure>
+  );
+}
+
+// Every job on one timeline, one lane per kind of work, so the range reads at a glance.
+const START = 2019;
+const NOW = [2026, 10];
+const END = 2027;
+
+function monthsFrom([y, m]) {
+  return (y - START) * 12 + (m - 1);
+}
+
+function RangeChart() {
+  const ref = useRef(null);
+  const [seen, setSeen] = useState(false);
+  const total = (END - START) * 12;
+  const years = Array.from({ length: END - START }, (_, i) => START + i);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSeen(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <figure className={`range ${seen ? 'is-seen' : ''}`} ref={ref}>
+      <figcaption>
+        <span className="range-title">{['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven'][fields.length - 1] ?? fields.length} kinds of work since 2019</span>
+        <span className="range-caption">Each bar is a job. Software is where I landed.</span>
+      </figcaption>
+
+      <div className="range-chart">
+        <div className="range-years" aria-hidden="true">
+          {years.map((y) => (
+            <span key={y} style={{ left: `${((y - START) * 12 / total) * 100}%` }}>{y}</span>
+          ))}
+        </div>
+        <ul className="range-lanes">
+          {fields.map((f, lane) => (
+            <li key={f.name} className="range-lane">
+              <span className="range-lane-name">{f.name}</span>
+              <span className="range-track">
+                {f.spans.map((sp, i) => {
+                  const a = monthsFrom(sp.from);
+                  const b = monthsFrom(sp.to ?? NOW) + 1;
+                  return (
+                    <span
+                      key={sp.org}
+                      className={`range-bar ${sp.to ? '' : 'is-current'} ${b - a >= 18 ? 'is-wide' : ''}`}
+                      style={{
+                        left: `${(a / total) * 100}%`,
+                        width: `${((b - a) / total) * 100}%`,
+                        '--c': f.color,
+                        '--d': `${lane * 90 + i * 60}ms`,
+                      }}
+                      title={sp.org}
+                    >
+                      <span className="range-bar-label">{sp.org}</span>
+                    </span>
+                  );
+                })}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </figure>
   );

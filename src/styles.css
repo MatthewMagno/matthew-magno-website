@@ -757,6 +757,120 @@ img {
   color: var(--label);
 }
 
+/* ---------- Work: range timeline ---------- */
+
+.range {
+  --name-col: 172px;
+  margin: 0 0 16px;
+  padding: 32px;
+  border-radius: 24px;
+  background: var(--surface);
+}
+
+.range figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.range-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.4vw, 34px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.range-caption {
+  font-size: 15px;
+  color: var(--label-2);
+}
+
+.range-years {
+  position: relative;
+  height: 20px;
+  margin-left: var(--name-col);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--label-2);
+}
+
+.range-years span {
+  position: absolute;
+  top: 0;
+  transform: translateX(4px);
+}
+
+.range-lanes {
+  display: grid;
+}
+
+.range-lane {
+  display: grid;
+  grid-template-columns: var(--name-col) minmax(0, 1fr);
+  align-items: end;
+  min-height: 52px;
+}
+
+.range-lane-name {
+  padding-bottom: 4px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.range-track {
+  position: relative;
+  height: 52px;
+  background-image: linear-gradient(to right, var(--separator) 1px, transparent 1px);
+  background-size: calc(100% / 8) 100%;
+}
+
+.range-bar {
+  position: absolute;
+  bottom: 6px;
+  height: 24px;
+  min-width: 6px;
+  border-radius: 7px;
+  background: var(--c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--spring) var(--d);
+}
+
+.range-bar.is-current {
+  border-radius: 7px 3px 3px 7px;
+  background: linear-gradient(to right, var(--c) 70%, color-mix(in srgb, var(--c) 35%, transparent));
+}
+
+.range-bar-label {
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 0;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--label-2);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease) calc(var(--d) + 0.4s);
+}
+
+.range-bar.is-wide .range-bar-label {
+  bottom: auto;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #fff;
+}
+
+.range.is-seen .range-bar {
+  transform: scaleX(1);
+}
+
+.range.is-seen .range-bar-label {
+  opacity: 1;
+}
+
 /* ---------- Work: highlight chart ---------- */
 
 .speedup {
@@ -1217,6 +1331,37 @@ button.row:active {
   .speedup {
     gap: 24px;
     padding: 24px;
+  }
+
+  .range {
+    --name-col: 0px;
+    padding: 24px 20px;
+  }
+
+  .range-lane {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .range-lane-name {
+    padding: 14px 0 0;
+    font-size: 13px;
+    color: var(--label-2);
+  }
+
+  .range-lane-name {
+    padding-top: 18px;
+  }
+
+  .range-track {
+    height: 54px;
+  }
+
+  .range-bar.is-wide:not(.is-current) .range-bar-label {
+    top: auto;
+    bottom: calc(100% + 3px);
+    left: 0;
+    transform: none;
+    color: var(--label-2);
   }
 }
 
