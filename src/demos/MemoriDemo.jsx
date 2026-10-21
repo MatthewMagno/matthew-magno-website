@@ -1,210 +1,591 @@
-import React, { useState } from 'react';
-import { PhoneFrame, Stack, useStack } from './Phone.jsx';
+import React, { useEffect, useState } from 'react';
+import { PhoneFrame } from './Phone.jsx';
+
+// Mirrors the Memori app (date-jar-app) as it ships: the Jar tab with the
+// "your last pull" card, the + menu, the new-idea and idea sheets, making a
+// memory, the sealed stamp, the Log shoebox, a held print, and the Us tab.
+// Sample data is the app's own seeded demo couple, Mia & Sam.
 
 const photo = (name) => `./demo/memori-${name}.jpg`;
 
-const SLIPS = [
-  { id: 's1', title: 'Try the new ramen place', tags: ['$$'], by: 'Mia' },
-  { id: 's2', title: 'Ceramics class downtown', tags: ['two hours', 'wheel'], by: 'you' },
-  { id: 's3', title: 'Drive out to the lookout', tags: ['free', 'outdoors'], by: 'Mia' },
-  { id: 's4', title: 'Rainy-day bookshop crawl', tags: ['cozy'], by: 'you' },
-  { id: 's5', title: 'The rooftop tacos place', tags: ['$$', 'Friday'], by: 'Mia' },
+const ENERGY = ['cozy', 'out & about', 'big night', 'active'];
+const SPEND = ['free', '$', '$$', '$$$'];
+const WEATHER = ['indoors', 'outdoors', 'hot', 'cold'];
+const FOOD = ['italian', 'mexican', 'asian', 'american', 'coffee', 'dessert', 'drinks'];
+const DURATION = ['quick', 'evening', 'half-day+', 'weekend'];
+const CATEGORIES = [
+  { key: 'energy', label: 'Energy', options: ENERGY },
+  { key: 'spend', label: 'Price', options: SPEND },
+  { key: 'weather', label: 'Weather', options: WEATHER },
+  { key: 'food', label: 'Food', options: FOOD },
+  { key: 'duration', label: 'Time', options: DURATION },
 ];
+
+const slip = (id, title, energy, spend, weather, by, extra = {}) => ({ id, title, energy, spend, weather, by, ...extra });
+
+const SLIPS = [
+  slip('golf', 'That rooftop mini-golf place', ['out & about'], ['$$'], ['outdoors'], 'You', { tossed: 'September' }),
+  slip('drivein', 'Drive-in movie with the good blankets', ['cozy'], ['free'], ['outdoors'], 'Sam', { link: true, tossed: 'September' }),
+  slip('drivein2', 'Drive-in movie, any movie', ['cozy'], ['free'], ['outdoors'], 'You', { tossed: 'August' }),
+  slip('omakase', 'Omakase counter for the anniversary', ['big night'], ['$$$'], ['indoors'], 'Sam', { tossed: 'August' }),
+  slip('market', 'Night market food crawl', ['big night'], ['$$'], ['outdoors'], 'Sam', { link: true, tossed: 'July', dust: '3 months', dustAt: 5 }),
+  slip('pasta', 'Learn to make pasta from scratch', ['cozy'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 3 }),
+  slip('books', 'Bookstore date — pick each other’s next read', ['out & about'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 4 }),
+  slip('ramen', 'That tiny ramen bar on 5th', ['out & about'], ['$$'], ['indoors'], 'You', { tossed: 'April', dust: '6 months', dustAt: 2 }),
+  slip('firstmeal', 'Cook the first meal you ever ate together', ['cozy'], ['$'], ['indoors'], 'starter set', { tossed: 'March', dust: '7 months', dustAt: 1 }),
+];
+
+const LAST_PULL = slip('picnic', 'Sunset picnic at Miller Point', ['cozy'], ['free'], ['outdoors'], 'Sam');
+
+const memory = (no, title, month, day, year, img, extra = {}) => ({ id: `m${no}`, no, title, month, day, year, img, ...extra });
 
 const MEMORIES = [
-  { id: 'm6', no: 6, img: photo('pier'), caption: 'the pier, freezing', month: 'August', date: 'Aug 30' },
-  { id: 'm5', no: 5, img: photo('ramen'), caption: 'ramen, 11pm', month: 'August', date: 'Aug 14' },
-  { id: 'm4', no: 4, img: photo('trees'), caption: 'the long walk', month: 'July', date: 'Jul 26' },
-  { id: 'm3', no: 3, img: photo('flowers'), caption: 'flower market haul', month: 'July', date: 'Jul 12' },
-  { id: 'm2', no: 2, img: photo('road'), caption: 'back roads home', month: 'July', date: 'Jul 3' },
+  memory(8, 'That tiny ramen bar on 5th', 'June', 2, 2026, photo('ramen')),
+  memory(7, 'Farmers market breakfast run', 'May', 10, 2026, photo('farmers'), { note: 'croissants, then more croissants' }),
+  memory(6, 'Bowling, loser buys tacos', 'April', 18, 2026, photo('tacos')),
+  memory(5, 'Museum date, the long way home', 'March', 7, 2026, photo('road')),
+  memory(4, 'Thrift store challenge', 'February', 14, 2026, photo('flowers'), { note: 'you in that jacket' }),
+  memory(3, 'Hot pot night', 'December', 12, 2025, photo('diner')),
+  memory(2, 'First snow walk', 'November', 20, 2025, photo('trees'), { note: 'cold hands, warm everything else' }),
+  memory(1, 'Karaoke until they kicked us out', 'October', 21, 2025, photo('karaoke')),
 ];
 
+const PICKS = [photo('pier'), photo('tacos'), photo('road')];
+const WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
+  'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
+const numWord = (n) => WORDS[n] ?? String(n);
+const meta = (s) => [...s.energy, ...s.spend, ...s.weather, ...(s.food ?? []), ...(s.duration ?? []), s.by].join(' · ');
+const stamp = (m) => `${m.month.toUpperCase()} ${m.day}`;
+const monthHeader = (m) => (m.year === 2026 ? m.month.toUpperCase() : `${m.month.toUpperCase()} ${m.year}`);
+
 export default function MemoriDemo() {
-  const nav = useStack('home');
-  const [tab, setTab] = useState('ideas');
-  const [slips, setSlips] = useState(SLIPS);
-  const [upNext, setUpNext] = useState(null);
-  const [memories, setMemories] = useState(MEMORIES);
-  const [pulled, setPulled] = useState(false);
-
-  const restart = () => {
-    setTab('ideas');
-    setSlips(SLIPS);
-    setUpNext(null);
-    setMemories(MEMORIES);
-    setPulled(false);
-    nav.reset();
-  };
-
-  const top = nav.stack.filter((e) => !e.leaving).at(-1);
-  const darkStatus = top?.name === 'pull';
-
-  const seal = ({ img, caption }) => {
-    const no = Math.max(...memories.map((m) => m.no)) + 1;
-    const memory = { id: `m${no}`, no, img, caption: caption || upNext.title.toLowerCase(), month: 'October', date: 'Oct 21' };
-    setMemories((m) => [memory, ...m]);
-    setSlips((s) => s.filter((x) => x.id !== upNext.id));
-    setUpNext(null);
-    nav.pop();
-    setTimeout(() => nav.push('sealed', 'fade', { memory }), 380);
-  };
-
-  const render = (entry) => {
-    switch (entry.name) {
-      case 'home':
-        return (
-          <div className="mem-screen">
-            {tab === 'ideas' ? (
-              <Ideas
-                slips={slips}
-                upNext={upNext}
-                hintPull={!pulled}
-                onAdd={(title) => setSlips((s) => [{ id: `s${Date.now()}`, title, tags: [], by: 'you', fresh: true }, ...s])}
-                onPull={() => {
-                  setPulled(true);
-                  nav.push('pull', 'fade');
-                }}
-                onSeal={() => nav.push('seal', 'sheet')}
-              />
-            ) : (
-              <Log memories={memories} onOpen={(m) => nav.push('print', 'push', { memory: m })} />
-            )}
-            <TabBar tab={tab} onTab={setTab} />
-          </div>
-        );
-      case 'pull':
-        return (
-          <Pull
-            slips={slips.filter((s) => s.id !== upNext?.id)}
-            onKeep={(slip) => {
-              setUpNext(slip);
-              setTab('ideas');
-              nav.pop();
-            }}
-            onClose={nav.pop}
-          />
-        );
-      case 'seal':
-        return <Seal slip={upNext} onCancel={nav.pop} onSeal={seal} />;
-      case 'sealed':
-        return (
-          <Sealed
-            memory={entry.props.memory}
-            onLog={() => {
-              setTab('log');
-              nav.reset();
-            }}
-            onIdeas={() => {
-              setTab('ideas');
-              nav.reset();
-            }}
-          />
-        );
-      case 'print':
-        return <Print memory={entry.props.memory} onBack={nav.pop} />;
-      default:
-        return null;
-    }
-  };
-
+  const [key, setKey] = useState(0);
   return (
-    <PhoneFrame label="Memori demo" onRestart={restart} darkStatus={darkStatus}>
-      <div className="demo demo-mem">
-        <Stack stack={nav.stack} render={render} />
-      </div>
+    <PhoneFrame label="Memori demo" onRestart={() => setKey((k) => k + 1)}>
+      <Memori key={key} />
     </PhoneFrame>
   );
 }
 
-function Ideas({ slips, upNext, hintPull, onAdd, onPull, onSeal }) {
-  const [draft, setDraft] = useState('');
-  const waiting = slips.filter((s) => s.id !== upNext?.id);
+function Memori() {
+  const [tab, setTab] = useState('jar');
+  const [slips, setSlips] = useState(SLIPS);
+  const [hearts, setHearts] = useState(() => new Set());
+  const [dusted, setDusted] = useState(() => new Set());
+  const [lastPull, setLastPull] = useState(LAST_PULL);
+  const [memories, setMemories] = useState(MEMORIES);
+  const [route, setRoute] = useState(null); // 'memory' | 'sealed'
+  const [sealed, setSealed] = useState(null);
+  const [plus, setPlus] = useState(false);
+  const [sheet, setSheet] = useState(null); // { kind: 'new' | 'detail' | 'edit', slip }
+  const [print, setPrint] = useState(null);
+  const [toast, setToast] = useState(null);
+  const labels = useLabelWindow();
+
+  const showToast = (t) => {
+    setToast({ ...t, id: Date.now() });
+  };
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(null), 3600);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const toss = (draft) => {
+    const s = { id: `s${Date.now()}`, energy: [], spend: [], weather: [], food: [], duration: [], by: 'You', tossed: 'October', fresh: true, ...draft };
+    setSlips((list) => [s, ...list]);
+    setSheet(null);
+    showToast({ text: `In it goes — ${slips.length + 1} and counting`, undo: () => setSlips((list) => list.filter((x) => x.id !== s.id)) });
+  };
+
+  const seal = (img) => {
+    const no = memories.length + 1;
+    const m = memory(no, lastPull.title, 'October', 20, 2026, img, { tags: [...lastPull.energy, ...lastPull.spend, ...lastPull.weather], fresh: true });
+    setMemories((list) => [m, ...list]);
+    setSealed(m);
+    setLastPull(null);
+    setRoute('sealed');
+  };
+
+  const openSlip = (s) => {
+    setDusted((d) => new Set(d).add(s.id));
+    setSheet({ kind: 'detail', slip: s });
+  };
 
   return (
-    <>
-      <div className="mem-scroll">
-        <header className="mem-head">
-          <img src="./icons/memori.png" alt="" />
-          <div>
-            <span className="mem-kicker">You &amp; Mia</span>
-            <h1>{waiting.length} ideas waiting</h1>
-          </div>
-        </header>
+    <div className="demo demo-mem">
+      <div className={`mem-tabs ${route ? 'is-covered' : ''}`}>
+        <div className={`mem-tab ${tab === 'jar' ? 'is-on' : ''}`}>
+          <Jar
+            slips={slips}
+            hearts={hearts}
+            dusted={dusted}
+            lastPull={lastPull}
+            onHeart={(id) => setHearts((h) => { const n = new Set(h); n.has(id) ? n.delete(id) : n.add(id); return n; })}
+            onOpen={openSlip}
+            onAddPhotos={() => setRoute('memory')}
+            onNotNow={() => setLastPull(null)}
+          />
+        </div>
+        <div className={`mem-tab ${tab === 'log' ? 'is-on' : ''}`}>
+          <Log memories={memories} onOpen={setPrint} />
+        </div>
+        <div className={`mem-tab ${tab === 'us' ? 'is-on' : ''}`}>
+          <Us memories={memories} slips={slips} />
+        </div>
 
-        {upNext ? (
-          <div className="mem-hero">
-            <span className="mem-stamp">Up next</span>
-            <h2>{upNext.title}</h2>
-            <p>Mia’s been told. Have a good one.</p>
-            <button className="mem-cta-light hint" onClick={onSeal}>We went, seal it</button>
-          </div>
-        ) : (
-          <div className="mem-hero">
-            <span className="mem-stamp">Free tonight?</span>
-            <h2>Too many ideas? Pick one.</h2>
-            <p>One pull picks a slip at random. On a phone, you shake it.</p>
-            <button className={`mem-cta-light ${hintPull ? 'hint' : ''}`} onClick={onPull}>Pull one</button>
+        <div className="mem-fade" />
+        <TabBar tab={tab} onTab={(t) => { setTab(t); setPlus(false); }} labels={labels} />
+        <PlusMenu
+          open={plus}
+          onToggle={() => setPlus((p) => !p)}
+          onIdea={() => { setPlus(false); setSheet({ kind: 'new' }); }}
+          onMemory={() => { setPlus(false); if (lastPull) setRoute('memory'); else { setTab('log'); } }}
+        />
+
+        {sheet?.kind === 'new' && <IdeaSheet onClose={() => setSheet(null)} onToss={toss} />}
+        {sheet?.kind === 'detail' && (
+          <DetailSheet
+            slip={sheet.slip}
+            onClose={() => setSheet(null)}
+            onEdit={() => setSheet({ kind: 'edit', slip: sheet.slip })}
+            onDelete={() => {
+              setSlips((list) => list.filter((x) => x.id !== sheet.slip.id));
+              setSheet(null);
+            }}
+          />
+        )}
+        {sheet?.kind === 'edit' && (
+          <EditSheet
+            slip={sheet.slip}
+            onClose={() => setSheet(null)}
+            onSave={(next) => {
+              setSlips((list) => list.map((x) => (x.id === next.id ? next : x)));
+              setSheet(null);
+            }}
+          />
+        )}
+        {print && <PrintDetail memory={print} memories={memories} onClose={() => setPrint(null)} />}
+        {toast && (
+          <div className="mem-toast" key={toast.id}>
+            <span>{toast.text}</span>
+            {toast.undo && <button onClick={() => { toast.undo(); setToast(null); }}>Undo</button>}
           </div>
         )}
-
-        <ul className="mem-slips">
-          {waiting.map((s) => (
-            <li key={s.id} className={`mem-slip ${s.fresh ? 'is-fresh' : ''}`}>
-              <span className="mem-slip-title">{s.title}</span>
-              <span className="mem-slip-meta">
-                {s.tags.map((t) => (
-                  <span key={t} className="mem-tag">{t}</span>
-                ))}
-                <span className={s.fresh ? 'mem-now' : ''}>{s.fresh ? 'you, just now' : s.by}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      <form
-        className="mem-composer"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (draft.trim()) onAdd(draft.trim());
-          setDraft('');
-        }}
-      >
-        <input value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Toss in an idea…" aria-label="New idea" />
-        <button aria-label="Add idea" disabled={!draft.trim()}>
-          <svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
+      {route === 'memory' && lastPull && <MakeMemory slip={lastPull} onClose={() => setRoute(null)} onSeal={seal} />}
+      {route === 'sealed' && sealed && (
+        <Sealed
+          memory={sealed}
+          count={memories.length}
+          onLog={() => { setTab('log'); setRoute(null); }}
+          onIdeas={() => { setTab('jar'); setRoute(null); }}
+        />
+      )}
+    </div>
+  );
+}
+
+// Every tab label shows for the session's first four seconds, then fades for good.
+function useLabelWindow() {
+  const [on, setOn] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setOn(false), 4000);
+    return () => clearTimeout(t);
+  }, []);
+  return on;
+}
+
+/* ---------- Jar ---------- */
+
+function Jar({ slips, hearts, dusted, lastPull, onHeart, onOpen, onAddPhotos, onNotNow }) {
+  const dust = slips.filter((s) => s.dust && !dusted.has(s.id)).sort((a, b) => a.dustAt - b.dustAt);
+  const count = (key) => slips.filter((s) => s[key]?.length).length;
+
+  return (
+    <div className="mem-scroll">
+      <header className="mem-title">
+        <div>
+          <span className="mem-eyebrow">Jar · Mia &amp; Sam</span>
+          <h1>Ideas</h1>
+        </div>
+        <span className="mem-count">{String(slips.length).padStart(2, '0')}</span>
+      </header>
+
+      {lastPull && (
+        <section className="mem-lastpull">
+          <span className="mem-lastpull-eyebrow">Your last pull</span>
+          <div className="mem-lastpull-row">
+            <div>
+              <h2>{lastPull.title}</h2>
+              <p>How’d it go? Add a photo and it becomes a memory.</p>
+            </div>
+            <button className="mem-pill hint" onClick={onAddPhotos}>Add photos</button>
+          </div>
+          <button className="mem-notnow" onClick={onNotNow}>Not now</button>
+        </section>
+      )}
+
+      {dust.length > 0 && (
+        <section className="mem-dust">
+          <h3>Not looked at in a while</h3>
+          <div className="mem-dust-rail">
+            {dust.map((s) => (
+              <button key={s.id} className="mem-dust-card" onClick={() => onOpen(s)}>
+                <span className="mem-dust-tile">
+                  <span className="mem-dust-age">{s.dust}</span>
+                  <span className="mem-dust-title">{s.title}</span>
+                </span>
+                <span className="mem-dust-meta">{[...s.spend, ...s.weather].join(' · ')}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="mem-filters">
+        <span className="mem-filter"><Icon name="energy" />Energy {count('energy')}</span>
+        <span className="mem-filter"><Icon name="price" />Price {count('spend')}</span>
+        <span className="mem-filter"><Icon name="weather" />Weather {count('weather')}</span>
+      </div>
+
+      <ul className="mem-rows">
+        {slips.map((s) => (
+          <li key={s.id} className={`mem-row ${s.fresh ? 'is-fresh' : ''}`}>
+            <button className="mem-row-main" onClick={() => onOpen(s)}>
+              {s.link && <span className="mem-thumb mem-stripes" />}
+              <span className="mem-row-text">
+                <span className="mem-row-title">{s.title}</span>
+                <span className="mem-row-meta">{meta(s)}</span>
+              </span>
+            </button>
+            <button className={`mem-heart ${hearts.has(s.id) ? 'is-on' : ''}`} onClick={() => onHeart(s.id)} aria-label={hearts.has(s.id) ? 'Unheart' : 'Heart'}>
+              <svg viewBox="0 0 20 20" width="22" height="22"><path d="M10 17.2S2.5 12.6 2.5 7.3A4 4 0 0 1 10 5a4 4 0 0 1 7.5 2.3C17.5 12.6 10 17.2 10 17.2z" strokeWidth="1.6" strokeLinejoin="round" /></svg>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* ---------- Tab bar + add menu ---------- */
+
+function TabBar({ tab, onTab, labels }) {
+  const items = [
+    { id: 'jar', label: 'Jar', icon: 'jar' },
+    { id: 'log', label: 'Log', icon: 'log' },
+    { id: 'us', label: 'Us', icon: 'us' },
+  ];
+  const at = items.findIndex((i) => i.id === tab);
+  return (
+    <nav className={`mem-tabbar ${labels ? 'has-labels' : ''}`}>
+      <span className="mem-tabbar-on" style={{ transform: `translateX(${at * 77.5}px)` }} />
+      {items.map((i) => (
+        <button key={i.id} className={tab === i.id ? 'is-on' : ''} onClick={() => onTab(i.id)} aria-label={i.label}>
+          <Icon name={i.icon} size={30} />
+          <span>{i.label}</span>
         </button>
-      </form>
+      ))}
+    </nav>
+  );
+}
+
+function PlusMenu({ open, onToggle, onIdea, onMemory }) {
+  return (
+    <>
+      <div className={`mem-plus-menu ${open ? 'is-open' : ''}`} {...(!open && { inert: '' })}>
+        <button className="mem-plus-item" style={{ '--i': 1 }} onClick={onIdea}>
+          <span className="mem-glass mem-plus-label" style={{ width: 80 }}>Idea</span>
+          <span className="mem-glass mem-plus-icon"><Icon name="idea" size={26} /></span>
+        </button>
+        <button className="mem-plus-item" style={{ '--i': 0 }} onClick={onMemory}>
+          <span className="mem-glass mem-plus-label" style={{ width: 104 }}>Memory</span>
+          <span className="mem-glass mem-plus-icon"><Icon name="memory" size={26} /></span>
+        </button>
+      </div>
+      <button className={`mem-glass mem-plus ${open ? 'is-open' : ''}`} onClick={onToggle} aria-label={open ? 'Close' : 'Add'}>
+        <svg viewBox="0 0 20 20" width="22" height="22"><path d="M10 3v14M3 10h14" stroke="#150F0A" strokeWidth="2.2" strokeLinecap="round" /></svg>
+      </button>
     </>
   );
 }
 
+/* ---------- Sheets ---------- */
+
+function Categories({ values, onChange }) {
+  return (
+    <div className="mem-cats">
+      <p className="mem-cats-head">Categories <span>(optional)</span></p>
+      {CATEGORIES.map((c) => {
+        const v = values[c.key]?.[0];
+        const cycle = () => {
+          const i = v ? c.options.indexOf(v) + 1 : 0;
+          onChange(c.key, i < c.options.length ? [c.options[i]] : []);
+        };
+        return (
+          <button key={c.key} className="mem-cat" onClick={cycle}>
+            <span>{c.label}</span>
+            <span className={v ? 'is-set' : ''}>{v ?? 'Any'}</span>
+            <i>▾</i>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function IdeaSheet({ onClose, onToss }) {
+  const [title, setTitle] = useState('');
+  const [note, setNote] = useState('');
+  const [tags, setTags] = useState({});
+  const [closing, setClosing] = useState(false);
+  const close = () => { setClosing(true); setTimeout(onClose, 220); };
+
+  return (
+    <div className={`mem-dim ${closing ? 'is-closing' : ''}`} onClick={close}>
+      <div className="mem-card-sheet" onClick={(e) => e.stopPropagation()}>
+        <span className="mem-sheet-eyebrow">New idea</span>
+        <button className="mem-x-circle" onClick={close} aria-label="Close">✕</button>
+        <h2 className="mem-sheet-title">Add an Idea or <u>Paste a Link</u></h2>
+        <span className="mem-dashes" />
+        <input
+          className={`mem-title-input ${title ? 'has-value' : ''}`}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="That rooftop mini-golf place"
+          aria-label="Idea"
+        />
+        <span className="mem-helper">Currently only Google Maps and TikTok links are supported</span>
+        <button className="mem-add-photos">
+          <b>+</b>
+          Add photos
+        </button>
+        <textarea className="mem-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="A line to jog your memory… (optional)" />
+        <Categories values={tags} onChange={(k, v) => setTags((t) => ({ ...t, [k]: v }))} />
+        <button className="mem-primary" disabled={!title.trim()} onMouseDown={(e) => e.preventDefault()} onClick={() => onToss({ title: title.trim(), ...tags })}>
+          Toss it in
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function BottomSheet({ onClose, children, className = '' }) {
+  const [closing, setClosing] = useState(false);
+  const close = () => { setClosing(true); setTimeout(onClose, 260); };
+  return (
+    <div className={`mem-dim mem-dim-bottom ${closing ? 'is-closing' : ''}`} onClick={close}>
+      <div className={`mem-bottom-sheet ${className}`} onClick={(e) => e.stopPropagation()}>
+        <span className="mem-grabber" />
+        {children(close)}
+      </div>
+    </div>
+  );
+}
+
+function DetailSheet({ slip: s, onClose, onEdit, onDelete }) {
+  const tags = [...s.energy, ...s.spend, ...s.weather, ...(s.food ?? []), ...(s.duration ?? [])];
+  const who = s.by === 'You' ? 'You' : s.by === 'starter set' ? 'From the starter set' : s.by;
+  return (
+    <BottomSheet onClose={onClose}>
+      {(close) => (
+        <div className="mem-detail">
+          <h2>{s.title}</h2>
+          {tags.length > 0 && (
+            <div className="mem-chips">
+              {tags.map((t) => <span key={t} className="mem-chip">{t}</span>)}
+            </div>
+          )}
+          <p className="mem-detail-who">{who} tossed this in · {s.tossed}</p>
+          <button className="mem-soft-btn" onClick={onEdit}>Edit this idea</button>
+          <button className="mem-danger" onClick={() => { close(); setTimeout(onDelete, 260); }}>Delete this idea</button>
+        </div>
+      )}
+    </BottomSheet>
+  );
+}
+
+function EditSheet({ slip: s, onClose, onSave }) {
+  const [title, setTitle] = useState(s.title);
+  const [note, setNote] = useState('');
+  const [tags, setTags] = useState({ energy: s.energy, spend: s.spend, weather: s.weather, food: s.food ?? [], duration: s.duration ?? [] });
+  return (
+    <BottomSheet onClose={onClose} className="mem-edit">
+      {(close) => (
+        <>
+          <div className="mem-edit-head">
+            <span>Edit this idea</span>
+            <button onClick={close} aria-label="Close">✕</button>
+          </div>
+          <button className="mem-add-photos">
+            <b>+</b>
+            Add photos
+          </button>
+          <input className="mem-edit-title" value={title} onChange={(e) => setTitle(e.target.value)} aria-label="Title" />
+          <textarea className="mem-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="A line to jog your memory… (optional)" />
+          <Categories values={tags} onChange={(k, v) => setTags((t) => ({ ...t, [k]: v }))} />
+          <button className="mem-primary" disabled={!title.trim()} onClick={() => { close(); setTimeout(() => onSave({ ...s, ...tags, title: title.trim() }), 260); }}>
+            Save changes
+          </button>
+        </>
+      )}
+    </BottomSheet>
+  );
+}
+
+/* ---------- Make it a memory → sealed ---------- */
+
+function MakeMemory({ slip: s, onClose, onSeal }) {
+  const [img, setImg] = useState(null);
+  const [note, setNote] = useState('');
+  const [sealing, setSealing] = useState(false);
+  const pick = () => setImg((cur) => PICKS[(PICKS.indexOf(cur) + 1) % PICKS.length]);
+  const seal = () => {
+    setSealing(true);
+    setTimeout(() => onSeal(img), 1400);
+  };
+
+  return (
+    <div className="mem-route mem-make">
+      <div className={`mem-make-card ${img ? 'has-photo' : ''} ${sealing ? 'is-sealing' : ''}`}>
+        <span className="mem-tape mem-make-tape" />
+        <button className="mem-make-x" onClick={onClose} aria-label="Close">✕</button>
+        <span className="mem-make-eyebrow">Make it a memory</span>
+        {sealing ? (
+          <img className="mem-make-thumb" src={img} alt="" />
+        ) : img ? (
+          <button className="mem-make-photo" onClick={pick}>
+            <img src={img} alt="" />
+            <span>Main</span>
+          </button>
+        ) : (
+          <button className="mem-make-add hint" onClick={pick}>
+            <b>+</b>
+            Add photos
+          </button>
+        )}
+        <span className="mem-make-title">{s.title}</span>
+        <span className="mem-make-date">{sealing ? 'OCTOBER 20' : <>OCTOBER 20 &nbsp;· tap to change date</>}</span>
+        <input className="mem-make-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="add a note…" aria-label="Note" disabled={sealing} />
+        <span className="mem-make-rule" />
+        {sealing && <p className="mem-make-upload">Uploading 1 of 1… Safe either way.</p>}
+      </div>
+      <button className={`mem-seal ${img && !sealing ? 'hint' : ''} ${sealing ? 'is-sealed' : ''}`} disabled={!img} onClick={sealing ? undefined : seal}>
+        {sealing ? (
+          <>
+            <svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Sealed
+          </>
+        ) : 'Seal it into the log'}
+      </button>
+    </div>
+  );
+}
+
+function Sealed({ memory: m, count, onLog, onIdeas }) {
+  return (
+    <div className="mem-route mem-sealed">
+      <div className="mem-sealed-print">
+        <span className="mem-tape mem-sealed-tape" />
+        <img src={m.img} alt="" />
+        <span className="mem-sealed-caption">{m.title}</span>
+        <Stamp className="mem-sealed-stamp" m={m} />
+      </div>
+      <span className="mem-sealed-eyebrow">Sealed into the log</span>
+      <h2>{numWord(count)} dates and counting</h2>
+      <p>Sam will see it the moment they open the app.</p>
+      <div className="mem-sealed-actions">
+        <button className="mem-wide hint" onClick={onLog}>See it on the timeline</button>
+        <button className="mem-quiet" onClick={onIdeas}>Back to your ideas</button>
+      </div>
+    </div>
+  );
+}
+
+function Stamp({ m, className }) {
+  return (
+    <span className={`mem-stamp ${className ?? ''}`}>
+      {stamp(m)} · N<sup>º</sup> {m.no}
+    </span>
+  );
+}
+
+/* ---------- Log ---------- */
+
 function Log({ memories, onOpen }) {
-  const months = [];
-  memories.forEach((m) => {
-    const last = months[months.length - 1];
-    if (last && last.month === m.month) last.items.push(m);
-    else months.push({ month: m.month, items: [m] });
+  const [filter, setFilter] = useState('all');
+  const tagCounts = {};
+  memories.forEach((m) => (m.tags ?? []).forEach((t) => { tagCounts[t] = (tagCounts[t] ?? 0) + 1; }));
+  const shown = filter === 'all' ? memories : memories.filter((m) => m.tags?.includes(filter));
+  const onThisDay = memories.find((m) => m.month === 'October' && m.day === 21 && m.year === 2025);
+
+  const groups = [];
+  shown.forEach((m) => {
+    const h = monthHeader(m);
+    const last = groups[groups.length - 1];
+    if (last && last.h === h) last.items.push(m);
+    else groups.push({ h, items: [m] });
   });
 
   return (
     <div className="mem-scroll">
-      <header className="mem-head mem-head-log">
+      <header className="mem-log-head">
         <div>
-          <span className="mem-kicker">The log</span>
+          <span className="mem-eyebrow mem-eyebrow-log">The log</span>
           <h1>{memories.length} dates in</h1>
         </div>
+        <Icon name="search" size={14} className="mem-log-search" />
+        <span className="mem-views">
+          <span className="is-on"><Icon name="grid" size={14} /></span>
+          <i />
+          <span><Icon name="list" size={14} /></span>
+          <i />
+          <span><Icon name="cal" size={14} /></span>
+        </span>
       </header>
-      {months.map((g) => (
-        <section key={g.month} className="mem-month">
-          <h2>{g.month}, {g.items.length} sealed</h2>
-          <div className="mem-grid">
-            {g.items.map((m, i) => (
-              <button key={m.id} className={`mem-print ${i === 0 && g.month === 'October' ? 'is-fresh' : ''}`} onClick={() => onOpen(m)} style={{ '--r': `${i % 2 ? 1.4 : -1.2}deg` }}>
-                <img src={m.img} alt="" />
-                <span className="mem-caption">{m.caption}</span>
-                <span className="mem-no">Nº {m.no}</span>
-              </button>
+
+      {Object.keys(tagCounts).length > 0 && (
+        <div className="mem-log-chips">
+          <button className={filter === 'all' ? 'is-on' : ''} onClick={() => setFilter('all')}>all</button>
+          {Object.entries(tagCounts).map(([t, n]) => (
+            <button key={t} className={filter === t ? 'is-on' : ''} onClick={() => setFilter(filter === t ? 'all' : t)}>{t} · {n}</button>
+          ))}
+        </div>
+      )}
+
+      {onThisDay && filter === 'all' && (
+        <button className="mem-otd" onClick={() => onOpen(onThisDay)}>
+          <span className="mem-otd-thumb"><img src={onThisDay.img} alt="" /></span>
+          <span className="mem-otd-tape" />
+          <span>
+            <span className="mem-otd-eyebrow">On this day, last year</span>
+            <span className="mem-otd-title">{onThisDay.title}</span>
+          </span>
+        </button>
+      )}
+
+      {groups.map((g) => (
+        <section key={g.h} className="mem-month">
+          <h2>— {g.h} —</h2>
+          <div className="mem-shoebox">
+            {[0, 1].map((col) => (
+              <div key={col} className="mem-shoebox-col">
+                {g.items.filter((_, i) => i % 2 === col).map((m) => (
+                  <button
+                    key={m.id}
+                    className={`mem-print ${m.fresh ? 'is-fresh' : ''}`}
+                    style={{ '--r': `${((m.no * 37) % 5) * 0.5 - 1.2}deg` }}
+                    onClick={() => onOpen(m)}
+                  >
+                    {m.no % 2 === 0 && <span className="mem-tape mem-print-tape" />}
+                    <img src={m.img} alt="" />
+                    <span className="mem-print-caption">{m.title}</span>
+                    <Stamp className="mem-print-stamp" m={m} />
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
         </section>
@@ -213,127 +594,148 @@ function Log({ memories, onOpen }) {
   );
 }
 
-function TabBar({ tab, onTab }) {
+function PrintDetail({ memory: m, onClose }) {
+  const [closing, setClosing] = useState(false);
+  const [note, setNote] = useState('');
+  const close = () => { setClosing(true); setTimeout(onClose, 260); };
   return (
-    <nav className="mem-tabbar">
-      <button className={tab === 'ideas' ? 'is-on' : ''} onClick={() => onTab('ideas')}>
-        <svg viewBox="0 0 20 20"><path d="M10 2.5a5.5 5.5 0 0 0-3.2 10c.5.4.7.9.7 1.5h5c0-.6.2-1.1.7-1.5a5.5 5.5 0 0 0-3.2-10zM8 16.5h4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-        Ideas
-      </button>
-      <button className={tab === 'log' ? 'is-on' : ''} onClick={() => onTab('log')}>
-        <svg viewBox="0 0 20 20"><rect x="4" y="2.5" width="12" height="15" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M7 6.5h6M7 9.5h6M7 12.5h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-        Log
-      </button>
-    </nav>
-  );
-}
-
-function Pull({ slips, onKeep, onClose }) {
-  const pick = (except) => {
-    const pool = slips.filter((s) => s.id !== except);
-    return pool[Math.floor(Math.random() * pool.length)] ?? slips[0];
-  };
-  const [slip, setSlip] = useState(() => pick());
-  const [n, setN] = useState(0);
-
-  return (
-    <div className="mem-pull">
-      <button className="mem-close" onClick={onClose} aria-label="Close">
-        <svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
-      </button>
-      <span className="mem-pull-kicker">The pull</span>
-      {slip ? (
-        <div className="mem-pulled" key={n}>
-          <span className="mem-pulled-title">{slip.title}</span>
-          <span className="mem-slip-meta">
-            {slip.tags.map((t) => (
-              <span key={t} className="mem-tag">{t}</span>
-            ))}
-          </span>
+    <div className={`mem-held ${closing ? 'is-closing' : ''}`} onClick={close}>
+      <div className="mem-held-inner" onClick={(e) => e.stopPropagation()}>
+        <div className="mem-held-bar">
+          <button className="mem-glass-circle" onClick={close} aria-label="Back">←</button>
+          <span className="mem-held-grab" />
+          <button className="mem-glass-circle" aria-label="More">⋯</button>
         </div>
-      ) : (
-        <p className="mem-pull-empty">The list is empty. Toss in an idea first.</p>
-      )}
-      <p className="mem-pull-hint">Shake to pull another</p>
-      <div className="mem-pull-actions">
-        <button className="mem-ghost" onClick={() => { setSlip(pick(slip?.id)); setN(n + 1); }}>Pull again</button>
-        {slip && <button className="mem-cta-light hint" onClick={() => onKeep(slip)}>That’s the one</button>}
+        <div className="mem-held-print">
+          <img src={m.img} alt="" />
+          <span className="mem-held-caption">{m.title}</span>
+          <span className="mem-held-stamp">{stamp(m)} · Nº {m.no}</span>
+        </div>
+        {m.note && <p className="mem-held-note">“{m.note}”</p>}
+        <label className="mem-held-reply">
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Leave a note for Sam…" />
+          <span>Edit ✎</span>
+        </label>
       </div>
     </div>
   );
 }
 
-const PICKS = ['tacos', 'pier', 'road'];
+/* ---------- Us ---------- */
 
-function Seal({ slip, onCancel, onSeal }) {
-  const [img, setImg] = useState(null);
-  const [caption, setCaption] = useState('');
-  const next = () => {
-    const i = img ? (PICKS.indexOf(img.split('memori-')[1].replace('.jpg', '')) + 1) % PICKS.length : 0;
-    setImg(photo(PICKS[i]));
-  };
-
+function Us({ memories, slips }) {
   return (
-    <div className="mem-sheet">
-      <button className="mem-close mem-close-dark" onClick={onCancel} aria-label="Cancel">
-        <svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
-      </button>
-      <span className="mem-stamp">Make it a memory</span>
-      <div className="mem-polaroid mem-polaroid-edit">
-        <span className="mem-tape" />
-        <button className={`mem-photo-slot ${img ? 'has-photo' : 'hint'}`} onClick={next}>
-          {img ? <img src={img} alt="" /> : <span>+ Add a photo</span>}
-        </button>
-        <input
-          className="mem-caption-input"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          placeholder={slip ? slip.title.toLowerCase() : 'add a note…'}
-          aria-label="Caption"
-        />
-        <span className="mem-date">Oct 21 · tap to change</span>
+    <div className="mem-scroll mem-us">
+      <div className="mem-us-prints">
+        <div className="mem-us-print mem-us-mia">
+          <span className="mem-tape mem-us-tape" />
+          <span className="mem-us-face">M</span>
+          <span className="mem-us-name">Mia</span>
+          <span className="mem-us-add">+</span>
+        </div>
+        <div className="mem-us-print mem-us-sam">
+          <span className="mem-us-tape mem-us-tape-b" />
+          <span className="mem-us-face">S</span>
+          <span className="mem-us-name">Sam</span>
+        </div>
       </div>
-      <button className={`mem-cta ${img ? 'hint' : ''}`} disabled={!img} onClick={() => onSeal({ img, caption })}>
-        Seal it into the log
-      </button>
-      <p className="mem-sheet-foot">{img ? 'Tap the photo to try another.' : 'Add at least one photo to seal this one in.'}</p>
+      <span className="mem-us-est">Mia &amp; Sam · Est. 2025</span>
+      <h2 className="mem-us-title">{numWord(memories.length)} dates in, {numWord(slips.length).toLowerCase()} waiting</h2>
+      <div className="mem-us-card mem-us-name-row">
+        <span>Your name</span>
+        <span>
+          Mia ›
+          <small>mia@demo.datejar</small>
+        </span>
+      </div>
+      <div className="mem-us-card mem-us-story">
+        <span className="mem-us-story-head">Your story so far</span>
+        <div>
+          <span><b>{memories.length}</b><small>dates sealed</small></span>
+          <span><b className="is-dash">—</b><small>together since</small></span>
+        </div>
+      </div>
+      <button className="mem-us-keepsake">Get Keepsake+</button>
+      <button className="mem-us-card mem-us-settings">Settings <span>›</span></button>
+      <p className="mem-us-foot">Memori · made for two</p>
     </div>
   );
 }
 
-function Sealed({ memory, onLog, onIdeas }) {
-  return (
-    <div className="mem-sealed">
-      <div className="mem-polaroid mem-polaroid-drop">
-        <span className="mem-tape" />
-        <img src={memory.img} alt="" />
-        <span className="mem-caption">{memory.caption}</span>
-        <span className="mem-no">Nº {memory.no}</span>
-      </div>
-      <span className="mem-stamp">Sealed into the log</span>
-      <h2>{memory.no} dates and counting</h2>
-      <p>It’s waiting in Mia’s log too.</p>
-      <button className="mem-cta hint" onClick={onLog}>See it on the timeline</button>
-      <button className="mem-text-btn" onClick={onIdeas}>Back to your ideas</button>
-    </div>
-  );
-}
+/* ---------- Icons (paths copied from the app) ---------- */
 
-function Print({ memory, onBack }) {
+function Icon({ name, size = 15, className }) {
+  const common = { fill: 'none', stroke: 'currentColor', strokeLinejoin: 'round', strokeLinecap: 'round' };
+  const p = {
+    energy: <path d="M11 2 4.5 11.5h4.2L8 18l7.5-10H11l1.8-6z" {...common} strokeWidth="1.5" />,
+    price: <path d="M10 2.5v15M13.2 5.6c-.6-.9-1.8-1.5-3.2-1.5-2 0-3.6 1.1-3.6 2.9 0 3.9 6.8 2 6.8 5.8 0 1.8-1.6 2.9-3.6 2.9-1.4 0-2.6-.6-3.2-1.5" {...common} strokeWidth="1.5" />,
+    weather: (
+      <g {...common} strokeWidth="1.5">
+        <circle cx="7.2" cy="6.6" r="2.6" />
+        <path d="M7.2 2.4v1M7.2 9.8v1M3 6.6h1M10.4 6.6h1M4.4 3.8l.7.7M9.3 3.8l-.7.7" />
+        <path d="M6 17h7.5a3 3 0 0 0 .5-5.96 4 4 0 0 0-7.7-1.3A3.3 3.3 0 0 0 6 17z" />
+      </g>
+    ),
+    jar: (
+      <g {...common} strokeWidth="1.6">
+        <path d="M10 2.5a5 5 0 0 0-2.7 9.2c.5.4.7 1 .7 1.6v.7h4v-.7c0-.6.2-1.2.7-1.6A5 5 0 0 0 10 2.5z" />
+        <path d="M8.3 16.5h3.4M8.7 18h2.6" />
+      </g>
+    ),
+    us: (
+      <g {...common} strokeWidth="1.6">
+        <circle cx="7.3" cy="10" r="5.3" />
+        <circle cx="12.7" cy="10" r="5.3" />
+      </g>
+    ),
+    idea: (
+      <g {...common} strokeWidth="1.5">
+        <path d="M10 2.6a4.6 4.6 0 0 0-2.5 8.5c.45.35.6.9.6 1.4v.6h3.8v-.6c0-.5.15-1.05.6-1.4A4.6 4.6 0 0 0 10 2.6z" />
+        <path d="M8.4 15.8h3.2M8.9 17.3h2.2" />
+      </g>
+    ),
+    memory: (
+      <g {...common} strokeWidth="1.5">
+        <rect x="4" y="3" width="12" height="14" rx="1" />
+        <rect x="6" y="5" width="8" height="6.4" rx="0.6" />
+        <path d="M7.6 14.2h4.8" />
+      </g>
+    ),
+    search: (
+      <g {...common} strokeWidth="1.6">
+        <circle cx="9" cy="9" r="6.5" />
+        <path d="M14 14l4.5 4.5" />
+      </g>
+    ),
+    grid: (
+      <g {...common} strokeWidth="1.7">
+        <rect x="2" y="2" width="7" height="7" rx="1.5" />
+        <rect x="11" y="2" width="7" height="7" rx="1.5" />
+        <rect x="2" y="11" width="7" height="7" rx="1.5" />
+        <rect x="11" y="11" width="7" height="7" rx="1.5" />
+      </g>
+    ),
+    list: <path d="M2 4h16M2 10h16M2 16h16" {...common} strokeWidth="1.7" />,
+    cal: (
+      <g {...common} strokeWidth="1.7">
+        <rect x="2" y="3.5" width="16" height="14.5" rx="2" />
+        <path d="M2 8h16M6 2v3M14 2v3" />
+      </g>
+    ),
+  }[name];
+  if (name === 'log') {
+    return (
+      <svg viewBox="0 0 24 24" width={size} height={size} className={className}>
+        <g {...common} strokeWidth="1.7">
+          <rect x="5" y="3.5" width="14" height="17" rx="2.2" />
+          <path d="M8.6 3.5v17M11.6 8h4.2M11.6 11.5h4.2" />
+        </g>
+      </svg>
+    );
+  }
   return (
-    <div className="mem-screen mem-print-screen">
-      <button className="mem-back" onClick={onBack}>
-        <svg viewBox="0 0 10 16"><path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        The log
-      </button>
-      <span className="mem-stamp">Sealed · {memory.date}</span>
-      <div className="mem-polaroid">
-        <span className="mem-tape" />
-        <img src={memory.img} alt="" />
-        <span className="mem-caption">{memory.caption}</span>
-        <span className="mem-no">Nº {memory.no}</span>
-      </div>
-      <p className="mem-print-foot">You &amp; Mia</p>
-    </div>
+    <svg viewBox="0 0 20 20" width={size} height={size} className={className}>
+      {p}
+    </svg>
   );
 }
