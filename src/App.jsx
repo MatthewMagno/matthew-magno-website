@@ -8,8 +8,8 @@ import Contact from './components/Contact.jsx';
 import { apps } from './data.js';
 
 const SECTIONS = [
-  { id: 'about', label: 'About' },
   { id: 'work', label: 'Work' },
+  { id: 'about', label: 'About' },
   { id: 'apps', label: 'Apps' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -28,12 +28,12 @@ export default function App() {
 
   return (
     <>
-      <a className="skip-link" href="#about">Skip to content</a>
+      <a className="skip-link" href="#work">Skip to content</a>
       <ScrollIsland sections={SECTIONS} />
       <main>
         <Hero />
-        <About />
         <Work />
+        <About />
         <WalletStack openIds={openApps} onToggle={toggleApp} />
         <Contact />
       </main>
