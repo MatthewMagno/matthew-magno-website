@@ -120,8 +120,82 @@ export const work = [
         title: 'Project Management Intern',
         dates: 'Summer 2021',
         points: [
+          'Built a SharePoint document repository for New Product Development that became the go-to resource for everyone in the group.',
           'Ran 30+ interviews across 19 product development departments to find and simplify project processes.',
           'Worked with R&D and outside vendors to standardize trial plans, reports and vendor briefs.',
+          'Made an obsolescence tracking sheet so Supply Chain could follow discontinued products.',
+        ],
+      },
+    ],
+  },
+  {
+    org: 'The Chemours Company',
+    place: 'Belle, West Virginia',
+    tint: '#30b0c7',
+    roles: [
+      {
+        title: 'Mechanical Integrity Quality Assurance Engineer Intern',
+        dates: 'Jan – May 2021',
+        points: [
+          'Built a database locating 3,000+ documents for the VAZO and glycolic acid facilities.',
+          'Led biweekly meetings with plant engineers on hazard mitigation and incident reviews covering 530+ pieces of equipment.',
+          'Made a hazardous substances matrix cross-referencing 100+ chemicals against human contact.',
+        ],
+      },
+    ],
+  },
+  {
+    org: 'Texas A&M, Nutrition and Food Science',
+    place: 'College Station',
+    tint: '#8e2430',
+    roles: [
+      {
+        title: 'Lead Undergraduate Research Assistant',
+        dates: '2020',
+        points: [
+          'Led weekly research meetings on how diet affected 17th-century European sailors, physically and mentally.',
+          'Guided three colleagues on a paper submitted to The Mariner’s Mirror journal.',
+          'Analyzed the nutritional content of salted meats to work out how healthy those sailors were.',
+        ],
+      },
+      {
+        title: 'Undergraduate Research Assistant',
+        dates: '2019',
+        points: [
+          'Used gas chromatography, DNA sequencing and Soxhlet extraction to measure bacteria and minerals in foods preserved with 17th-century methods.',
+          'Ran the Institute of Nautical Archaeology’s blog, editing and publishing every article.',
+          'Presented twice at Texas A&M’s Research Symposium. Named a Spring 2019 Aggie Research Scholar.',
+        ],
+      },
+    ],
+  },
+  {
+    org: 'Texas A&M, College of Engineering',
+    place: 'College Station',
+    tint: '#8e2430',
+    roles: [
+      {
+        title: 'Undergraduate Research Assistant',
+        dates: '2020',
+        points: [
+          'Researched biofuel alternatives made by fermenting organic material, contributing to MixAlco, a patented process for alcohol-based fuel.',
+          'Adapted inoculum on plant biomass to measure acid production, and modeled particle distribution to estimate conversion efficiency.',
+        ],
+      },
+    ],
+  },
+  {
+    org: 'ProGoes Probiotics',
+    place: 'College Station',
+    tint: '#34c759',
+    roles: [
+      {
+        title: 'Web Content Producer',
+        dates: 'Aug 2019 – Jan 2020',
+        points: [
+          'The only undergraduate on the startup’s original team of four.',
+          'Turned medical research papers into blog and ad articles, and ran photo and video for Instagram, Twitter and Facebook.',
+          'Planned marketing to grow the company’s reach.',
         ],
       },
     ],

@@ -5,6 +5,7 @@ const FACTS = [
   { label: 'Studied', value: 'Chemical engineering, Texas A&M' },
   { label: 'Day job', value: 'Software Engineer II, JPMorganChase' },
   { label: 'Certified', value: 'AWS Cloud Practitioner' },
+  { label: 'Research', value: 'Aggie Research Scholar, 2019' },
   { label: 'Building now', value: 'Reservations' },
 ];
 
@@ -18,8 +19,9 @@ export default function About() {
       <div className="about">
         <div className="about-story">
           <p>
-            I studied chemical engineering at Texas A&M. One summer I interned in project management
-            at Tillamook, and the next I wrote front-end code at Wells Fargo. The second one stuck.
+            I studied chemical engineering at Texas A&M, spent two years in research labs (one of them on
+            what 17th-century sailors ate), and interned at a chemical plant, a creamery and a bank. The
+            bank is where I wrote my first production code, and that’s what stuck.
           </p>
           <p>
             Now I work on lending software at JPMorganChase, where I like the unglamorous wins: an index

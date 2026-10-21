@@ -14,7 +14,7 @@ export default function Work() {
     <section className="section" id="work" aria-labelledby="work-title">
       <div className="section-head">
         <h2 id="work-title">Work</h2>
-        <p>Three years as a software engineer at JPMorganChase, and the internships before it.</p>
+        <p>Three years as a software engineer at JPMorganChase, and the internships and research that came before it.</p>
       </div>
 
       <SpeedupCard />
