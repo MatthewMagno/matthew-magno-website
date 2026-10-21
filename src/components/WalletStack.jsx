@@ -6,11 +6,11 @@ import SplitItDemo from '../demos/SplitItDemo.jsx';
 
 const DEMOS = { reservations: ReservationsDemo, memori: MemoriDemo, splitit: SplitItDemo };
 
-// Apple Wallet-style stack: every app shows its header, the open one expands.
-export default function WalletStack({ openId, onOpen }) {
+// Apple Wallet-style stack: every app shows its header; tap one to open or close it.
+export default function WalletStack({ openIds, onToggle }) {
   // A demo stays mounted after its first open, so closing a card doesn't jump its height.
   const mounted = useRef(new Set());
-  mounted.current.add(openId);
+  openIds.forEach((id) => mounted.current.add(id));
 
   return (
     <section className="section" id="apps" aria-labelledby="apps-title">
@@ -21,20 +21,23 @@ export default function WalletStack({ openId, onOpen }) {
 
       <div className="wallet">
         {apps.map((app) => {
-          const open = app.id === openId;
+          const open = openIds.has(app.id);
           const Demo = DEMOS[app.id];
           return (
             <article key={app.id} className={`pass ${open ? 'is-open' : ''}`} style={{ '--pass': app.color }}>
               <h3 className="pass-heading">
                 <button
                   className="pass-header"
-                  onClick={() => onOpen(app.id)}
+                  onClick={() => onToggle(app.id)}
                   aria-expanded={open}
                   aria-controls={`pass-${app.id}`}
                 >
                   <img src={app.icon} alt="" width="48" height="48" />
                   <span className="pass-name">{app.name}</span>
                   <span className="pass-status">{app.status}</span>
+                  <svg className="pass-chevron" viewBox="0 0 14 9" width="14" height="9" aria-hidden="true">
+                    <path d="M1.5 1.5 7 7l5.5-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
               </h3>
 

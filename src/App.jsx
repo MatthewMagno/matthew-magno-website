@@ -15,10 +15,19 @@ const SECTIONS = [
 ];
 
 export default function App() {
-  const [openApp, setOpenApp] = useState(apps[0].id);
+  // Each app card opens and closes on its own; the first starts open.
+  const [openApps, setOpenApps] = useState(() => new Set([apps[0].id]));
+
+  const toggleApp = (id) => {
+    setOpenApps((open) => {
+      const next = new Set(open);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
+  };
 
   const showApp = (id) => {
-    setOpenApp(id);
+    setOpenApps((open) => new Set(open).add(id));
     document.getElementById('apps')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -30,7 +39,7 @@ export default function App() {
         <Hero onOpenApp={showApp} />
         <Work />
         <About />
-        <WalletStack openId={openApp} onOpen={setOpenApp} />
+        <WalletStack openIds={openApps} onToggle={toggleApp} />
         <Contact />
       </main>
       <footer className="footer">

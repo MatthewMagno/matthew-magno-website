@@ -635,6 +635,17 @@ img {
   white-space: nowrap;
 }
 
+.pass-chevron {
+  flex: none;
+  margin-left: 4px;
+  opacity: 0.8;
+  transition: transform 0.45s var(--spring);
+}
+
+.pass.is-open .pass-chevron {
+  transform: rotate(180deg);
+}
+
 .pass-body {
   display: grid;
   grid-template-rows: 0fr;
