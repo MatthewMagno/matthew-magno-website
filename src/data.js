@@ -67,24 +67,6 @@ export const apps = [
     ],
     stack: ['Swift', 'SwiftUI', 'Cloudflare Workers', 'MCP'],
   },
-  {
-    id: 'mogomo',
-    name: 'Mogomo',
-    icon: './icons/mogomo.png',
-    color: '#a8613a',
-    status: 'Prototype',
-    tagline: 'Hand an AI agent a real chore, like sorting your inbox, and watch it work through a friendly character.',
-    points: [
-      'Built for people who aren’t technical: the agent explains what it’s doing in plain language.',
-      'Nothing irreversible happens until you approve it.',
-      'A Fastify and Postgres backend streams each agent step live to an Expo app with nine screens and full dark mode.',
-    ],
-    facts: [
-      { value: '9', label: 'screens' },
-      { value: 'Live', label: 'agent updates' },
-    ],
-    stack: ['TypeScript', 'Fastify', 'Postgres', 'Expo'],
-  },
 ];
 
 export const work = [
