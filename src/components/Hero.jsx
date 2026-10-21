@@ -1,9 +1,7 @@
 import React from 'react';
-import { apps, profile } from '../data.js';
+import { profile } from '../data.js';
 
-export default function Hero({ onOpenApp }) {
-  const reviewing = apps.find((a) => a.status === 'In App Store review');
-
+export default function Hero() {
   return (
     <header className="hero" id="top">
       <div className="silk" aria-hidden="true">
@@ -13,13 +11,6 @@ export default function Hero({ onOpenApp }) {
       </div>
 
       <div className="hero-inner">
-        {reviewing && (
-          <p className="status-pill glass">
-            <span className="status-dot" aria-hidden="true" />
-            {reviewing.name} is in App Store review
-          </p>
-        )}
-
         <h1 className="hero-title">
           <span className="reveal" style={{ '--i': 0 }}>Matthew</span>{' '}
           <span className="reveal" style={{ '--i': 1 }}>Magno</span>
@@ -37,21 +28,6 @@ export default function Hero({ onOpenApp }) {
           </a>
         </div>
 
-        <div className="dock glass" role="list" aria-label="My apps">
-          {apps.map((app, i) => (
-            <button
-              key={app.id}
-              role="listitem"
-              className="dock-app"
-              style={{ '--i': i }}
-              onClick={() => onOpenApp(app.id)}
-              aria-label={`${app.name}: ${app.status}`}
-            >
-              <img src={app.icon} alt="" width="72" height="72" />
-              <span>{app.name}</span>
-            </button>
-          ))}
-        </div>
       </div>
     </header>
   );

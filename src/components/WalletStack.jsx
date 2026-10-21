@@ -48,6 +48,13 @@ export default function WalletStack({ openIds, onToggle }) {
                     <div className="pass-info">
                       <p className="pass-tagline">{app.tagline}</p>
 
+                      {app.different && (
+                        <div className="pass-different">
+                          <p className="pass-different-label">What makes it different</p>
+                          <p>{app.different}</p>
+                        </div>
+                      )}
+
                       <dl className="pass-facts">
                         {app.facts.map((f) => (
                           <div key={f.label}>

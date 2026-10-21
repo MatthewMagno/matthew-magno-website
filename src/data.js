@@ -17,6 +17,7 @@ export const apps = [
     color: '#0f6b66',
     status: 'In TestFlight',
     tagline: 'Split the costs of a trip or a dinner, then settle up in the fewest payments possible.',
+    different: 'Most bill-splitting apps make you type every expense by hand. With SplitIt you send Claude a photo of the receipt, and through the app’s MCP connector it logs every line. The app matches the names to your group, so all you do is check who had what.',
     points: [
       'Native SwiftUI with no third-party packages.',
       'Four ways to split, including line by line from a receipt, with tax and tip shared in proportion.',
@@ -36,6 +37,7 @@ export const apps = [
     color: '#b8432a',
     status: 'On the App Store',
     tagline: 'A shared list of date ideas for two people, and a keepsake log of the dates you actually go on.',
+    different: 'Most date apps hand you a generic list of suggestions. Memori is your own list, shared live between two phones, and a shake picks tonight’s date so neither of you has to. It also has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos.',
     points: [
       'Shake your phone to pull a random idea when you’re both free.',
       'Pairs two phones and keeps the list and photo log in sync live.',
@@ -55,6 +57,7 @@ export const apps = [
     color: '#1d1d1f',
     status: 'In App Store review',
     tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
+    different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
     points: [
       'Imports bookings through a custom MCP server: your own Claude account reads the confirmation emails and sends back only the booking details, so the app never asks for Gmail access.',
       'Checks every AI-imported booking on the server, matching confirmation codes, flight numbers and titles so nothing is added twice.',
@@ -75,6 +78,7 @@ export const work = [
     field: 'Software engineering',
     place: 'Palo Alto',
     tint: '#5e5ce6',
+    logo: './logos/jpmorganchase.png',
     roles: [
       {
         title: 'Software Engineer II',
@@ -102,6 +106,7 @@ export const work = [
     field: 'Software engineering',
     place: 'San Francisco',
     tint: '#ff453a',
+    logo: './logos/wellsfargo.png',
     roles: [
       {
         title: 'Software Engineering Intern',
@@ -118,6 +123,7 @@ export const work = [
     field: 'Project management',
     place: 'New York',
     tint: '#ff9f0a',
+    logo: './logos/tillamook.png',
     roles: [
       {
         title: 'Project Management Intern',
@@ -135,7 +141,8 @@ export const work = [
     org: 'The Chemours Company',
     field: 'Plant engineering',
     place: 'Belle, West Virginia',
-    tint: '#30b0c7',
+    tint: '#fff',
+    logo: './logos/chemours.png',
     roles: [
       {
         title: 'Mechanical Integrity Quality Assurance Engineer Intern',
@@ -153,6 +160,7 @@ export const work = [
     field: 'Research',
     place: 'College Station',
     tint: '#8e2430',
+    logo: './logos/tamu.png',
     roles: [
       {
         title: 'Lead Undergraduate Research Assistant',
@@ -204,24 +212,13 @@ export const work = [
   },
 ];
 
-// Every job as a span on the timeline, grouped by the kind of work. Months are 1–12.
+// Colors for each kind of work, used for the timeline dots and field pills.
 export const fields = [
-  { name: 'Software engineering', color: '#007aff', spans: [
-    { org: 'Wells Fargo', from: [2022, 6], to: [2022, 8] },
-    { org: 'JPMorganChase', from: [2023, 9], to: null },
-  ] },
-  { name: 'Research', color: '#af52de', spans: [
-    { org: 'Texas A&M research labs', from: [2019, 1], to: [2020, 12] },
-  ] },
-  { name: 'Marketing', color: '#34c759', spans: [
-    { org: 'ProGoes Probiotics', from: [2019, 8], to: [2020, 1] },
-  ] },
-  { name: 'Plant engineering', color: '#30b0c7', spans: [
-    { org: 'Chemours', from: [2021, 1], to: [2021, 5] },
-  ] },
-  { name: 'Project management', color: '#ff9f0a', spans: [
-    { org: 'Tillamook', from: [2021, 6], to: [2021, 8] },
-  ] },
+  { name: 'Software engineering', color: '#007aff' },
+  { name: 'Research', color: '#af52de' },
+  { name: 'Marketing', color: '#34c759' },
+  { name: 'Plant engineering', color: '#30b0c7' },
+  { name: 'Project management', color: '#ff9f0a' },
 ];
 
 export const school = [
@@ -229,6 +226,7 @@ export const school = [
     org: 'Texas A&M University',
     place: 'College Station',
     tint: '#8e2430',
+    logo: './logos/tamu.png',
     roles: [
       {
         title: 'B.S. Chemical Engineering',
