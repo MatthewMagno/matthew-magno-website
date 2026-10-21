@@ -373,17 +373,40 @@ img {
   max-width: var(--page);
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  gap: clamp(36px, 5vw, 72px);
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 40px);
+}
+
+/* Photo and the text beside it share a row and stretch to the same
+   height, so their top and bottom edges line up exactly. The row's
+   height comes from the text alone: the photo wrapper contributes
+   none, and the image fills whatever height the text sets. */
+.hero-row {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(36px, 5vw, 64px);
+  width: 100%;
 }
 
 .hero-photo {
+  position: relative;
   flex: none;
-  width: clamp(230px, 27vw, 320px);
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  width: clamp(220px, 25vw, 300px);
   border-radius: 28px;
+  overflow: hidden;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* Cover with a slight bias toward the bottom of the frame crops more
+   of the sky (and some of the grass at the bottom) than the original
+   full 3 / 4 frame showed, without enlarging the photo. */
+.hero-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
 }
 
 .hero-text {
@@ -393,11 +416,12 @@ img {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(60px, 12.5vw, 148px);
+  font-size: clamp(54px, 11.5vw, 126px);
   font-weight: 700;
-  line-height: 0.92;
+  line-height: 0.95;
   letter-spacing: -0.045em;
   margin-left: -0.04em;
+  white-space: nowrap;
 }
 
 .hero-title .reveal {
@@ -434,15 +458,14 @@ img {
 }
 
 .hero-role {
-  margin-top: 28px;
-  font-size: clamp(22px, 2.6vw, 30px);
+  font-size: clamp(21px, 2.2vw, 25px);
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.021em;
 }
 
 .hero-prev {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: clamp(17px, 1.8vw, 20px);
   color: var(--label-2);
 }
@@ -450,7 +473,7 @@ img {
 /* Key facts as label ... value rows, like a spec sheet. */
 .hero-facts {
   max-width: 760px;
-  margin-top: 36px;
+  margin-top: 24px;
   border-top: 1px solid var(--separator);
 }
 
@@ -458,7 +481,7 @@ img {
   display: flex;
   align-items: baseline;
   gap: 16px;
-  padding: 16px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--separator);
 }
 
@@ -496,7 +519,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: 24px;
 }
 
 /* ---------- Sections ---------- */
@@ -1453,13 +1476,21 @@ button.row:active {
   }
 
   .hero-inner {
+    gap: 24px;
+  }
+
+  .hero-title {
+    font-size: clamp(32px, 11.4vw, 54px);
+  }
+
+  .hero-row {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 30px;
+    gap: 26px;
   }
 
   .hero-photo {
     width: min(62vw, 240px);
+    aspect-ratio: 4 / 5;
   }
 
   .hero-actions .button {

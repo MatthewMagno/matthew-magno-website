@@ -19,13 +19,16 @@ export default function Hero() {
       </div>
 
       <div className="hero-inner">
-        <img className="hero-photo reveal" style={{ '--i': 0 }} src="./portrait.jpg" alt="Matthew Magno" />
-        <div className="hero-text">
         <h1 className="hero-title">
           <span className="reveal" style={{ '--i': 0 }}>Matthew</span>{' '}
           <span className="reveal" style={{ '--i': 1 }}>Magno</span>
         </h1>
 
+        <div className="hero-row">
+        <div className="hero-photo reveal" style={{ '--i': 1 }}>
+          <img src="./portrait.jpg" alt="Matthew Magno" />
+        </div>
+        <div className="hero-text">
         <p className="hero-role reveal" style={{ '--i': 2 }}>Backend-leaning software engineer at JPMorganChase</p>
         <p className="hero-prev reveal" style={{ '--i': 2 }}>Previously at Wells Fargo, Tillamook and Chemours</p>
 
@@ -46,6 +49,7 @@ export default function Hero() {
           <a className="button button-glass glass" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
           <a className="button button-glass glass" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
           <a className="button button-glass glass" href={`mailto:${profile.email}`}>Email</a>
+        </div>
         </div>
         </div>
       </div>
