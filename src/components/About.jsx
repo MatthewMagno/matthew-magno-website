@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FACTS = [
-  { label: 'Studied', value: 'Chemical engineering, Texas A&M University' },
+  { label: 'Studied', value: 'Chemical engineering' },
   { label: 'Day job', value: 'Software Engineer II, JPMorganChase' },
   { label: 'Certified', value: 'AWS Cloud Practitioner' },
   { label: 'Research', value: 'Aggie Research Scholar, 2019' },
