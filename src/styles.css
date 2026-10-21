@@ -416,20 +416,70 @@ img {
   }
 }
 
-.hero-lede {
-  max-width: 34ch;
+.hero-role {
   margin-top: 28px;
-  font-size: clamp(21px, 2.4vw, 26px);
-  line-height: 1.35;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 500;
+  line-height: 1.25;
   letter-spacing: -0.021em;
+}
+
+.hero-prev {
+  margin-top: 8px;
+  font-size: clamp(17px, 1.8vw, 20px);
   color: var(--label-2);
+}
+
+/* Key facts as label ... value rows, like a spec sheet. */
+.hero-facts {
+  max-width: 760px;
+  margin-top: 36px;
+  border-top: 1px solid var(--separator);
+}
+
+.hero-facts div {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.hero-facts dt {
+  flex: none;
+  font-size: 17px;
+  color: var(--label-2);
+}
+
+/* Dotted leader between the label and the value. */
+.hero-facts div::after {
+  content: '';
+  order: 1;
+  flex: 1;
+  min-width: 24px;
+  border-bottom: 1px dotted var(--label-3);
+  transform: translateY(-4px);
+}
+
+.hero-facts dd {
+  order: 2;
+  text-align: right;
+  font-size: 17px;
+  color: var(--label-2);
+}
+
+.hero-facts b {
+  margin-right: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--label);
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 36px;
+  margin-top: 32px;
 }
 
 /* ---------- Sections ---------- */
@@ -868,36 +918,75 @@ img {
 }
 
 .tl-card {
-  padding: 22px 24px;
   border-radius: 22px;
   background: var(--surface);
+}
+
+.tl-heading {
+  margin: 0;
 }
 
 .tl-head {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: 22px;
+  text-align: left;
+  color: inherit;
+}
+
+.tl-head:hover .more-chevron {
+  color: var(--label);
+}
+
+.tl-head .more-chevron {
+  flex: none;
+  color: var(--label-2);
 }
 
 .tl-head-text {
+  display: grid;
   flex: 1;
   min-width: 0;
 }
 
-.tl-head h4 {
-  margin: 0;
+.tl-org {
   font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-.tl-head p {
+.tl-sub {
   font-size: 14px;
+  font-weight: 400;
   color: var(--label-2);
 }
 
+/* Collapsed by default; the height animates open. */
+.tl-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease);
+}
+
+.tl-item.is-open .tl-body {
+  grid-template-rows: 1fr;
+}
+
+.tl-body-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 22px;
+}
+
+.tl-item.is-open .tl-body-inner {
+  padding-bottom: 22px;
+}
+
 .tl-role {
-  margin-top: 18px;
+  margin-top: 4px;
 }
 
 .tl-role + .tl-role {
@@ -932,13 +1021,6 @@ img {
   color: var(--label-2);
 }
 
-.tl-points li:first-child {
-  color: var(--label);
-}
-
-.tl-points li + li {
-  animation: work-rise 0.4s var(--ease) both;
-}
 
 /* Education and toolbox */
 
@@ -1355,6 +1437,20 @@ button.row:active {
 
   .hero-actions .button {
     flex: 1 1 auto;
+  }
+
+  .hero-facts div {
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 0;
+  }
+
+  .hero-facts div::after {
+    display: none;
+  }
+
+  .hero-facts dd {
+    text-align: left;
   }
 
   .section {

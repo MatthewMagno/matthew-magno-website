@@ -61,41 +61,43 @@ function TimelineEntry({ entry }) {
   const color = fieldColor(entry.field);
   // The year the job started, from its earliest role.
   const year = entry.roles.at(-1).dates.match(/\d{4}/)?.[0] ?? '';
-  const hidden = entry.roles.reduce((n, r) => n + Math.max(r.points.length - 1, 0), 0);
   const id = `tl-${entry.org.replace(/\W+/g, '-').toLowerCase()}`;
 
   return (
-    <li className="tl-item" style={{ '--c': color }}>
+    <li className={`tl-item ${open ? 'is-open' : ''}`} style={{ '--c': color }}>
       <span className="tl-year">{year}</span>
       <span className="tl-dot" aria-hidden="true" />
       <article className="tl-card">
-        <header className="tl-head">
-          <Mono entry={entry} />
-          <div className="tl-head-text">
-            <h4>{entry.org}</h4>
-            <p>{entry.place}</p>
-          </div>
-          <span className="field-pill">{entry.field}</span>
-        </header>
-
-        {entry.roles.map((r) => (
-          <div key={`${r.title}-${r.dates}-${r.team ?? ''}`} className="tl-role">
-            <p className="tl-role-title">
-              {r.title}
-              <span>{[r.team, r.dates].filter(Boolean).join(' · ')}</span>
-            </p>
-            <ul className="tl-points" id={`${id}-${r.dates}-${r.team ?? ''}`}>
-              {(open ? r.points : r.points.slice(0, 1)).map((p) => <li key={p}>{p}</li>)}
-            </ul>
-          </div>
-        ))}
-
-        {hidden > 0 && (
-          <button className="more-btn" onClick={() => setOpen(!open)} aria-expanded={open}>
-            {open ? 'Show less' : `${hidden} more`}
+        <h4 className="tl-heading">
+          <button className="tl-head" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls={id}>
+            <Mono entry={entry} />
+            <span className="tl-head-text">
+              <span className="tl-org">{entry.org}</span>
+              <span className="tl-sub">{[entry.roles[0].title, entry.place].join(' · ')}</span>
+            </span>
+            <span className="field-pill">{entry.field}</span>
             <Chevron open={open} />
           </button>
-        )}
+        </h4>
+
+        {/* Closed bodies stay in the DOM so the height can animate; inert hides them from focus. */}
+        <div className="tl-body" id={id} {...(!open && { inert: '', 'aria-hidden': true })}>
+          <div className="tl-body-inner">
+            {entry.roles.map((r) => (
+              <div key={`${r.title}-${r.dates}-${r.team ?? ''}`} className="tl-role">
+                <p className="tl-role-title">
+                  {r.title}
+                  <span>{[r.team, r.dates].filter(Boolean).join(' · ')}</span>
+                </p>
+                {r.points.length > 0 && (
+                  <ul className="tl-points">
+                    {r.points.map((p) => <li key={p}>{p}</li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </article>
     </li>
   );

@@ -245,7 +245,8 @@ export const school = [
   {
     org: 'Amazon Web Services',
     place: 'Certification',
-    tint: '#ff9f0a',
+    tint: '#232f3e',
+    logo: './logos/aws.png',
     roles: [
       {
         title: 'AWS Certified Cloud Practitioner',

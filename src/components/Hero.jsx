@@ -1,6 +1,14 @@
 import React from 'react';
 import { profile } from '../data.js';
 
+// The essentials a recruiter looks for, readable without scrolling.
+const FACTS = [
+  { label: 'Role', value: 'Software Engineer II', note: 'commercial real estate lending' },
+  { label: 'Headline result', value: '59.5%', note: 'faster loan-event processing' },
+  { label: 'Side projects', value: '3 apps', note: '1 live on the App Store' },
+  { label: 'Based in', value: 'San Francisco', note: 'Bay Area' },
+];
+
 export default function Hero() {
   return (
     <header className="hero" id="top">
@@ -16,18 +24,27 @@ export default function Hero() {
           <span className="reveal" style={{ '--i': 1 }}>Magno</span>
         </h1>
 
-        <p className="hero-lede reveal" style={{ '--i': 2 }}>
-          Software engineer at JPMorganChase in the Bay Area. On nights and weekends I ship apps that
-          make my own life more productive.
-        </p>
+        <p className="hero-role reveal" style={{ '--i': 2 }}>Software Engineer at JPMorganChase</p>
+        <p className="hero-prev reveal" style={{ '--i': 2 }}>Previously at Wells Fargo, Tillamook and Chemours</p>
 
-        <div className="hero-actions reveal" style={{ '--i': 3 }}>
-          <a className="button button-filled" href={`mailto:${profile.email}`}>Email me</a>
-          <a className="button button-glass glass" href={profile.resume} target="_blank" rel="noreferrer">
-            Download résumé
-          </a>
+        <dl className="hero-facts reveal" style={{ '--i': 3 }}>
+          {FACTS.map((f) => (
+            <div key={f.label}>
+              <dt>{f.label}</dt>
+              <dd>
+                <b>{f.value}</b>
+                {f.note && <span>{f.note}</span>}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="hero-actions reveal" style={{ '--i': 4 }}>
+          <a className="button button-filled" href={profile.resume} target="_blank" rel="noreferrer">View résumé</a>
+          <a className="button button-glass glass" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+          <a className="button button-glass glass" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+          <a className="button button-glass glass" href={`mailto:${profile.email}`}>Email</a>
         </div>
-
       </div>
     </header>
   );
