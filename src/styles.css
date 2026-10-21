@@ -667,6 +667,35 @@ img {
   transition-delay: 0.08s;
 }
 
+.pass-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 344px;
+  gap: 40px;
+  align-items: start;
+}
+
+.pass-demo {
+  padding-top: 4px;
+}
+
+@media (max-width: 860px) {
+  .pass-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* On narrow screens the phone sits right under the tagline. */
+  .pass-info {
+    display: contents;
+  }
+
+  .pass-tagline { order: 1; }
+  .pass-demo { order: 2; padding: 24px 0 4px; }
+  .pass-facts { order: 3; }
+  .pass-points { order: 4; }
+  .pass-footer { order: 5; }
+}
+
 .pass-tagline {
   max-width: 30ch;
   font-family: var(--font-display);
