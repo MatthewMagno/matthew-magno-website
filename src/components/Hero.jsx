@@ -3,8 +3,8 @@ import { profile } from '../data.js';
 
 // The essentials a recruiter looks for, readable without scrolling.
 const FACTS = [
-  { label: 'Role', value: 'Software Engineer II', note: 'commercial real estate lending' },
-  { label: 'Headline result', value: '59.5%', note: 'faster loan-event processing' },
+  { label: 'Role', value: 'Software Engineer II', note: 'Commercial Real Estate Digital Experience' },
+  { label: 'Focus', value: 'Software engineering', note: 'backend' },
   { label: 'Side projects', value: '3 apps', note: '1 live on the App Store' },
   { label: 'Based in', value: 'San Francisco', note: 'Bay Area' },
 ];
