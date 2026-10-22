@@ -13,9 +13,14 @@ export default function Hero() {
   const videoRef = useRef(null);
 
   // Play the 3D loop unless the visitor asked for reduced motion; then the poster frame stays.
+  // Both files keep the background transparent, but each browser only honours one kind of alpha:
+  // WebKit (Safari, and every iOS browser) reads it from HEVC, Chrome and Firefox from VP9 WebM.
+  // Chrome on a Mac will also decode HEVC, just without the alpha, so pick by engine, not canPlayType.
   useEffect(() => {
     const video = videoRef.current;
     if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent);
+    video.src = webkit ? './me-3d.mov' : './me-3d.webm';
     video.play().catch(() => {});
   }, []);
 
@@ -37,8 +42,7 @@ export default function Hero() {
         <div className="hero-photo reveal" style={{ '--i': 1 }}>
           <video
             ref={videoRef}
-            src="./me-3d.mp4"
-            poster="./me-3d.jpg"
+            poster="./me-3d.png"
             muted
             loop
             playsInline

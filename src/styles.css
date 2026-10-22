@@ -387,25 +387,17 @@ img {
   width: 100%;
 }
 
+/* Just the figure, cut out on a transparent video, standing beside the text. */
 .hero-photo {
-  position: relative;
   flex: none;
-  width: clamp(220px, 25vw, 300px);
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  align-self: center;
+  width: clamp(200px, 22vw, 280px);
 }
 
-/* Cover with a slight bias toward the bottom of the frame crops more
-   of the sky (and some of the grass at the bottom) than the original
-   full 3 / 4 frame showed, without enlarging the photo. */
 .hero-photo video {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 50%;
+  height: auto;
 }
 
 .hero-text {
@@ -1278,8 +1270,7 @@ img {
   }
 
   .hero-photo {
-    width: min(62vw, 240px);
-    aspect-ratio: 4 / 5;
+    width: min(52vw, 200px);
   }
 
   .hero-actions .button {
