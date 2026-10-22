@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { profile } from '../data.js';
 
 // The essentials a recruiter looks for, readable without scrolling.
@@ -10,20 +10,6 @@ const FACTS = [
 ];
 
 export default function Hero() {
-  const videoRef = useRef(null);
-
-  // Play the 3D loop unless the visitor asked for reduced motion; then the poster frame stays.
-  // Both files keep the background transparent, but each browser only honours one kind of alpha:
-  // WebKit (Safari, and every iOS browser) reads it from HEVC, Chrome and Firefox from VP9 WebM.
-  // Chrome on a Mac will also decode HEVC, just without the alpha, so pick by engine, not canPlayType.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg|Android/.test(navigator.userAgent);
-    video.src = webkit ? './me-3d.mov' : './me-3d.webm';
-    video.play().catch(() => {});
-  }, []);
-
   return (
     <header className="hero" id="top">
       <div className="silk" aria-hidden="true">
@@ -40,14 +26,7 @@ export default function Hero() {
 
         <div className="hero-row">
         <div className="hero-photo reveal" style={{ '--i': 1 }}>
-          <video
-            ref={videoRef}
-            poster="./me-3d.png"
-            muted
-            loop
-            playsInline
-            aria-label="Animated 3D figure of Matthew holding a phone, waving and hopping"
-          />
+          <img src="./portrait.jpg" alt="Matthew Magno" />
         </div>
         <div className="hero-text">
         <p className="hero-role reveal" style={{ '--i': 2 }}>Backend software engineer at JPMorganChase</p>
