@@ -102,12 +102,6 @@ function SectionGlyph({ id }) {
         <path d="M3.8 20.5c.9-4 4.2-6.3 8.2-6.3s7.3 2.3 8.2 6.3z" />
       </>
     ),
-    contact: (
-      <>
-        <rect x="2.5" y="5" width="19" height="14" rx="3" />
-        <path d="m4 7 8 6 8-6" fill="none" stroke="var(--glyph-cut)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      </>
-    ),
   };
   return (
     <svg className="island-glyph" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
