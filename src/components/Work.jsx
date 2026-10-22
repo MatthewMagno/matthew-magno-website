@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { fields, school, toolbox, work } from '../data.js';
 
 const fieldColor = (name) => fields.find((f) => f.name === name)?.color ?? 'var(--tint)';
@@ -62,9 +62,10 @@ function TimelineEntry({ entry }) {
   // The year the job started, from its earliest role.
   const year = entry.roles.at(-1).dates.match(/\d{4}/)?.[0] ?? '';
   const id = `tl-${entry.org.replace(/\W+/g, '-').toLowerCase()}`;
+  const [ref, seen] = useSeen();
 
   return (
-    <li className={`tl-item ${open ? 'is-open' : ''}`} style={{ '--c': color }}>
+    <li ref={ref} className={`tl-item ${open ? 'is-open' : ''} ${seen ? 'is-seen' : ''}`} style={{ '--c': color }}>
       <span className="tl-year">{year}</span>
       <span className="tl-dot" aria-hidden="true" />
       <article className="tl-card">
@@ -101,6 +102,28 @@ function TimelineEntry({ entry }) {
       </article>
     </li>
   );
+}
+
+// True once the element has scrolled into view; it stays true so it fades in only once.
+function useSeen() {
+  const ref = useRef(null);
+  const [seen, setSeen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setSeen(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, seen];
 }
 
 // The company's logo, or its initial on its tint when there's no logo.
