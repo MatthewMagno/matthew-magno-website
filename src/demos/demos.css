@@ -2467,6 +2467,16 @@
   background: var(--paper-alt);
 }
 
+/* A tossed-in photo fills the tile; a scrim keeps the age and title readable. */
+.mem-dust-tile.has-photo {
+  background: linear-gradient(180deg, rgba(20, 12, 6, 0.35) 0%, rgba(20, 12, 6, 0) 38%, rgba(20, 12, 6, 0.72) 100%), var(--photo) center / cover;
+  color: #fff;
+}
+
+.mem-dust-tile.has-photo .mem-dust-age {
+  color: rgba(255, 255, 255, 0.86);
+}
+
 .mem-dust-age {
   font-size: 13px;
   line-height: 15px;
@@ -2540,6 +2550,10 @@
   width: 64px;
   height: 64px;
   border-radius: 12px;
+}
+
+img.mem-thumb {
+  object-fit: cover;
 }
 
 .mem-stripes {
@@ -3021,6 +3035,15 @@
   margin: 0 auto 18px;
   border-radius: 99px;
   background: var(--border);
+}
+
+.mem-detail-photo {
+  display: block;
+  width: 100%;
+  height: 190px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  object-fit: cover;
 }
 
 .mem-detail h2 {

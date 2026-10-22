@@ -24,33 +24,42 @@ const CATEGORIES = [
 const slip = (id, title, energy, spend, weather, by, extra = {}) => ({ id, title, energy, spend, weather, by, ...extra });
 
 const SLIPS = [
-  slip('golf', 'That rooftop mini-golf place', ['out & about'], ['$$'], ['outdoors'], 'You', { tossed: 'September' }),
-  slip('drivein', 'Drive-in movie with the good blankets', ['cozy'], ['free'], ['outdoors'], 'Sam', { link: true, tossed: 'September' }),
+  slip('golf', 'That rooftop mini-golf place', ['out & about'], ['$$'], ['outdoors'], 'You', { tossed: 'September', img: photo('lookout') }),
+  slip('drivein', 'Drive-in movie with the good blankets', ['cozy'], ['free'], ['outdoors'], 'Sam', { link: true, tossed: 'September', img: photo('sunset') }),
   slip('drivein2', 'Drive-in movie, any movie', ['cozy'], ['free'], ['outdoors'], 'You', { tossed: 'August' }),
-  slip('omakase', 'Omakase counter for the anniversary', ['big night'], ['$$$'], ['indoors'], 'Sam', { tossed: 'August' }),
-  slip('market', 'Night market food crawl', ['big night'], ['$$'], ['outdoors'], 'Sam', { link: true, tossed: 'July', dust: '3 months', dustAt: 5 }),
-  slip('pasta', 'Learn to make pasta from scratch', ['cozy'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 3 }),
-  slip('books', 'Bookstore date — pick each other’s next read', ['out & about'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 4 }),
-  slip('ramen', 'That tiny ramen bar on 5th', ['out & about'], ['$$'], ['indoors'], 'You', { tossed: 'April', dust: '6 months', dustAt: 2 }),
-  slip('firstmeal', 'Cook the first meal you ever ate together', ['cozy'], ['$'], ['indoors'], 'starter set', { tossed: 'March', dust: '7 months', dustAt: 1 }),
+  slip('omakase', 'Omakase counter for the anniversary', ['big night'], ['$$$'], ['indoors'], 'Sam', { tossed: 'August', img: photo('storefront') }),
+  slip('market', 'Night market food crawl', ['big night'], ['$$'], ['outdoors'], 'Sam', { link: true, tossed: 'July', dust: '3 months', dustAt: 5, img: photo('fireworks') }),
+  slip('pasta', 'Learn to make pasta from scratch', ['cozy'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 3, img: photo('farmers') }),
+  slip('books', 'Bookstore date — pick each other’s next read', ['out & about'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 4, img: photo('flowers') }),
+  slip('ramen', 'That tiny ramen bar on 5th', ['out & about'], ['$$'], ['indoors'], 'You', { tossed: 'April', dust: '6 months', dustAt: 2, img: photo('ramen') }),
+  slip('firstmeal', 'Cook the first meal you ever ate together', ['cozy'], ['$'], ['indoors'], 'starter set', { tossed: 'March', dust: '7 months', dustAt: 1, img: photo('diner') }),
 ];
 
-const LAST_PULL = slip('picnic', 'Sunset picnic at Miller Point', ['cozy'], ['free'], ['outdoors'], 'Sam');
+const LAST_PULL = slip('picnic', 'Sunset picnic at Miller Point', ['cozy'], ['free'], ['outdoors'], 'Sam', { img: photo('trail') });
 
 const memory = (no, title, month, day, year, img, extra = {}) => ({ id: `m${no}`, no, title, month, day, year, img, ...extra });
 
+// Several dates a month, so the Log reads like a full shoebox. Nº follows date order.
 const MEMORIES = [
-  memory(8, 'That tiny ramen bar on 5th', 'June', 2, 2026, photo('ramen')),
-  memory(7, 'Farmers market breakfast run', 'May', 10, 2026, photo('farmers'), { note: 'croissants, then more croissants' }),
-  memory(6, 'Bowling, loser buys tacos', 'April', 18, 2026, photo('tacos')),
-  memory(5, 'Museum date, the long way home', 'March', 7, 2026, photo('road')),
-  memory(4, 'Thrift store challenge', 'February', 14, 2026, photo('flowers'), { note: 'you in that jacket' }),
-  memory(3, 'Hot pot night', 'December', 12, 2025, photo('diner')),
-  memory(2, 'First snow walk', 'November', 20, 2025, photo('trees'), { note: 'cold hands, warm everything else' }),
-  memory(1, 'Karaoke until they kicked us out', 'October', 21, 2025, photo('karaoke')),
+  memory(16, 'Board game café, best of seven', 'June', 21, 2026, photo('games'), { note: 'you still owe me a rematch' }),
+  memory(15, 'That tiny ramen bar on 5th', 'June', 2, 2026, photo('ramen')),
+  memory(14, 'Ceramics class downtown', 'May', 24, 2026, photo('ceramics'), { note: 'one bowl, slightly lopsided' }),
+  memory(13, 'Farmers market breakfast run', 'May', 10, 2026, photo('farmers'), { note: 'croissants, then more croissants' }),
+  memory(12, 'Bowling, loser buys tacos', 'April', 18, 2026, photo('tacos')),
+  memory(11, 'Drive out to the lookout', 'April', 5, 2026, photo('lookout')),
+  memory(10, 'Desert trail at golden hour', 'March', 22, 2026, photo('trail')),
+  memory(9, 'Museum date, the long way home', 'March', 7, 2026, photo('road')),
+  memory(8, 'Thrift store challenge', 'February', 14, 2026, photo('flowers'), { note: 'you in that jacket' }),
+  memory(7, 'Sunset drive, no destination', 'February', 1, 2026, photo('sunset')),
+  memory(6, 'Fireworks from the roof', 'December', 31, 2025, photo('fireworks'), { note: 'midnight, freezing, worth it' }),
+  memory(5, 'Hot pot night', 'December', 12, 2025, photo('diner')),
+  memory(4, 'First snow walk', 'November', 20, 2025, photo('trees'), { note: 'cold hands, warm everything else' }),
+  memory(3, 'The pier, freezing', 'November', 8, 2025, photo('pier')),
+  memory(2, 'Karaoke until they kicked us out', 'October', 21, 2025, photo('karaoke')),
+  memory(1, 'Dinner at the corner spot', 'October', 3, 2025, photo('storefront')),
 ];
 
-const PICKS = [photo('pier'), photo('tacos'), photo('road')];
+const PICKS = [photo('trail'), photo('pier'), photo('tacos')];
 const WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
   'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
 const numWord = (n) => WORDS[n] ?? String(n);
@@ -233,7 +242,7 @@ function Jar({ slips, hearts, dusted, lastPull, onHeart, onOpen, onAddPhotos, on
           <div className="mem-dust-rail">
             {dust.map((s) => (
               <button key={s.id} className="mem-dust-card" onClick={() => onOpen(s)}>
-                <span className="mem-dust-tile">
+                <span className={`mem-dust-tile ${s.img ? 'has-photo' : ''}`} style={s.img ? { '--photo': `url(${s.img})` } : undefined}>
                   <span className="mem-dust-age">{s.dust}</span>
                   <span className="mem-dust-title">{s.title}</span>
                 </span>
@@ -254,7 +263,7 @@ function Jar({ slips, hearts, dusted, lastPull, onHeart, onOpen, onAddPhotos, on
         {slips.map((s) => (
           <li key={s.id} className={`mem-row ${s.fresh ? 'is-fresh' : ''}`}>
             <button className="mem-row-main" onClick={() => onOpen(s)}>
-              {s.link && <span className="mem-thumb mem-stripes" />}
+              {s.img ? <img className="mem-thumb" src={s.img} alt="" /> : s.link && <span className="mem-thumb mem-stripes" />}
               <span className="mem-row-text">
                 <span className="mem-row-title">{s.title}</span>
                 <span className="mem-row-meta">{meta(s)}</span>
@@ -392,6 +401,7 @@ function DetailSheet({ slip: s, onClose, onEdit, onDelete }) {
     <BottomSheet onClose={onClose}>
       {(close) => (
         <div className="mem-detail">
+          {s.img && <img className="mem-detail-photo" src={s.img} alt="" />}
           <h2>{s.title}</h2>
           {tags.length > 0 && (
             <div className="mem-chips">
