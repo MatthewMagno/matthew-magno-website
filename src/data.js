@@ -23,8 +23,7 @@ export const apps = [
       'Runs its own OAuth 2.1 sign-in server (PKCE, dynamic client registration), so the connector installs in Claude from a single URL.',
     ],
     facts: [
-      { value: '290+', label: 'automated tests' },
-      { value: '0', label: 'Gmail permissions' },
+      { value: '6', label: 'MCP tools' },
     ],
     stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
   },
@@ -41,6 +40,7 @@ export const apps = [
       'Shipped to the App Store and updated through version 1.7, with a share extension for saving ideas from anywhere.',
     ],
     facts: [
+      { value: '7', label: 'MCP tools' },
       { value: '1.7', label: 'current version' },
       { value: '29', label: 'downloads' },
     ],
@@ -60,7 +60,7 @@ export const apps = [
       'Four ways to split, including line by line from a receipt, with tax and tip shared in proportion.',
     ],
     facts: [
-      { value: '4', label: 'ways to split' },
+      { value: '17', label: 'MCP tools' },
     ],
     stack: ['Swift', 'SwiftUI', 'Cloudflare Workers', 'MCP'],
   },

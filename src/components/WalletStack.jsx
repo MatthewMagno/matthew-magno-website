@@ -55,14 +55,16 @@ export default function WalletStack({ openIds, onToggle }) {
                         </div>
                       )}
 
-                      <dl className="pass-facts">
-                        {app.facts.map((f) => (
-                          <div key={f.label}>
-                            <dt>{f.label}</dt>
-                            <dd>{f.value}</dd>
-                          </div>
-                        ))}
-                      </dl>
+                      {app.facts && (
+                        <dl className="pass-facts">
+                          {app.facts.map((f) => (
+                            <div key={f.label}>
+                              <dt>{f.label}</dt>
+                              <dd>{f.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      )}
 
                       <ul className="pass-points">
                         {app.points.map((p) => (
