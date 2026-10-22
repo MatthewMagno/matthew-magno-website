@@ -24,8 +24,7 @@ export default function Contact() {
       <div className="contact-card glass">
         <h2 id="contact-title">Let’s talk.</h2>
         <p>
-          I’m open to software engineering roles, especially on mobile and AI products. Email is the
-          fastest way to reach me.
+          I’m open to backend software engineering roles. Email is the fastest way to reach me.
         </p>
 
         <div className="contact-actions">

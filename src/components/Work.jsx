@@ -8,7 +8,7 @@ export default function Work() {
     <section className="section" id="work" aria-labelledby="work-title">
       <div className="section-head">
         <h2 id="work-title">Work</h2>
-        <p>Software, research labs, a chemical plant, product development and a startup’s marketing team. I’ve learned something different from each.</p>
+        <p>Backend engineering at JPMorganChase, and the software, plant, research and product roles that came before it.</p>
       </div>
 
       <h3 className="work-subhead">Experience</h3>

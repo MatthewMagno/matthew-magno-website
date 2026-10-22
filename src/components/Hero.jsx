@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { profile } from '../data.js';
 
 // The essentials a recruiter looks for, readable without scrolling.
 const FACTS = [
   { label: 'Role', value: 'Software Engineer II', note: 'Commercial Real Estate Digital Experience' },
-  { label: 'Focus', value: 'Software engineering', note: 'backend-leaning' },
+  { label: 'Focus', value: 'Backend', note: 'APIs, databases and performance' },
   { label: 'Side projects', value: '3 apps', note: '1 live on the App Store' },
   { label: 'Based in', value: 'San Francisco' },
 ];
 
 export default function Hero() {
+  const videoRef = useRef(null);
+
+  // Play the 3D loop unless the visitor asked for reduced motion; then the poster frame stays.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    video.play().catch(() => {});
+  }, []);
+
   return (
     <header className="hero" id="top">
       <div className="silk" aria-hidden="true">
@@ -26,10 +35,18 @@ export default function Hero() {
 
         <div className="hero-row">
         <div className="hero-photo reveal" style={{ '--i': 1 }}>
-          <img src="./portrait.jpg" alt="Matthew Magno" />
+          <video
+            ref={videoRef}
+            src="./me-3d.mp4"
+            poster="./me-3d.jpg"
+            muted
+            loop
+            playsInline
+            aria-label="Animated 3D figure of Matthew holding a phone, waving and hopping"
+          />
         </div>
         <div className="hero-text">
-        <p className="hero-role reveal" style={{ '--i': 2 }}>Backend-leaning software engineer at JPMorganChase</p>
+        <p className="hero-role reveal" style={{ '--i': 2 }}>Backend software engineer at JPMorganChase</p>
         <p className="hero-prev reveal" style={{ '--i': 2 }}>Previously at Wells Fargo, Tillamook and Chemours</p>
 
         <dl className="hero-facts reveal" style={{ '--i': 3 }}>

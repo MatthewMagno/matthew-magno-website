@@ -11,24 +11,22 @@ export const profile = {
 
 export const apps = [
   {
-    id: 'splitit',
-    name: 'SplitIt',
-    icon: './icons/splitit.png',
-    color: '#0f6b66',
-    status: 'In TestFlight',
-    tagline: 'Split the costs of a trip or a dinner, then settle up in the fewest payments possible.',
-    different: 'Most bill-splitting apps make you type every expense by hand. With SplitIt you send Claude a photo of the receipt, and through the app’s MCP connector it logs every line. The app matches the names to your group, so all you do is check who had what.',
+    id: 'reservations',
+    name: 'Reservations',
+    icon: './icons/reservations.png',
+    color: '#1d1d1f',
+    status: 'In App Store review',
+    tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
+    different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
     points: [
-      'Native SwiftUI with no third-party packages.',
-      'Four ways to split, including line by line from a receipt, with tax and tip shared in proportion.',
-      'Ask Claude to log a receipt and it waits in the app, already matched to the people at your event.',
-      'A review mode remembers what you checked and flags an expense if it changes afterwards.',
+      'Checks every AI-imported booking on the server, matching confirmation codes, flight numbers and titles so nothing is added twice.',
+      'Runs its own OAuth 2.1 sign-in server (PKCE, dynamic client registration), so the connector installs in Claude from a single URL.',
     ],
     facts: [
-      { value: '4', label: 'ways to split' },
-      { value: '2', label: 'currencies per event' },
+      { value: '290+', label: 'automated tests' },
+      { value: '0', label: 'Gmail permissions' },
     ],
-    stack: ['Swift', 'SwiftUI', 'Cloudflare Workers', 'MCP'],
+    stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
   },
   {
     id: 'memori',
@@ -39,7 +37,6 @@ export const apps = [
     tagline: 'A shared list of date ideas for two people, and a keepsake log of the dates you actually go on.',
     different: 'Most date apps hand you a generic list of suggestions. Memori is your own list, shared live between two phones, and a shake picks tonight’s date so neither of you has to. It also has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos.',
     points: [
-      'Shake your phone to pull a random idea when you’re both free.',
       'Pairs two phones and keeps the list and photo log in sync live.',
       'Shipped to the App Store and updated through version 1.7, with a share extension for saving ideas from anywhere.',
     ],
@@ -51,24 +48,21 @@ export const apps = [
     link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/memori-for-two/id6792543667' },
   },
   {
-    id: 'reservations',
-    name: 'Reservations',
-    icon: './icons/reservations.png',
-    color: '#1d1d1f',
-    status: 'In App Store review',
-    tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
-    different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
+    id: 'splitit',
+    name: 'SplitIt',
+    icon: './icons/splitit.png',
+    color: '#0f6b66',
+    status: 'In TestFlight',
+    tagline: 'Split the costs of a trip or a dinner, then settle up in the fewest payments possible.',
+    different: 'Most bill-splitting apps make you type every expense by hand. With SplitIt you send Claude a photo of the receipt, and through the app’s MCP connector it logs every line. The app matches the names to your group, so all you do is check who had what.',
     points: [
-      'Imports bookings through a custom MCP server: your own Claude account reads the confirmation emails and sends back only the booking details, so the app never asks for Gmail access.',
-      'Checks every AI-imported booking on the server, matching confirmation codes, flight numbers and titles so nothing is added twice.',
-      'Runs its own OAuth 2.1 sign-in server (PKCE, dynamic client registration), so the connector installs in Claude from a single URL.',
-      'Taken from spec to App Store submission solo. I made the architecture, security and product calls and directed Claude Code on the implementation.',
+      'Native SwiftUI with no third-party packages.',
+      'Four ways to split, including line by line from a receipt, with tax and tip shared in proportion.',
     ],
     facts: [
-      { value: '290+', label: 'automated tests' },
-      { value: '0', label: 'Gmail permissions' },
+      { value: '4', label: 'ways to split' },
     ],
-    stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
+    stack: ['Swift', 'SwiftUI', 'Cloudflare Workers', 'MCP'],
   },
 ];
 
@@ -141,7 +135,7 @@ export const work = [
     org: 'The Chemours Company',
     field: 'Chemical engineering',
     place: 'Belle, West Virginia',
-    tint: '#fff',
+    tint: '#e53e30',
     logo: './logos/chemours.png',
     roles: [
       {
