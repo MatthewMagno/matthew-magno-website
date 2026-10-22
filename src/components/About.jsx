@@ -1,5 +1,39 @@
 import React from 'react';
 
+// What I do away from a keyboard, each with the photos that go with it.
+const PURSUITS = [
+  {
+    title: 'Running',
+    text: 'I run long distances, including the San Francisco Marathon, which starts in the dark outside the Ferry Building.',
+    photos: [
+      { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
+      { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
+    ],
+  },
+  {
+    title: 'Hiking',
+    text: 'My favorite trips are multi-day treks. In Peru that meant climbing a high pass in the Andes, dropping into cloud forest and crossing a river in a cable car.',
+    photos: [
+      { src: './about/trek-pass.jpg', alt: 'Hikers climbing a rocky trail above a long valley under low clouds', caption: 'Up to the pass' },
+      { src: './about/trek-forest.jpg', alt: 'Matthew with trekking poles, small against a wall of dense green forest', caption: 'Into the cloud forest' },
+      { src: './about/trek-cable.jpg', alt: 'Matthew and a friend laughing in a hanging cable car over a rushing river', caption: 'The way across the river' },
+    ],
+  },
+  {
+    title: 'Photography',
+    text: 'I bring a camera everywhere I go. These are a few favorites from my trips.',
+    link: { label: 'More on Instagram', href: 'https://www.instagram.com/matthew.magno/' },
+    photos: [
+      { src: './about/photo-torres-del-paine.jpg', alt: 'A lone figure at a lake below the granite towers of Torres del Paine, lit orange at sunrise', caption: 'Torres del Paine, Patagonia' },
+      { src: './about/photo-dolomites.jpg', alt: 'Four hikers on a grassy ridge below jagged grey peaks', caption: 'The Dolomites, Italy' },
+      { src: './about/photo-tokyo.jpg', alt: 'A quiet Tokyo street at dusk, seen from above, with one person walking', caption: 'Tokyo' },
+      { src: './about/photo-sequoia.jpg', alt: 'A person sitting at the base of a giant sequoia in a sunlit forest', caption: 'Giant sequoias, California' },
+      { src: './about/photo-mexico-city.jpg', alt: 'Brightly painted boats lined up along a canal in Xochimilco', caption: 'Xochimilco, Mexico City' },
+      { src: './about/photo-patagonia-glacier.jpg', alt: 'Hikers crossing dark rocks beside a grey glacial lake under heavy cloud', caption: 'On the W Trek, Patagonia' },
+    ],
+  },
+];
+
 export default function About() {
   return (
     <section className="section" id="about" aria-labelledby="about-title">
@@ -24,6 +58,30 @@ export default function About() {
           build each one end to end, and lately that means putting AI agents to work with real
           guardrails around them.
         </p>
+      </div>
+
+      <div className="pursuits">
+        {PURSUITS.map((p) => (
+          <div className="pursuit" key={p.title}>
+            <div className="pursuit-text">
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+              {p.link && (
+                <a className="pursuit-link" href={p.link.href} target="_blank" rel="noreferrer">
+                  {p.link.label}
+                </a>
+              )}
+            </div>
+            <div className="pursuit-photos" data-count={p.photos.length}>
+              {p.photos.map((ph) => (
+                <figure key={ph.src}>
+                  <img src={ph.src} alt={ph.alt} loading="lazy" />
+                  <figcaption>{ph.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
