@@ -1231,6 +1231,11 @@ button.row:active {
   letter-spacing: -0.02em;
 }
 
+.row-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
 .row-text {
   display: flex;
   flex-direction: column;
