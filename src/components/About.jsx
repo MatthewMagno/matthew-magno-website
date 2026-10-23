@@ -56,8 +56,7 @@ export default function About() {
             Outside work I run, hike and take photos, usually all at once on a trip. I like the hard
             version of things: a marathon, a three-day W Trek, a trail most people would hire a guide
             for. I also build apps to make my own life easier, like splitting trip costs with friends,
-            planning dates and keeping every booking in one place. Lately that means putting AI agents
-            to work with real guardrails around them.
+            planning dates and keeping every booking in one place.
           </p>
         </div>
 
