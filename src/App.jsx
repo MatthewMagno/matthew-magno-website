@@ -4,7 +4,6 @@ import Hero from './components/Hero.jsx';
 import WalletStack from './components/WalletStack.jsx';
 import Work from './components/Work.jsx';
 import About from './components/About.jsx';
-import { apps } from './data.js';
 
 const SECTIONS = [
   { id: 'work', label: 'Work' },
@@ -13,8 +12,8 @@ const SECTIONS = [
 ];
 
 export default function App() {
-  // Each app card opens and closes on its own; the first starts open.
-  const [openApps, setOpenApps] = useState(() => new Set([apps[0].id]));
+  // Each app card opens and closes on its own; all start closed.
+  const [openApps, setOpenApps] = useState(() => new Set());
 
   const toggleApp = (id) => {
     setOpenApps((open) => {
