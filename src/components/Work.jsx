@@ -21,7 +21,7 @@ export default function Work() {
           <h3 className="work-subhead">Education</h3>
           <div className="edu-grid">
             {school.map((s) => (
-              <div key={s.org} className="edu-card">
+              <div key={s.org} className={`edu-card ${s.minor ? 'is-minor' : ''}`}>
                 <Mono entry={s} />
                 <div>
                   <p className="edu-org">{s.org}</p>

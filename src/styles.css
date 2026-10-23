@@ -1107,6 +1107,48 @@ img {
   color: var(--label-2);
 }
 
+/* The degree leads; a certification is a quieter supporting row. */
+.edu-card:not(.is-minor) {
+  padding: 22px 0;
+}
+
+.edu-card:not(.is-minor) .mono {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+}
+
+.edu-card:not(.is-minor) .edu-org {
+  font-size: 20px;
+}
+
+.edu-card:not(.is-minor) .edu-role {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.edu-card.is-minor {
+  padding: 12px 0;
+}
+
+.edu-card.is-minor .mono {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.edu-card.is-minor .edu-org {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--label-2);
+}
+
+.edu-card.is-minor .edu-role {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--label-2);
+}
+
 .tool-card {
   display: grid;
   grid-template-columns: 180px minmax(0, 1fr);

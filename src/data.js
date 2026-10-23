@@ -232,6 +232,7 @@ export const school = [
   {
     org: 'Amazon Web Services',
     place: 'Certification',
+    minor: true,
     tint: '#232f3e',
     logo: './logos/aws.png',
     roles: [
