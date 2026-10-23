@@ -1186,8 +1186,16 @@ img {
 }
 
 /* Running, hiking and photography: a segmented control, then one strip of photos that scrolls sideways. */
+/* The story on the left, the pursuits beside it. */
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+}
+
 .pursuits {
-  margin-top: 72px;
+  min-width: 0;
 }
 
 .segmented {
@@ -1247,7 +1255,7 @@ img {
 }
 
 .pursuit-photos figure {
-  flex: 0 0 calc((100% - 36px) / 4);
+  flex: 0 0 calc((100% - 12px) / 2);
   margin: 0;
   scroll-snap-align: start;
 }
@@ -1290,6 +1298,13 @@ img {
 .pursuit-arrows button:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+@media (max-width: 900px) {
+  .about-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
 }
 
 /* ---------- Footer ---------- */

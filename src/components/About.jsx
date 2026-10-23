@@ -12,7 +12,7 @@ const PURSUITS = [
   },
   {
     title: 'Hiking',
-    text: 'My favorite trips are multi-day treks. In Peru that meant climbing a high pass in the Andes, dropping into cloud forest and crossing a river in a cable car.',
+    text: 'My favorite trips are multi-day treks. In Peru that meant climbing a high pass in the Andes, dropping into cloud forest and crossing a river in a makeshift cable car. In Patagonia that meant finishing the 50 miles of the W Trek in three days rather than five.',
     photos: [
       { src: './about/trek-pass.jpg', alt: 'Hikers climbing a rocky trail above a long valley under low clouds', caption: 'Up to the pass' },
       { src: './about/trek-forest.jpg', alt: 'Matthew with trekking poles, small against a wall of dense green forest', caption: 'Into the cloud forest' },
@@ -41,26 +41,28 @@ export default function About() {
         <h2 id="about-title">About</h2>
       </div>
 
-      <div className="about-story">
-        <p>
-          I’m a backend software engineer at JPMorganChase. I started in chemical engineering because I
-          wanted to change the world, and moved to software because it lets me do that faster, and for
-          more people.
-        </p>
-        <p>
-          I work on commercial real estate lending software, where I like the unglamorous wins: an
-          index in the right place, a vendor dependency replaced by something my team owns, a sprint
-          that doesn’t stall on a sign-off.
-        </p>
-        <p>
-          Outside work I build apps to make my own life more productive: one for splitting trip costs with
-          friends, one for planning dates, one that keeps every booking in a single place. I design and
-          build each one end to end, and lately that means putting AI agents to work with real
-          guardrails around them.
-        </p>
-      </div>
+      <div className="about-layout">
+        <div className="about-story">
+          <p>
+            I’m a backend software engineer at JPMorganChase. I started in chemical engineering because I
+            wanted to change the world, and moved to software because it lets me do that faster, and for
+            more people.
+          </p>
+          <p>
+            I work on commercial real estate lending software, where I like the unglamorous wins: an
+            index in the right place, a vendor dependency replaced by something my team owns, a sprint
+            that doesn’t stall on a sign-off.
+          </p>
+          <p>
+            Outside work I build apps to make my own life more productive: one for splitting trip costs with
+            friends, one for planning dates, one that keeps every booking in a single place. I design and
+            build each one end to end, and lately that means putting AI agents to work with real
+            guardrails around them.
+          </p>
+        </div>
 
-      <Pursuits />
+        <Pursuits />
+      </div>
     </section>
   );
 }
