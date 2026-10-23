@@ -22,7 +22,6 @@ const PURSUITS = [
   {
     title: 'Photography',
     text: 'I carry a camera on every trip, including the hard ones. These are a few favorites.',
-    link: { label: 'More on Instagram', href: 'https://www.instagram.com/matthew.magno/' },
     photos: [
       { src: './about/photo-torres-del-paine.jpg', alt: 'A lone figure at a lake below the granite towers of Torres del Paine, lit orange at sunrise', caption: 'Torres del Paine, Patagonia' },
       { src: './about/photo-dolomites.jpg', alt: 'Four hikers on a grassy ridge below jagged grey peaks', caption: 'The Dolomites, Italy' },
