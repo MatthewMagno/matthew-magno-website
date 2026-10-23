@@ -1072,26 +1072,22 @@ img {
 
 .work-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
-  gap: 0 24px;
+  grid-template-columns: minmax(0, 1fr);
 }
 
+/* Each item is a plain row with a divider, not its own box. */
 .edu-grid,
 .tool-grid {
   display: grid;
-  gap: 12px;
-}
-
-.tool-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--separator);
 }
 
 .edu-card {
   display: flex;
+  align-items: center;
   gap: 14px;
-  padding: 20px;
-  border-radius: 22px;
-  background: var(--surface);
+  padding: 16px 0;
+  border-bottom: 1px solid var(--separator);
 }
 
 .edu-org {
@@ -1112,23 +1108,21 @@ img {
 }
 
 .tool-card {
-  padding: 18px 18px 20px;
-  border-radius: 22px;
-  background: var(--surface);
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--separator);
 }
 
 .tool-card p {
-  margin-bottom: 12px;
   font-size: 15px;
   font-weight: 600;
 }
 
-.tool-card:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-}
-
-@media (max-width: 860px) {
-  .work-columns {
+@media (max-width: 560px) {
+  .tool-card {
     grid-template-columns: minmax(0, 1fr);
   }
 }
