@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // What I do away from a keyboard, each with the photos that go with it.
 const PURSUITS = [
@@ -60,29 +60,92 @@ export default function About() {
         </p>
       </div>
 
-      <div className="pursuits">
-        {PURSUITS.map((p) => (
-          <div className="pursuit" key={p.title}>
-            <div className="pursuit-text">
-              <h3>{p.title}</h3>
-              <p>{p.text}</p>
-              {p.link && (
-                <a className="pursuit-link" href={p.link.href} target="_blank" rel="noreferrer">
-                  {p.link.label}
-                </a>
-              )}
-            </div>
-            <div className="pursuit-photos" data-count={p.photos.length}>
-              {p.photos.map((ph) => (
-                <figure key={ph.src}>
-                  <img src={ph.src} alt={ph.alt} loading="lazy" />
-                  <figcaption>{ph.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
+      <Pursuits />
+    </section>
+  );
+}
+
+// One pursuit at a time, picked from a segmented control, with its photos in a strip that scrolls sideways.
+function Pursuits() {
+  const [active, setActive] = useState(0);
+  const [edges, setEdges] = useState({ start: true, end: false });
+  const stripRef = useRef(null);
+  const p = PURSUITS[active];
+
+  const updateEdges = () => {
+    const el = stripRef.current;
+    if (!el) return;
+    setEdges({
+      start: el.scrollLeft <= 4,
+      end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4,
+    });
+  };
+
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    el.scrollLeft = 0;
+    updateEdges();
+    window.addEventListener('resize', updateEdges);
+    return () => window.removeEventListener('resize', updateEdges);
+  }, [active]);
+
+  const step = (dir) => {
+    const el = stripRef.current;
+    const card = el?.querySelector('figure');
+    if (!card) return;
+    el.scrollBy({ left: dir * (card.offsetWidth + 12), behavior: 'smooth' });
+  };
+
+  return (
+    <div className="pursuits">
+      <div className="segmented" role="tablist" aria-label="Outside work">
+        {PURSUITS.map((item, i) => (
+          <button
+            key={item.title}
+            role="tab"
+            id={`pursuit-tab-${i}`}
+            aria-selected={i === active}
+            aria-controls="pursuit-panel"
+            className={i === active ? 'is-active' : undefined}
+            onClick={() => setActive(i)}
+          >
+            {item.title}
+          </button>
         ))}
       </div>
-    </section>
+
+      <div className="pursuit" id="pursuit-panel" role="tabpanel" aria-labelledby={`pursuit-tab-${active}`}>
+        <div className="pursuit-text">
+          <p>{p.text}</p>
+          {p.link && (
+            <a className="pursuit-link" href={p.link.href} target="_blank" rel="noreferrer">
+              {p.link.label}
+            </a>
+          )}
+        </div>
+
+        <div className="pursuit-carousel">
+          <div className="pursuit-photos" ref={stripRef} onScroll={updateEdges}>
+            {p.photos.map((ph) => (
+              <figure key={ph.src}>
+                <img src={ph.src} alt={ph.alt} loading="lazy" />
+                <figcaption>{ph.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          {!(edges.start && edges.end) && (
+            <div className="pursuit-arrows">
+              <button aria-label="Previous photos" onClick={() => step(-1)} disabled={edges.start}>
+                ‹
+              </button>
+              <button aria-label="Next photos" onClick={() => step(1)} disabled={edges.end}>
+                ›
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

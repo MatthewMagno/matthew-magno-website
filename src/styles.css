@@ -1185,27 +1185,42 @@ img {
   letter-spacing: -0.024em;
 }
 
-/* Running and hiking: a line of text, then the photos from each. */
+/* Running, hiking and photography: a segmented control, then one strip of photos that scrolls sideways. */
 .pursuits {
-  display: grid;
-  gap: 64px;
   margin-top: 72px;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--fill);
+}
+
+.segmented button {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: 600 15px/1.2 var(--font-text);
+  color: var(--label-2);
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.segmented button.is-active {
+  background: var(--surface);
+  color: var(--label);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
 .pursuit-text {
   max-width: 60ch;
-  margin-bottom: 20px;
-}
-
-.pursuit-text h3 {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.028em;
+  margin: 20px 0;
+  min-height: calc(19px * 1.55 * 2);
 }
 
 .pursuit-text p {
-  margin-top: 6px;
   font-size: 19px;
   line-height: 1.55;
   color: var(--label-2);
@@ -1219,23 +1234,22 @@ img {
 }
 
 .pursuit-photos {
-  display: grid;
-  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
 }
 
-.pursuit-photos[data-count='3'],
-.pursuit-photos[data-count='6'] {
-  --cols: 3;
-}
-
-/* Two photos keep the same size as three, so both rows line up. */
-.pursuit-photos[data-count='2'] {
-  max-width: calc((100% - 24px) / 3 * 2 + 12px);
+.pursuit-photos::-webkit-scrollbar {
+  display: none;
 }
 
 .pursuit-photos figure {
+  flex: 0 0 calc((100% - 36px) / 4);
   margin: 0;
+  scroll-snap-align: start;
 }
 
 .pursuit-photos img {
@@ -1251,6 +1265,31 @@ img {
   margin-top: 8px;
   font-size: 14px;
   color: var(--label-2);
+}
+
+.pursuit-arrows {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pursuit-arrows button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--label);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease);
+}
+
+.pursuit-arrows button:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 /* ---------- Footer ---------- */
@@ -1269,25 +1308,9 @@ img {
     --gutter: 16px;
   }
 
-  /* Three photos get cramped side by side: the first goes full width above the other two. */
-  .pursuit-photos[data-count='3'] {
-    --cols: 2;
-  }
-
-  .pursuit-photos[data-count='3'] figure:first-child {
-    grid-column: 1 / -1;
-  }
-
-  .pursuit-photos[data-count='3'] figure:first-child img {
-    aspect-ratio: 4 / 3;
-  }
-
-  .pursuit-photos[data-count='2'] {
-    max-width: none;
-  }
-
-  .pursuit-photos[data-count='6'] {
-    --cols: 2;
+  /* About two and a bit photos show at once, so the next one peeks in. */
+  .pursuit-photos figure {
+    flex-basis: 42%;
   }
 
   html {
