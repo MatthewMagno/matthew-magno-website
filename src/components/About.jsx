@@ -43,9 +43,8 @@ export default function About() {
       <div className="about-layout">
         <div className="about-story">
           <p>
-            I’m a backend software engineer at JPMorganChase. I started in chemical engineering because I
-            wanted to change the world, and moved to software because it lets me do that faster, and for
-            more people.
+            I’m a backend engineer at JPMorganChase. I started in chemical engineering to change the
+            world, then moved to software to do it faster and for more people.
           </p>
           <p>
             I work on commercial real estate lending software, where I like the unglamorous wins: an
