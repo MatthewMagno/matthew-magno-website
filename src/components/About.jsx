@@ -6,8 +6,8 @@ const PURSUITS = [
     title: 'Running',
     text: 'I love running long distances, including the San Francisco Marathon, and an innumerable amount of half marathons. The feeling I get afterwards is hard to put into words.',
     photos: [
-      { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
-      { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
+      { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night' },
+      { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators' },
     ],
   },
   {
@@ -190,7 +190,7 @@ function Pursuits() {
             {p.photos.map((ph) => (
               <figure key={ph.src}>
                 <img src={ph.src} alt={ph.alt} loading="lazy" />
-                <figcaption>{ph.caption}</figcaption>
+                {ph.caption && <figcaption>{ph.caption}</figcaption>}
               </figure>
             ))}
           </div>
