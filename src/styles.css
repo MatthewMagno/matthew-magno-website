@@ -1199,13 +1199,27 @@ img {
 }
 
 .segmented {
+  position: relative;
   display: inline-flex;
   padding: 3px;
   border-radius: 999px;
   background: var(--fill);
 }
 
+/* The thumb slides between tabs instead of each tab fading its own background. */
+.segmented-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s var(--ease), width 0.4s var(--ease);
+}
+
 .segmented button {
+  position: relative;
   padding: 8px 18px;
   border: 0;
   border-radius: 999px;
@@ -1217,9 +1231,16 @@ img {
 }
 
 .segmented button.is-active {
-  background: var(--surface);
   color: var(--label);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.pursuit {
+  overflow: hidden;
+  transition: height 0.38s var(--ease), opacity 0.18s ease;
+}
+
+.pursuit.is-fading {
+  opacity: 0;
 }
 
 .pursuit-text {

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 // What I do away from a keyboard, each with the photos that go with it.
 const PURSUITS = [
   {
     title: 'Running',
-    text: 'I love running long distances. I’ve run the San Francisco Marathon, 26.2 miles starting in the dark outside the Ferry Building, and more half marathons than I can count. A marathon is mostly tenacity, and the miles at the end are decided by every training run before race day. The feeling afterwards is hard to put into words.',
+    text: 'I love running long distances, including the San Francisco Marathon, and an innumerable amount of half marathons. The feeling I get afterwards is hard to put into words.',
     photos: [
       { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
       { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
@@ -68,11 +68,21 @@ export default function About() {
 }
 
 // One pursuit at a time, picked from a segmented control, with its photos in a strip that scrolls sideways.
+// Switching slides the control's thumb, fades the old panel out, then fades the new one in while the height eases.
+const FADE_MS = 180;
+const RESIZE_MS = 380;
+
 function Pursuits() {
   const [active, setActive] = useState(0);
+  const [shown, setShown] = useState(0);
+  const [fading, setFading] = useState(false);
+  const [thumb, setThumb] = useState(null);
   const [edges, setEdges] = useState({ start: true, end: false });
   const stripRef = useRef(null);
-  const p = PURSUITS[active];
+  const panelRef = useRef(null);
+  const tabRefs = useRef([]);
+  const fromHeight = useRef(null);
+  const p = PURSUITS[shown];
 
   const updateEdges = () => {
     const el = stripRef.current;
@@ -83,6 +93,47 @@ function Pursuits() {
     });
   };
 
+  // Slide the thumb under the selected tab.
+  useLayoutEffect(() => {
+    const place = () => {
+      const tab = tabRefs.current[active];
+      if (tab) setThumb({ x: tab.offsetLeft, w: tab.offsetWidth });
+    };
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [active]);
+
+  // Fade the current panel out, then swap in the new one.
+  useEffect(() => {
+    if (active === shown) return;
+    const panel = panelRef.current;
+    fromHeight.current = panel ? panel.offsetHeight : null;
+    setFading(true);
+    const t = setTimeout(() => setShown(active), FADE_MS);
+    return () => clearTimeout(t);
+  }, [active]);
+
+  // After the swap, ease the panel from its old height to its new one and fade back in.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const from = fromHeight.current;
+    fromHeight.current = null;
+    if (!panel || from == null) return;
+    panel.style.transition = 'none';
+    panel.style.height = 'auto';
+    const to = panel.offsetHeight;
+    panel.style.height = `${from}px`;
+    panel.getBoundingClientRect();
+    panel.style.transition = '';
+    panel.style.height = `${to}px`;
+    setFading(false);
+    const t = setTimeout(() => {
+      panel.style.height = '';
+    }, RESIZE_MS);
+    return () => clearTimeout(t);
+  }, [shown]);
+
   useEffect(() => {
     const el = stripRef.current;
     if (!el) return;
@@ -90,7 +141,7 @@ function Pursuits() {
     updateEdges();
     window.addEventListener('resize', updateEdges);
     return () => window.removeEventListener('resize', updateEdges);
-  }, [active]);
+  }, [shown]);
 
   const step = (dir) => {
     const el = stripRef.current;
@@ -102,9 +153,11 @@ function Pursuits() {
   return (
     <div className="pursuits">
       <div className="segmented" role="tablist" aria-label="Outside work">
+        {thumb && <span className="segmented-thumb" style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} />}
         {PURSUITS.map((item, i) => (
           <button
             key={item.title}
+            ref={(el) => (tabRefs.current[i] = el)}
             role="tab"
             id={`pursuit-tab-${i}`}
             aria-selected={i === active}
@@ -117,7 +170,13 @@ function Pursuits() {
         ))}
       </div>
 
-      <div className="pursuit" id="pursuit-panel" role="tabpanel" aria-labelledby={`pursuit-tab-${active}`}>
+      <div
+        className={fading ? 'pursuit is-fading' : 'pursuit'}
+        id="pursuit-panel"
+        role="tabpanel"
+        aria-labelledby={`pursuit-tab-${active}`}
+        ref={panelRef}
+      >
         <div className="pursuit-text">
           <p>{p.text}</p>
           {p.link && (
