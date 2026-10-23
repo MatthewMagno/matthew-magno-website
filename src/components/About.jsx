@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const PURSUITS = [
   {
     title: 'Running',
-    text: 'I run long distances, including the San Francisco Marathon, which starts in the dark outside the Ferry Building.',
+    text: 'I ran the San Francisco Marathon: 26.2 miles, starting in the dark outside the Ferry Building. A marathon is mostly tenacity. The miles at the end are decided by the discipline of every training run before race day.',
     photos: [
       { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
       { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
@@ -12,7 +12,7 @@ const PURSUITS = [
   },
   {
     title: 'Hiking',
-    text: 'My favorite trips are multi-day treks. In Peru that meant climbing a high pass in the Andes, dropping into cloud forest and crossing a river in a makeshift cable car. In Patagonia that meant finishing the 50 miles of the W Trek in three days rather than five.',
+    text: 'The W Trek in Patagonia is 50 miles and most people take five days. I did it in three. In Peru I took a trail most people only do with a guide: over a high pass in the Andes, down into cloud forest and across a river in a makeshift cable car. I like going somewhere I don’t fully know and working it out as I go.',
     photos: [
       { src: './about/trek-pass.jpg', alt: 'Hikers climbing a rocky trail above a long valley under low clouds', caption: 'Up to the pass' },
       { src: './about/trek-forest.jpg', alt: 'Matthew with trekking poles, small against a wall of dense green forest', caption: 'Into the cloud forest' },
@@ -21,7 +21,7 @@ const PURSUITS = [
   },
   {
     title: 'Photography',
-    text: 'I bring a camera everywhere I go. These are a few favorites from my trips.',
+    text: 'I carry a camera on every trip, including the hard ones. These are a few favorites.',
     link: { label: 'More on Instagram', href: 'https://www.instagram.com/matthew.magno/' },
     photos: [
       { src: './about/photo-torres-del-paine.jpg', alt: 'A lone figure at a lake below the granite towers of Torres del Paine, lit orange at sunrise', caption: 'Torres del Paine, Patagonia' },
