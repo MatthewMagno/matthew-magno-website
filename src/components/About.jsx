@@ -53,10 +53,11 @@ export default function About() {
             that doesn’t stall on a sign-off.
           </p>
           <p>
-            Outside work I build apps to make my own life more productive: one for splitting trip costs with
-            friends, one for planning dates, one that keeps every booking in a single place. I design and
-            build each one end to end, and lately that means putting AI agents to work with real
-            guardrails around them.
+            Outside work I run, hike and take photos, usually all at once on a trip. I like the hard
+            version of things: a marathon, a three-day W Trek, a trail most people would hire a guide
+            for. I also build apps to make my own life easier, like splitting trip costs with friends,
+            planning dates and keeping every booking in one place. Lately that means putting AI agents
+            to work with real guardrails around them.
           </p>
         </div>
 
