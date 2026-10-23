@@ -34,7 +34,7 @@ export const apps = [
     color: '#b8432a',
     status: 'On the App Store',
     tagline: 'A shared list of date ideas for two people, and a keepsake log of the dates you actually go on.',
-    different: 'Most date apps hand you a generic list of suggestions. Memori is your own list, shared live between two phones, and a shake picks tonight’s date so neither of you has to. It also has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos.',
+    different: 'Memori has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos.',
     points: [
       'Pairs two phones and keeps the list and photo log in sync live.',
       'Shipped to the App Store and updated through version 1.7, with a share extension for saving ideas from anywhere.',

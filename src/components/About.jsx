@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 // What I do away from a keyboard, each with the photos that go with it.
 const PURSUITS = [
   {
     title: 'Running',
-    text: 'I run long distances, including the San Francisco Marathon, which starts in the dark outside the Ferry Building.',
+    text: 'I love running long distances, including the San Francisco Marathon, and an innumerable amount of half marathons. The feeling I get afterwards is hard to put into words.',
     photos: [
       { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
       { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
@@ -12,7 +12,7 @@ const PURSUITS = [
   },
   {
     title: 'Hiking',
-    text: 'My favorite trips are multi-day treks. In Peru that meant climbing a high pass in the Andes, dropping into cloud forest and crossing a river in a makeshift cable car. In Patagonia that meant finishing the 50 miles of the W Trek in three days rather than five.',
+    text: 'The W Trek in Patagonia is 50 miles and most people take five days. I did it in three. In Peru I took a trail most people only do with a guide: over a high pass in the Andes, down into cloud forest and across a river in a makeshift cable car. I like going somewhere I don’t fully know and working it out as I go.',
     photos: [
       { src: './about/trek-pass.jpg', alt: 'Hikers climbing a rocky trail above a long valley under low clouds', caption: 'Up to the pass' },
       { src: './about/trek-forest.jpg', alt: 'Matthew with trekking poles, small against a wall of dense green forest', caption: 'Into the cloud forest' },
@@ -21,8 +21,7 @@ const PURSUITS = [
   },
   {
     title: 'Photography',
-    text: 'I bring a camera everywhere I go. These are a few favorites from my trips.',
-    link: { label: 'More on Instagram', href: 'https://www.instagram.com/matthew.magno/' },
+    text: 'I carry a camera on every trip, including the hard ones. These are a few favorites.',
     photos: [
       { src: './about/photo-torres-del-paine.jpg', alt: 'A lone figure at a lake below the granite towers of Torres del Paine, lit orange at sunrise', caption: 'Torres del Paine, Patagonia' },
       { src: './about/photo-dolomites.jpg', alt: 'Four hikers on a grassy ridge below jagged grey peaks', caption: 'The Dolomites, Italy' },
@@ -68,11 +67,21 @@ export default function About() {
 }
 
 // One pursuit at a time, picked from a segmented control, with its photos in a strip that scrolls sideways.
+// Switching slides the control's thumb, fades the old panel out, then fades the new one in while the height eases.
+const FADE_MS = 180;
+const RESIZE_MS = 380;
+
 function Pursuits() {
   const [active, setActive] = useState(0);
+  const [shown, setShown] = useState(0);
+  const [fading, setFading] = useState(false);
+  const [thumb, setThumb] = useState(null);
   const [edges, setEdges] = useState({ start: true, end: false });
   const stripRef = useRef(null);
-  const p = PURSUITS[active];
+  const panelRef = useRef(null);
+  const tabRefs = useRef([]);
+  const fromHeight = useRef(null);
+  const p = PURSUITS[shown];
 
   const updateEdges = () => {
     const el = stripRef.current;
@@ -83,6 +92,47 @@ function Pursuits() {
     });
   };
 
+  // Slide the thumb under the selected tab.
+  useLayoutEffect(() => {
+    const place = () => {
+      const tab = tabRefs.current[active];
+      if (tab) setThumb({ x: tab.offsetLeft, w: tab.offsetWidth });
+    };
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [active]);
+
+  // Fade the current panel out, then swap in the new one.
+  useEffect(() => {
+    if (active === shown) return;
+    const panel = panelRef.current;
+    fromHeight.current = panel ? panel.offsetHeight : null;
+    setFading(true);
+    const t = setTimeout(() => setShown(active), FADE_MS);
+    return () => clearTimeout(t);
+  }, [active]);
+
+  // After the swap, ease the panel from its old height to its new one and fade back in.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const from = fromHeight.current;
+    fromHeight.current = null;
+    if (!panel || from == null) return;
+    panel.style.transition = 'none';
+    panel.style.height = 'auto';
+    const to = panel.offsetHeight;
+    panel.style.height = `${from}px`;
+    panel.getBoundingClientRect();
+    panel.style.transition = '';
+    panel.style.height = `${to}px`;
+    setFading(false);
+    const t = setTimeout(() => {
+      panel.style.height = '';
+    }, RESIZE_MS);
+    return () => clearTimeout(t);
+  }, [shown]);
+
   useEffect(() => {
     const el = stripRef.current;
     if (!el) return;
@@ -90,7 +140,7 @@ function Pursuits() {
     updateEdges();
     window.addEventListener('resize', updateEdges);
     return () => window.removeEventListener('resize', updateEdges);
-  }, [active]);
+  }, [shown]);
 
   const step = (dir) => {
     const el = stripRef.current;
@@ -102,9 +152,11 @@ function Pursuits() {
   return (
     <div className="pursuits">
       <div className="segmented" role="tablist" aria-label="Outside work">
+        {thumb && <span className="segmented-thumb" style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }} />}
         {PURSUITS.map((item, i) => (
           <button
             key={item.title}
+            ref={(el) => (tabRefs.current[i] = el)}
             role="tab"
             id={`pursuit-tab-${i}`}
             aria-selected={i === active}
@@ -117,7 +169,13 @@ function Pursuits() {
         ))}
       </div>
 
-      <div className="pursuit" id="pursuit-panel" role="tabpanel" aria-labelledby={`pursuit-tab-${active}`}>
+      <div
+        className={fading ? 'pursuit is-fading' : 'pursuit'}
+        id="pursuit-panel"
+        role="tabpanel"
+        aria-labelledby={`pursuit-tab-${active}`}
+        ref={panelRef}
+      >
         <div className="pursuit-text">
           <p>{p.text}</p>
           {p.link && (
