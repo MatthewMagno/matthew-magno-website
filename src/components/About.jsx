@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const PURSUITS = [
   {
     title: 'Running',
-    text: 'I ran the San Francisco Marathon: 26.2 miles, starting in the dark outside the Ferry Building. A marathon is mostly tenacity. The miles at the end are decided by the discipline of every training run before race day.',
+    text: 'I love running long distances. I’ve run the San Francisco Marathon, 26.2 miles starting in the dark outside the Ferry Building, and more half marathons than I can count. A marathon is mostly tenacity, and the miles at the end are decided by every training run before race day. The feeling afterwards is hard to put into words.',
     photos: [
       { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night', caption: 'Start line, before sunrise' },
       { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators', caption: 'Somewhere past the crowds' },
