@@ -44,7 +44,7 @@ export const apps = [
       { value: '1.7', label: 'current version' },
       { value: '29', label: 'downloads' },
     ],
-    stack: ['React Native', 'Expo', 'Node.js', 'Fly.io'],
+    stack: ['React Native', 'Expo', 'Node.js'],
     link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/memori-for-two/id6792543667' },
   },
   {
@@ -248,6 +248,6 @@ export const toolbox = [
   { group: 'Languages', items: ['Java', 'TypeScript', 'JavaScript', 'Swift', 'Python', 'SQL'] },
   { group: 'Apps', items: ['React Native', 'Expo', 'SwiftUI', 'React'] },
   { group: 'Backend and data', items: ['Node.js', 'GraphQL', 'Kafka', 'Avro', 'Postgres'] },
-  { group: 'Cloud', items: ['AWS', 'Cloudflare Workers', 'Fly.io'] },
+  { group: 'Cloud', items: ['AWS', 'Cloudflare Workers'] },
   { group: 'AI', items: ['Model Context Protocol', 'OAuth 2.1', 'Claude Code', 'LLM tool integration'] },
 ];
