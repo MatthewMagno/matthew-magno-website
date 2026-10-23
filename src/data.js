@@ -246,7 +246,7 @@ export const school = [
 
 export const toolbox = [
   { group: 'Languages', items: ['Java', 'TypeScript', 'JavaScript', 'Swift', 'Python', 'SQL'] },
-  { group: 'Apps', items: ['React Native', 'Expo', 'SwiftUI', 'React'] },
+  { group: 'Apps', items: ['React Native', 'Expo', 'React'] },
   { group: 'Backend and data', items: ['Node.js', 'GraphQL', 'Kafka', 'Avro', 'Postgres'] },
   { group: 'Cloud', items: ['AWS', 'Cloudflare Workers'] },
   { group: 'AI', items: ['Model Context Protocol', 'OAuth 2.1', 'Claude Code', 'LLM tool integration'] },
