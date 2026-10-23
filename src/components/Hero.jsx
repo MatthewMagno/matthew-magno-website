@@ -5,7 +5,7 @@ import { profile } from '../data.js';
 const FACTS = [
   { label: 'Role', value: 'Software Engineer II', note: 'Commercial Real Estate Digital Experience' },
   { label: 'Focus', value: 'Backend', note: 'APIs, databases and performance' },
-  { label: 'Side projects', value: '3 apps', note: '1 live on the App Store' },
+  { label: 'Side projects', value: '3 apps', note: 'Productivity helpers' },
   { label: 'Based in', value: 'San Francisco' },
 ];
 
