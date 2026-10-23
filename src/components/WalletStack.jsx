@@ -16,7 +16,7 @@ export default function WalletStack({ openIds, onToggle }) {
     <section className="section" id="apps" aria-labelledby="apps-title">
       <div className="section-head">
         <h2 id="apps-title">Apps I’ve built</h2>
-        <p>Each one started as a problem in my own life, and I designed and run the backend behind it: APIs, sync, sign-in and MCP servers. Open a card and try the app right on the page.</p>
+        <p>Each one started as a problem in my own life, and I designed and run the backend behind it: APIs, sync, sign-in and MCP servers.</p>
       </div>
 
       <div className="wallet">
