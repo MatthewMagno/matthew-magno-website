@@ -43,11 +43,6 @@ export default function About() {
       <div className="about-layout">
         <div className="about-story">
           <p>
-            I work on commercial real estate lending software, where I like the unglamorous wins: an
-            index in the right place, a vendor dependency replaced by something my team owns, a sprint
-            that doesn’t stall on a sign-off.
-          </p>
-          <p>
             Outside work I run, hike and take photos, usually all at once on a trip. I like the hard
             version of things: a marathon, a three-day W Trek, a trail most people would hire a guide
             for. I also build apps to make my own life easier, like splitting trip costs with friends,
