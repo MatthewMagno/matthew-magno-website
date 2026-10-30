@@ -43,7 +43,7 @@ export default function About() {
       <div className="about-layout">
         <div className="about-story">
           <p>
-            Outside work I run, hike and take photos, usually all at once on a trip. I like the hard
+            Outside work I enjoy going on and documenting my adventurous endeavors. I like the hard
             version of things: a marathon, a three-day W Trek, a trail most people would hire a guide
             for. I also build apps to make my own life easier, like splitting trip costs with friends,
             planning dates and keeping every booking in one place.
