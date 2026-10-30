@@ -1280,23 +1280,8 @@ img {
   opacity: 0;
 }
 
-.pursuit-text {
-  max-width: 60ch;
-  margin: 20px 0;
-  min-height: calc(19px * 1.55 * 2);
-}
-
-.pursuit-text p {
-  font-size: 19px;
-  line-height: 1.55;
-  color: var(--label-2);
-}
-
-.pursuit-link {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 17px;
-  color: var(--tint);
+.pursuit-carousel {
+  margin-top: 20px;
 }
 
 .pursuit-photos {

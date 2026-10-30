@@ -4,7 +4,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 const PURSUITS = [
   {
     title: 'Running',
-    text: 'I love running long distances, including the San Francisco Marathon, and an innumerable amount of half marathons. The feeling I get afterwards is hard to put into words.',
     photos: [
       { src: './about/marathon-start.jpg', alt: 'Matthew and two friends in race bibs at the marathon start at night' },
       { src: './about/marathon-run.jpg', alt: 'Matthew running in the San Francisco Marathon past a crowd of spectators' },
@@ -12,7 +11,6 @@ const PURSUITS = [
   },
   {
     title: 'Hiking',
-    text: 'The W Trek in Patagonia is 50 miles and most people take five days. I did it in three. In Peru I took a trail most people only do with a guide: over a high pass in the Andes, down into cloud forest and across a river in a makeshift cable car. I like going somewhere I don’t fully know and working it out as I go.',
     photos: [
       { src: './about/trek-pass.jpg', alt: 'Hikers climbing a rocky trail above a long valley under low clouds', caption: 'Up to the pass' },
       { src: './about/trek-forest.jpg', alt: 'Matthew with trekking poles, small against a wall of dense green forest', caption: 'Into the cloud forest' },
@@ -21,7 +19,6 @@ const PURSUITS = [
   },
   {
     title: 'Photography',
-    text: 'I carry a camera on every trip, including the hard ones. These are a few favorites.',
     photos: [
       { src: './about/photo-torres-del-paine.jpg', alt: 'A lone figure at a lake below the granite towers of Torres del Paine, lit orange at sunrise', caption: 'Torres del Paine, Patagonia' },
       { src: './about/photo-dolomites.jpg', alt: 'Four hikers on a grassy ridge below jagged grey peaks', caption: 'The Dolomites, Italy' },
@@ -166,15 +163,6 @@ function Pursuits() {
         aria-labelledby={`pursuit-tab-${active}`}
         ref={panelRef}
       >
-        <div className="pursuit-text">
-          <p>{p.text}</p>
-          {p.link && (
-            <a className="pursuit-link" href={p.link.href} target="_blank" rel="noreferrer">
-              {p.link.label}
-            </a>
-          )}
-        </div>
-
         <div className="pursuit-carousel">
           <div className="pursuit-photos" ref={stripRef} onScroll={updateEdges}>
             {p.photos.map((ph) => (
