@@ -43,9 +43,9 @@ export default function About() {
       <div className="about-layout">
         <div className="about-story">
           <p>
-            Outside work I enjoy going on and documenting my adventurous endeavors. I like the hard
-            version of things: a marathon, a three-day W Trek, a trail most people would hire a guide
-            for. I also build apps to make my own life easier, like splitting trip costs with friends,
+            Outside work I enjoy going on and documenting my adventurous endeavors. I like a
+            challenge: a marathon, a three-day W Trek instead of the usual five, and an unguided,
+            seemingly perilous hike through Peru that most would get a guide for. I also build apps to make my own life easier, like splitting trip costs with friends,
             planning dates and keeping every booking in one place.
           </p>
         </div>
