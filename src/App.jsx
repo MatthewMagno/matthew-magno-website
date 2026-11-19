@@ -7,8 +7,8 @@ import About from './components/About.jsx';
 
 const SECTIONS = [
   { id: 'work', label: 'Work' },
-  { id: 'about', label: 'About' },
   { id: 'apps', label: 'Apps' },
+  { id: 'about', label: 'About' },
 ];
 
 export default function App() {
@@ -30,8 +30,8 @@ export default function App() {
       <main>
         <Hero />
         <Work />
-        <About />
         <WalletStack openIds={openApps} onToggle={toggleApp} />
+        <About />
       </main>
       <footer className="footer">
         <p>© {new Date().getFullYear()} Matthew Magno. Designed and built in San Francisco.</p>
