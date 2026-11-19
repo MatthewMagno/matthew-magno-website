@@ -2351,230 +2351,292 @@
 /* Jar */
 
 .mem-title {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  padding: 12px 0 18px;
+}
+
+.mem-eyebrow-quiet {
+  font-size: 11.5px;
+  line-height: 14px;
+  letter-spacing: 2.1px;
+  color: var(--faint);
 }
 
 .mem-title h1 {
   margin-top: 5px;
-  font: 500 27px/30px var(--serif);
+  font: 500 29px/33px var(--serif);
 }
 
-.mem-count {
-  font: 700 22px/25px 'Mem Courier', 'Courier New', monospace;
-  letter-spacing: 1.76px;
-}
+/* Folder tabs: the open one shares the folder's paper, so tab and body read as one folder. */
 
-.mem-lastpull {
-  margin-top: 14px;
-  padding: 16px 18px 16px;
-  border: 1px solid var(--ember);
-  border-radius: 18px;
-  background: var(--card);
-}
-
-.mem-lastpull-eyebrow {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 17px;
-  letter-spacing: 2.24px;
-  text-transform: uppercase;
-  color: var(--ember);
-}
-
-.mem-lastpull-row {
+.mem-folders {
+  position: relative;
+  z-index: 2;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 2px;
+  margin: 0 -8px;
 }
 
-.mem-lastpull-row > div {
-  flex: 1;
+.mem-folder-tab {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  padding: 11px 13px 12px;
+  border-radius: 12px 12px 0 0;
+  background: #e8dbc2;
+  box-shadow: 0 -2px 6px rgba(50, 30, 10, 0.06);
+  font-size: 14px !important;
+  font-weight: 600;
+  color: var(--faint) !important;
+  white-space: nowrap;
 }
 
-.mem-lastpull h2 {
-  font: 500 19px/22px var(--serif);
+.mem-folder-tab span {
+  font: 700 11px/1 'Mem Courier', 'Courier New', monospace;
+  letter-spacing: 0.44px;
 }
 
-.mem-lastpull p {
-  margin-top: 3px;
-  font-size: 14px;
-  line-height: 20px;
+.mem-folder-tab.is-on {
+  margin-bottom: -1px;
+  background: var(--card);
+  color: var(--ink) !important;
+}
+
+.mem-folder-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--ember);
+}
+
+.mem-folder {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 420px;
+  margin: 0 -8px;
+  padding: 16px;
+  border-radius: 0 14px 14px 14px;
+  background: var(--card);
+  box-shadow: 0 4px 14px rgba(50, 30, 10, 0.08);
+}
+
+.mem-folder-empty {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 15px;
   color: var(--faint);
 }
 
-.mem-pill {
-  flex: none;
-  width: 112px;
-  height: 40px;
-  text-align: center !important;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--bg) !important;
-  font-size: 15px !important;
-  font-weight: 600;
-}
+/* [Sort] | [filters…] [Clear], one line that scrolls sideways, over a dashed rule. */
 
-.mem-notnow {
-  display: block;
-  margin: 12px auto 0;
-  font-size: 14.5px !important;
-  font-weight: 600;
-  line-height: 17px !important;
-  color: var(--muted) !important;
-}
-
-.mem-dust {
-  margin-top: 38px;
-}
-
-.mem-dust h3 {
-  font-size: 11.5px;
-  font-weight: 600;
-  line-height: 14px;
-  letter-spacing: 1.84px;
-  text-transform: uppercase;
-}
-
-.mem-dust-rail {
+.mem-pills {
   display: flex;
-  gap: 10px;
-  margin: 10px -22px 0;
-  padding: 0 22px;
+  align-items: center;
+  gap: 6px;
+  margin: 0 -16px;
+  padding: 0 16px 12px;
+  border-bottom: 1.5px dashed #e2d3b8;
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.mem-dust-rail::-webkit-scrollbar {
+.mem-pills::-webkit-scrollbar {
   display: none;
 }
 
-.mem-dust-card {
+.mem-pill-sort,
+.mem-pill-filter {
   flex: none;
-  width: 150px;
-}
-
-.mem-dust-tile {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 150px;
-  padding: 10px 12px 11px;
-  border-radius: 13px;
-  background: var(--paper-alt);
-}
-
-/* A tossed-in photo fills the tile; a scrim keeps the age and title readable. */
-.mem-dust-tile.has-photo {
-  background: linear-gradient(180deg, rgba(20, 12, 6, 0.35) 0%, rgba(20, 12, 6, 0) 38%, rgba(20, 12, 6, 0.72) 100%), var(--photo) center / cover;
-  color: #fff;
-}
-
-.mem-dust-tile.has-photo .mem-dust-age {
-  color: rgba(255, 255, 255, 0.86);
-}
-
-.mem-dust-age {
-  font-size: 13px;
-  line-height: 15px;
-  color: var(--deep);
-}
-
-.mem-dust-title {
-  font: 500 18px/21px var(--serif);
-}
-
-.mem-dust-meta {
-  display: block;
-  margin-top: 8px;
-  font-size: 13.5px;
-  line-height: 15px;
-  color: var(--muted);
-}
-
-.mem-filters {
-  display: flex;
-  gap: 8px;
-  margin-top: 26px;
-}
-
-.mem-filter {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--card);
-  font-size: 12.5px;
+  height: 34px;
+  padding: 0 12px 0 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 17px;
+  background: var(--paper-alt);
+  font-size: 13px !important;
   font-weight: 600;
-  color: var(--muted);
+  white-space: nowrap;
 }
 
-.mem-rows {
-  margin-top: 8px;
+.mem-pill-filter {
+  gap: 4px;
+  padding: 0 10px 0 12px;
+  background: var(--card);
+  color: var(--muted) !important;
+}
+
+.mem-pill-filter.is-on {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg) !important;
+}
+
+.mem-pills-rule {
+  flex: none;
+  width: 1px;
+  height: 22px;
+  margin: 0 3px;
+  background: #e2d3b8;
+}
+
+.mem-pill-clear {
+  flex: none;
+  margin-left: 4px;
+  font-size: 13px !important;
+  font-weight: 600;
+  color: var(--ember) !important;
+}
+
+/* Idea slips: paper cards, each a hair off straight. */
+
+.mem-slips {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   list-style: none;
 }
 
-.mem-row {
+.mem-slip {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 67px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+  gap: 14px;
+  padding: 16px 16px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  box-shadow: 0 3px 10px rgba(50, 30, 10, 0.1);
+  transform: rotate(var(--r));
 }
 
-.mem-row.is-fresh {
+.mem-slip.is-fresh {
   animation: mem-land 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  transition: outline-color 0.6s 1.6s;
+  outline-color: transparent;
 }
 
 @keyframes mem-land {
   from { opacity: 0; transform: translateY(-10px); }
 }
 
-.mem-row-main {
+.mem-slip-open {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mem-slip-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.mem-slip-text button {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.mem-slip-top {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
+  gap: 10px;
+  margin-bottom: -2px;
 }
 
-.mem-thumb {
-  flex: none;
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
+.mem-slip-added {
+  font: 400 11px/13px 'Mem Courier', 'Courier New', monospace;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
-img.mem-thumb {
-  object-fit: cover;
+.mem-slip-new {
+  padding: 2px 6px;
+  border: 1.5px solid var(--ember);
+  border-radius: 3px;
+  font: 700 11px/13px 'Mem Courier', 'Courier New', monospace;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+  color: var(--ember);
+  transform: rotate(-3deg);
 }
 
-.mem-stripes {
-  background: repeating-linear-gradient(45deg, #f0e2ca 0 3px, #e5d3b4 3px 6px);
+.mem-slip-title {
+  font: 500 20px/23px var(--serif);
 }
 
-.mem-row-text {
+.mem-slip-meta {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
+  align-items: center;
+  gap: 8px;
 }
 
-.mem-row-title {
-  font: 500 16px/18px var(--serif);
+.mem-slip-meta .mem-heart {
+  width: 30px;
+  height: 30px;
+  margin: -5px -4px -5px -6px;
 }
 
-.mem-row-meta {
-  font-size: 14px;
-  line-height: 17px;
-  color: var(--muted);
+.mem-slip-comments {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  min-width: 30px;
+  margin: -5px 0;
+  padding: 0 4px;
+}
+
+.mem-slip-comments b {
+  font: 700 12px/1 'Mem Courier', 'Courier New', monospace;
+}
+
+.mem-slip-tags {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-left: 4px;
+}
+
+.mem-slip-tags span {
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: var(--paper-alt);
+  font: 700 11.5px/14px 'Mem Courier', 'Courier New', monospace;
+  color: var(--deep);
+}
+
+.mem-slip-tags span.is-on {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.mem-slip-photo {
+  flex: none;
+  align-self: stretch;
+  width: 100px;
+  min-height: 100px;
+  margin: -8px -8px -6px 0;
+  border-radius: 2px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+@keyframes mem-land {
+  from { opacity: 0; transform: translateY(-10px); }
 }
 
 .mem-heart {
@@ -3074,29 +3136,6 @@ img.mem-thumb {
   color: var(--faint);
 }
 
-.mem-soft-btn {
-  display: block;
-  width: 100%;
-  height: 54px;
-  margin-top: 22px;
-  border-radius: 16px;
-  background: #f6eddf;
-  box-shadow: 0 3px 10px rgba(50, 30, 10, 0.1);
-  text-align: center !important;
-  font-size: 17px !important;
-  font-weight: 600;
-  color: #201812 !important;
-}
-
-.mem-danger {
-  display: block;
-  margin: 0 auto;
-  padding: 16px 0 0;
-  font-size: 16px !important;
-  font-weight: 600;
-  color: var(--ember) !important;
-}
-
 .mem-edit {
   padding-bottom: 26px !important;
 }
@@ -3564,10 +3603,19 @@ img.mem-thumb {
 .mem-log-chips {
   display: flex;
   gap: 8px;
-  margin-top: 15px;
+  margin: 15px -22px 0;
+  padding: 0 22px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mem-log-chips::-webkit-scrollbar {
+  display: none;
 }
 
 .mem-log-chips button {
+  flex: none;
+  white-space: nowrap;
   height: 32px;
   padding: 0 14px;
   border: 1px solid var(--border);
@@ -3654,21 +3702,11 @@ img.mem-thumb {
   color: var(--faint);
 }
 
-.mem-shoebox {
-  display: flex;
-  gap: 16px;
-  padding: 0 8px 18px;
-}
-
-.mem-shoebox-col {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.mem-shoebox-col:last-child {
-  padding-top: 26px;
+.mem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 16px;
+  padding: 6px 8px 18px;
 }
 
 .mem-print {
@@ -3697,7 +3735,7 @@ img.mem-thumb {
 
 .mem-print img {
   width: 100%;
-  aspect-ratio: 143 / 103;
+  aspect-ratio: 1;
   object-fit: cover;
   background: #f0e2ca;
 }
@@ -3967,41 +4005,11 @@ img.mem-thumb {
   transform: rotate(-2deg);
 }
 
-.mem-us-title {
-  margin-top: -2px;
-  text-align: center;
-  font: 500 26px/31px var(--serif);
-}
-
 .mem-us-card {
   align-self: stretch;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--card);
-}
-
-.mem-us-name-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 68px;
-  margin-top: 44px;
-  padding: 0 17px;
-  font-size: 15px;
-  line-height: 21px;
-}
-
-.mem-us-name-row > span:last-child {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  color: var(--muted);
-}
-
-.mem-us-name-row small {
-  font-size: 13.5px;
-  line-height: 15px;
-  color: var(--faint);
 }
 
 .mem-us-story {
@@ -4010,19 +4018,8 @@ img.mem-thumb {
   text-align: center;
 }
 
-.mem-us-story-head {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 13px;
-  letter-spacing: 1.54px;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
 .mem-us-story > div {
   display: flex;
-  margin-top: 14px;
 }
 
 .mem-us-story > div > span {
@@ -4063,23 +4060,555 @@ img.mem-thumb {
   color: var(--bg) !important;
 }
 
-.mem-us-settings {
-  height: 50px;
-  margin-top: 11px;
+/* Sort and filter sheets */
+
+.mem-sort h2,
+.mem-filter-sheet h2 {
+  margin-bottom: 16px;
+  font: 500 24px/28px var(--serif);
+}
+
+.mem-sort button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 4px;
+  border-top: 1px solid var(--border);
+}
+
+.mem-sort button > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mem-sort small {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--faint);
+}
+
+.mem-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--border);
+}
+
+.mem-filter-grid > * {
+  background: var(--card);
+}
+
+.mem-filter-grid button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 62px;
+  padding: 8px 4px;
   text-align: center !important;
   font-size: 14px !important;
+  font-weight: 600;
+}
+
+.mem-filter-grid button.is-on {
+  background: var(--paper-alt);
+}
+
+.mem-filter-grid button.is-empty {
+  color: #c9b99f !important;
+}
+
+.mem-filter-grid i {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.mem-filter-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.mem-filter-actions button {
+  flex: 1;
+  height: 52px;
+  border: 1.5px solid #e2d3b8;
+  border-radius: 26px;
+  text-align: center !important;
+  font-size: 15px !important;
+  font-weight: 600;
+}
+
+.mem-filter-actions button + button {
+  flex: 1.4;
+  border: 0;
+  background: var(--ink);
+  color: var(--bg) !important;
+}
+
+.mem-filter-actions button:disabled {
+  opacity: 0.45;
+}
+
+/* Folder picker in the add and edit sheets */
+
+.mem-folder-pick {
+  margin: 14px 0 6px;
+}
+
+.mem-folder-pick p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+.mem-folder-pick div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.mem-folder-pick button {
+  height: 36px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  font-size: 14px !important;
+  font-weight: 600;
   color: var(--muted) !important;
 }
 
-.mem-us-settings span {
+.mem-folder-pick button.is-on {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg) !important;
+}
+
+/* Idea detail: link, comments, then "We did this" with round edit and delete */
+
+.mem-detail-sheet {
+  max-height: 88%;
+  overflow-y: auto;
+}
+
+.mem-detail-link {
+  display: block;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--paper-alt);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+.mem-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0 22px;
+  padding-top: 14px;
+  border-top: 1.5px dashed #e2d3b8;
+}
+
+.mem-comments h3 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.9px;
+  text-transform: uppercase;
   color: var(--faint);
 }
 
-.mem-us-foot {
-  margin-top: 4px;
-  font-size: 13.5px;
-  line-height: 19px;
+.mem-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mem-comment-face {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background: var(--paper-alt);
+  font: 500 13px/1 var(--serif);
+}
+
+.mem-comment p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+}
+
+.mem-comment b {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mem-comment small {
+  font-size: 12.5px;
   color: var(--faint);
+}
+
+.mem-comment p span {
+  flex-basis: 100%;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.mem-comment-new {
+  display: flex;
+  gap: 8px;
+}
+
+.mem-comment-new input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 22px;
+  background: var(--bg);
+  font: 15px var(--sans);
+  color: var(--ink);
+  outline: none;
+}
+
+.mem-comment-new button {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  background: var(--ink);
+  font-size: 14px !important;
+  font-weight: 600;
+  color: var(--bg) !important;
+}
+
+.mem-comment-new button:disabled {
+  background: #d8cab0;
+}
+
+.mem-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mem-did {
+  flex: 1;
+  height: 54px;
+  border-radius: 27px;
+  background: var(--ink);
+  text-align: center !important;
+  font-size: 16px !important;
+  font-weight: 600;
+  color: var(--bg) !important;
+}
+
+.mem-round {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1.5px solid var(--border);
+  border-radius: 27px;
+  color: var(--ink);
+}
+
+.mem-round.is-danger {
+  color: var(--ember);
+}
+
+/* Us: stats, Today's Question and the Answer Book */
+
+.mem-us-story > div > span {
+  justify-content: flex-end;
+}
+
+.mem-us-story b.is-small {
+  font-size: 17px;
+  line-height: 20px;
+}
+
+.mem-numero {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+.mem-numero em {
+  font-family: var(--serif);
+  font-style: normal;
+}
+
+.mem-q {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 18px 16px 16px;
+}
+
+.mem-q-head,
+.mem-book-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.54px;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.mem-q h3 {
+  font: 500 22px/27px var(--serif);
+}
+
+.mem-q-sealed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1.5px dashed var(--dashed);
+  border-radius: 12px;
+  background: var(--paper-alt);
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--muted);
+}
+
+.mem-q-sealed span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--paper-alt2);
+  font: 14px/1 var(--serif);
+  color: var(--deep);
+}
+
+.mem-q textarea {
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  font: 15px/21px var(--sans);
+  color: var(--ink);
+  resize: none;
+  outline: none;
+}
+
+.mem-q-seal {
+  height: 46px;
+  border-radius: 99px;
+  background: var(--ink);
+  text-align: center !important;
+  font-size: 15px !important;
+  font-weight: 600;
+  color: var(--bg) !important;
+}
+
+.mem-q-seal:disabled {
+  opacity: 0.4;
+}
+
+.mem-q-open {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: mem-land 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+
+.mem-q-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.mem-q-who {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 20px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.63px;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.mem-q-who .mem-heart {
+  width: 28px;
+  height: 24px;
+  margin: -4px -6px -4px 0;
+}
+
+.mem-q-who .mem-heart path {
+  stroke: var(--dashed);
+}
+
+.mem-q-answer p {
+  font: 600 20px/23px var(--hand);
+}
+
+.mem-q-toss {
+  margin-top: 4px;
+  padding: 6px 13px;
+  border: 1.5px solid var(--ink);
+  border-radius: 99px;
+  font-size: 13px !important;
+  font-weight: 600;
+}
+
+.mem-q-stamp {
+  margin-top: 4px;
+  padding: 3px 9px;
+  border: 1.5px solid rgba(199, 64, 31, 0.55);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--ember);
+  transform: rotate(-2deg);
+  animation: mem-stamp 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+
+@keyframes mem-stamp {
+  from { opacity: 0; transform: rotate(-2deg) scale(1.4); }
+}
+
+.mem-book {
+  align-self: stretch;
+  margin-top: 26px;
+}
+
+.mem-book-head {
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.mem-book-head small {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mem-book-row {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+}
+
+.mem-book-line {
+  display: flex;
+  gap: 12px;
+}
+
+.mem-book-line .mem-numero {
+  flex: none;
+  width: 28px;
+  padding-top: 19px;
+}
+
+.mem-book-line > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  font: 500 16.5px/21px var(--serif);
+}
+
+.mem-book-line small,
+.mem-book-answers small {
+  font: 600 10.5px/13px var(--sans);
+  letter-spacing: 0.63px;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.mem-book-line i {
+  width: 16px;
+  padding-top: 14px;
+  font-style: normal;
+  font-size: 20px;
+  color: var(--faint);
+}
+
+.mem-book-answers {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-left: 40px;
+}
+
+.mem-book-answers > span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 18px/20px var(--hand);
+}
+
+.mem-book-open {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mem-us-rows {
+  display: flex;
+  flex-direction: column;
+  margin-top: 11px;
+  padding: 0 17px;
+}
+
+.mem-us-rows span {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  font-size: 15px;
+}
+
+.mem-us-rows span + span {
+  border-top: 1px solid var(--border);
+}
+
+.mem-us-rows i {
+  font-style: normal;
+  color: var(--muted);
 }
 
 /* ---------- SplitIt ---------- */

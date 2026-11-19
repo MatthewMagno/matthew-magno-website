@@ -17,10 +17,11 @@ export const apps = [
     color: '#b8432a',
     status: 'On the App Store',
     tagline: 'A shared list of date ideas for two people, and a keepsake log of the dates you actually go on.',
-    different: 'Memori has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos.',
+    different: 'Memori has an MCP connector, so you can ask Claude to add ideas, draw a date or log one with photos. Also, it’s personal to my own liking.',
     points: [
-      'Pairs two phones and keeps the list and photo log in sync live.',
-      'Shipped to the App Store and updated through version 1.7, with a share extension for saving ideas from anywhere.',
+      'Pairs two phones and keeps ideas, comments and the photo log in sync live, with ideas filed into folders you can sort and filter.',
+      'A daily question for the two of you: each answer stays sealed until both are in, and the good ones go straight onto the list.',
+      'Shipped to the App Store and updated through version 1.7, with a share extension that saves a Google or Apple Maps place without leaving Maps.',
     ],
     facts: [
       { value: '7', label: 'MCP tools' },

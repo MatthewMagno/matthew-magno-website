@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { PhoneFrame } from './Phone.jsx';
 
-// Mirrors the Memori app (date-jar-app) as it ships: the Jar tab with the
-// "your last pull" card, the + menu, the new-idea and idea sheets, making a
-// memory, the sealed stamp, the Log shoebox, a held print, and the Us tab.
+// Mirrors the Memori app (date-jar-app) as it ships: Ideas filed into folders
+// with sort and filter sheets, paper idea slips with comments, "We did this"
+// turning an idea into a memory, the sealed stamp, the Log's print grid, a held
+// print, and the Us tab with Today's Question and the Answer Book.
 // Sample data is the app's own seeded demo couple, Mia & Sam.
 
 const photo = (name) => `./demo/memori-${name}.jpg`;
@@ -11,38 +12,70 @@ const photo = (name) => `./demo/memori-${name}.jpg`;
 const ENERGY = ['cozy', 'out & about', 'big night', 'active'];
 const SPEND = ['free', '$', '$$', '$$$'];
 const WEATHER = ['indoors', 'outdoors', 'hot', 'cold'];
-const FOOD = ['italian', 'mexican', 'asian', 'american', 'coffee', 'dessert', 'drinks'];
+const FOOD = ['bbq', 'thai', 'japanese', 'chinese', 'mexican', 'italian', 'indian', 'burgers',
+  'seafood', 'brunch', 'bakery', 'dessert', 'coffee', 'drinks', 'vegetarian'];
 const DURATION = ['quick', 'evening', 'half-day+', 'weekend'];
 const CATEGORIES = [
   { key: 'energy', label: 'Energy', options: ENERGY },
   { key: 'spend', label: 'Price', options: SPEND },
   { key: 'weather', label: 'Weather', options: WEATHER },
-  { key: 'food', label: 'Food', options: FOOD },
+  { key: 'food', label: 'Cuisine', options: FOOD },
   { key: 'duration', label: 'Time', options: DURATION },
 ];
+const FIELD_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.label]));
+const FIELD_OPTIONS = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.options]));
+const FIELDS = CATEGORIES.map((c) => c.key);
 
-const slip = (id, title, energy, spend, weather, by, extra = {}) => ({ id, title, energy, spend, weather, by, ...extra });
-
-const SLIPS = [
-  slip('golf', 'That rooftop mini-golf place', ['out & about'], ['$$'], ['outdoors'], 'You', { tossed: 'September', img: photo('lookout') }),
-  slip('drivein', 'Drive-in movie with the good blankets', ['cozy'], ['free'], ['outdoors'], 'Sam', { link: true, tossed: 'September', img: photo('sunset') }),
-  slip('drivein2', 'Drive-in movie, any movie', ['cozy'], ['free'], ['outdoors'], 'You', { tossed: 'August' }),
-  slip('omakase', 'Omakase counter for the anniversary', ['big night'], ['$$$'], ['indoors'], 'Sam', { tossed: 'August', img: photo('storefront') }),
-  slip('market', 'Night market food crawl', ['big night'], ['$$'], ['outdoors'], 'Sam', { link: true, tossed: 'July', dust: '3 months', dustAt: 5, img: photo('fireworks') }),
-  slip('pasta', 'Learn to make pasta from scratch', ['cozy'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 3, img: photo('farmers') }),
-  slip('books', 'Bookstore date — pick each other’s next read', ['out & about'], ['$'], ['indoors'], 'You', { tossed: 'May', dust: '5 months', dustAt: 4, img: photo('flowers') }),
-  slip('ramen', 'That tiny ramen bar on 5th', ['out & about'], ['$$'], ['indoors'], 'You', { tossed: 'April', dust: '6 months', dustAt: 2, img: photo('ramen') }),
-  slip('firstmeal', 'Cook the first meal you ever ate together', ['cozy'], ['$'], ['indoors'], 'starter set', { tossed: 'March', dust: '7 months', dustAt: 1, img: photo('diner') }),
+// One folder per idea, each with its own filter pills (src/data.ts SLIP_CATEGORIES).
+const FOLDERS = [
+  { key: 'food', label: 'Food & drink', filters: ['food', 'spend'] },
+  { key: 'activities', label: 'Activities', filters: ['energy', 'spend', 'weather'] },
+  { key: 'home', label: 'At home', filters: ['energy', 'spend'] },
 ];
 
-const LAST_PULL = slip('picnic', 'Sunset picnic at Miller Point', ['cozy'], ['free'], ['outdoors'], 'Sam', { img: photo('trail') });
+const SORTS = [
+  { key: 'newest', label: 'Newest', sub: 'Latest slips first' },
+  { key: 'oldest', label: 'Oldest', sub: 'Been in the jar longest' },
+  { key: 'hearted', label: 'Hearted first', sub: 'Your favourites on top' },
+  { key: 'az', label: 'A–Z', sub: 'By title' },
+];
+
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const TODAY = { month: 10, day: 18 }; // November 18, 2026
+const addedLabel = (s) => `${MONTHS[s.at[0]]} ${s.at[1]}`;
+const order = (s) => s.at[0] * 40 + s.at[1];
+
+const slip = (id, title, category, at, tags, by, extra = {}) => ({
+  id, title, category, at, by, energy: [], spend: [], weather: [], food: [], duration: [], comments: [], ...tags, ...extra,
+});
+const comment = (by, text, when) => ({ by, text, when });
+
+const SLIPS = [
+  slip('omakase', 'Omakase counter for the anniversary', 'food', [10, 16], { food: ['japanese'], spend: ['$$$'], energy: ['big night'] }, 'Sam',
+    { img: photo('storefront'), comments: [comment('Sam', 'booked for the 14th?', '2d')], newFrom: true }),
+  slip('ramen', 'That tiny ramen bar on 5th', 'food', [9, 30], { food: ['japanese'], spend: ['$$'] }, 'You', { img: photo('ramen') }),
+  slip('tacos', 'Taco truck tour, one of everything', 'food', [8, 21], { food: ['mexican'], spend: ['$'] }, 'Sam'),
+  slip('brunch', 'Bottomless brunch somewhere new', 'food', [7, 2], { food: ['brunch'], spend: ['$$'] }, 'You', { img: photo('diner') }),
+  slip('golf', 'That rooftop mini-golf place', 'activities', [9, 18], { energy: ['out & about'], spend: ['$$'], weather: ['outdoors'] }, 'You', { img: photo('lookout') }),
+  slip('drivein', 'Drive-in movie with the good blankets', 'activities', [9, 18], { energy: ['cozy'], spend: ['free'], weather: ['outdoors'] }, 'Sam', {
+    link: '@datenightideas',
+    comments: [comment('Sam', 'bringing the big quilt this time', '3w'), comment('You', 'and the good snacks', '3w')],
+  }),
+  slip('picnic', 'Sunset picnic at Miller Point', 'activities', [8, 12], { energy: ['cozy'], spend: ['free'], weather: ['outdoors'] }, 'Sam', { img: photo('trail') }),
+  slip('market', 'Night market food crawl', 'activities', [6, 9], { energy: ['big night'], spend: ['$$'], weather: ['outdoors'] }, 'Sam', { img: photo('fireworks') }),
+  slip('books', 'Bookstore date — pick each other’s next read', 'activities', [4, 23], { energy: ['out & about'], spend: ['$'], weather: ['indoors'] }, 'You', { img: photo('flowers') }),
+  slip('pasta', 'Learn to make pasta from scratch', 'home', [8, 4], { energy: ['cozy'], spend: ['$'] }, 'You', { img: photo('farmers') }),
+  slip('firstmeal', 'Cook the first meal you ever ate together', 'home', [2, 14], { energy: ['cozy'], spend: ['$'] }, 'starter set'),
+  slip('puzzle', 'A 1,000-piece puzzle and a bottle of wine', 'home', [1, 27], { energy: ['cozy'], spend: ['$'] }, 'Sam'),
+];
 
 const memory = (no, title, month, day, year, img, extra = {}) => ({ id: `m${no}`, no, title, month, day, year, img, ...extra });
 
 // Several dates a month, so the Log reads like a full shoebox. Nº follows date order.
 const MEMORIES = [
   memory(16, 'Board game café, best of seven', 'June', 21, 2026, photo('games'), { note: 'you still owe me a rematch' }),
-  memory(15, 'That tiny ramen bar on 5th', 'June', 2, 2026, photo('ramen')),
+  memory(15, 'Hot pot night', 'June', 2, 2026, photo('diner')),
   memory(14, 'Ceramics class downtown', 'May', 24, 2026, photo('ceramics'), { note: 'one bowl, slightly lopsided' }),
   memory(13, 'Farmers market breakfast run', 'May', 10, 2026, photo('farmers'), { note: 'croissants, then more croissants' }),
   memory(12, 'Bowling, loser buys tacos', 'April', 18, 2026, photo('tacos')),
@@ -52,18 +85,19 @@ const MEMORIES = [
   memory(8, 'Thrift store challenge', 'February', 14, 2026, photo('flowers'), { note: 'you in that jacket' }),
   memory(7, 'Sunset drive, no destination', 'February', 1, 2026, photo('sunset')),
   memory(6, 'Fireworks from the roof', 'December', 31, 2025, photo('fireworks'), { note: 'midnight, freezing, worth it' }),
-  memory(5, 'Hot pot night', 'December', 12, 2025, photo('diner')),
-  memory(4, 'First snow walk', 'November', 20, 2025, photo('trees'), { note: 'cold hands, warm everything else' }),
+  memory(5, 'Dinner at the corner spot', 'December', 12, 2025, photo('storefront')),
+  memory(4, 'First snow walk', 'November', 18, 2025, photo('trees'), { note: 'cold hands, warm everything else' }),
   memory(3, 'The pier, freezing', 'November', 8, 2025, photo('pier')),
   memory(2, 'Karaoke until they kicked us out', 'October', 21, 2025, photo('karaoke')),
-  memory(1, 'Dinner at the corner spot', 'October', 3, 2025, photo('storefront')),
+  memory(1, 'That tiny ramen bar on 5th', 'October', 3, 2025, photo('ramen')),
 ];
 
 const PICKS = [photo('trail'), photo('pier'), photo('tacos')];
 const WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
   'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
 const numWord = (n) => WORDS[n] ?? String(n);
-const meta = (s) => [...s.energy, ...s.spend, ...s.weather, ...(s.food ?? []), ...(s.duration ?? []), s.by].join(' · ');
+const tagsOf = (s) => FIELDS.flatMap((f) => s[f] ?? []);
+const tagLabel = (t) => (t[0] === '$' ? t : t[0].toUpperCase() + t.slice(1));
 const stamp = (m) => `${m.month.toUpperCase()} ${m.day}`;
 const monthHeader = (m) => (m.year === 2026 ? m.month.toUpperCase() : `${m.month.toUpperCase()} ${m.year}`);
 
@@ -79,11 +113,10 @@ export default function MemoriDemo() {
 function Memori() {
   const [tab, setTab] = useState('jar');
   const [slips, setSlips] = useState(SLIPS);
-  const [hearts, setHearts] = useState(() => new Set());
-  const [dusted, setDusted] = useState(() => new Set());
-  const [lastPull, setLastPull] = useState(LAST_PULL);
+  const [hearts, setHearts] = useState(() => new Set(['drivein', 'pasta']));
+  const [folder, setFolder] = useState('activities');
   const [memories, setMemories] = useState(MEMORIES);
-  const [route, setRoute] = useState(null); // 'memory' | 'sealed'
+  const [making, setMaking] = useState(null); // the idea being turned into a memory
   const [sealed, setSealed] = useState(null);
   const [plus, setPlus] = useState(false);
   const [sheet, setSheet] = useState(null); // { kind: 'new' | 'detail' | 'edit', slip }
@@ -91,56 +124,57 @@ function Memori() {
   const [toast, setToast] = useState(null);
   const labels = useLabelWindow();
 
-  const showToast = (t) => {
-    setToast({ ...t, id: Date.now() });
-  };
   useEffect(() => {
     if (!toast) return undefined;
     const t = setTimeout(() => setToast(null), 3600);
     return () => clearTimeout(t);
   }, [toast]);
 
-  const toss = (draft) => {
-    const s = { id: `s${Date.now()}`, energy: [], spend: [], weather: [], food: [], duration: [], by: 'You', tossed: 'October', fresh: true, ...draft };
+  const addSlip = (draft, quiet) => {
+    const s = slip(`s${Date.now()}`, draft.title, draft.category, [TODAY.month, TODAY.day], {}, 'You', { fresh: true, ...draft });
     setSlips((list) => [s, ...list]);
-    setSheet(null);
-    showToast({ text: `In it goes — ${slips.length + 1} and counting`, undo: () => setSlips((list) => list.filter((x) => x.id !== s.id)) });
+    if (!quiet) {
+      setSheet(null);
+      setFolder(s.category);
+      setToast({ id: Date.now(), text: `In it goes — filed under ${FOLDERS.find((f) => f.key === s.category).label}`, undo: () => setSlips((list) => list.filter((x) => x.id !== s.id)) });
+    }
+    return s;
   };
 
   const seal = (img) => {
     const no = memories.length + 1;
-    const m = memory(no, lastPull.title, 'October', 20, 2026, img, { tags: [...lastPull.energy, ...lastPull.spend, ...lastPull.weather], fresh: true });
+    const m = memory(no, making.title, 'November', TODAY.day, 2026, img, { tags: tagsOf(making), fresh: true });
     setMemories((list) => [m, ...list]);
+    setSlips((list) => list.filter((x) => x.id !== making.id));
     setSealed(m);
-    setLastPull(null);
-    setRoute('sealed');
+    setMaking(null);
   };
 
-  const openSlip = (s) => {
-    setDusted((d) => new Set(d).add(s.id));
-    setSheet({ kind: 'detail', slip: s });
-  };
+  const update = (next) => setSlips((list) => list.map((x) => (x.id === next.id ? next : x)));
+  const detail = sheet?.slip && slips.find((x) => x.id === sheet.slip.id);
+  const covered = making || sealed;
 
   return (
     <div className="demo demo-mem">
-      <div className={`mem-tabs ${route ? 'is-covered' : ''}`}>
+      <div className={`mem-tabs ${covered ? 'is-covered' : ''}`}>
         <div className={`mem-tab ${tab === 'jar' ? 'is-on' : ''}`}>
           <Jar
             slips={slips}
             hearts={hearts}
-            dusted={dusted}
-            lastPull={lastPull}
+            folder={folder}
+            onFolder={setFolder}
             onHeart={(id) => setHearts((h) => { const n = new Set(h); n.has(id) ? n.delete(id) : n.add(id); return n; })}
-            onOpen={openSlip}
-            onAddPhotos={() => setRoute('memory')}
-            onNotNow={() => setLastPull(null)}
+            onOpen={(s, comments) => {
+              if (s.newFrom) update({ ...s, newFrom: false });
+              setSheet({ kind: 'detail', slip: s, comments });
+            }}
           />
         </div>
         <div className={`mem-tab ${tab === 'log' ? 'is-on' : ''}`}>
           <Log memories={memories} onOpen={setPrint} />
         </div>
         <div className={`mem-tab ${tab === 'us' ? 'is-on' : ''}`}>
-          <Us memories={memories} slips={slips} />
+          <Us memories={memories} onToss={(text) => addSlip({ title: text, category: 'activities' }, true)} />
         </div>
 
         <div className="mem-fade" />
@@ -149,27 +183,31 @@ function Memori() {
           open={plus}
           onToggle={() => setPlus((p) => !p)}
           onIdea={() => { setPlus(false); setSheet({ kind: 'new' }); }}
-          onMemory={() => { setPlus(false); if (lastPull) setRoute('memory'); else { setTab('log'); } }}
+          onMemory={() => { setPlus(false); setTab('log'); }}
         />
 
-        {sheet?.kind === 'new' && <IdeaSheet onClose={() => setSheet(null)} onToss={toss} />}
-        {sheet?.kind === 'detail' && (
+        {sheet?.kind === 'new' && <IdeaSheet folder={folder} onClose={() => setSheet(null)} onAdd={addSlip} />}
+        {sheet?.kind === 'detail' && detail && (
           <DetailSheet
-            slip={sheet.slip}
+            slip={detail}
+            focusComments={sheet.comments}
             onClose={() => setSheet(null)}
-            onEdit={() => setSheet({ kind: 'edit', slip: sheet.slip })}
+            onComment={(text) => update({ ...detail, comments: [...detail.comments, comment('You', text, 'now')] })}
+            onDid={() => { setSheet(null); setMaking(detail); }}
+            onEdit={() => setSheet({ kind: 'edit', slip: detail })}
             onDelete={() => {
-              setSlips((list) => list.filter((x) => x.id !== sheet.slip.id));
+              setSlips((list) => list.filter((x) => x.id !== detail.id));
               setSheet(null);
             }}
           />
         )}
-        {sheet?.kind === 'edit' && (
+        {sheet?.kind === 'edit' && detail && (
           <EditSheet
-            slip={sheet.slip}
+            slip={detail}
             onClose={() => setSheet(null)}
             onSave={(next) => {
-              setSlips((list) => list.map((x) => (x.id === next.id ? next : x)));
+              update(next);
+              setFolder(next.category);
               setSheet(null);
             }}
           />
@@ -183,13 +221,13 @@ function Memori() {
         )}
       </div>
 
-      {route === 'memory' && lastPull && <MakeMemory slip={lastPull} onClose={() => setRoute(null)} onSeal={seal} />}
-      {route === 'sealed' && sealed && (
+      {making && <MakeMemory slip={making} onClose={() => setMaking(null)} onSeal={seal} />}
+      {sealed && !making && (
         <Sealed
           memory={sealed}
           count={memories.length}
-          onLog={() => { setTab('log'); setRoute(null); }}
-          onIdeas={() => { setTab('jar'); setRoute(null); }}
+          onLog={() => { setTab('log'); setSealed(null); }}
+          onIdeas={() => { setTab('jar'); setSealed(null); }}
         />
       )}
     </div>
@@ -206,76 +244,191 @@ function useLabelWindow() {
   return on;
 }
 
-/* ---------- Jar ---------- */
+/* ---------- Ideas ---------- */
 
-function Jar({ slips, hearts, dusted, lastPull, onHeart, onOpen, onAddPhotos, onNotNow }) {
-  const dust = slips.filter((s) => s.dust && !dusted.has(s.id)).sort((a, b) => a.dustAt - b.dustAt);
-  const count = (key) => slips.filter((s) => s[key]?.length).length;
+function sortSlips(list, sort, hearts) {
+  const out = [...list];
+  if (sort === 'newest') out.sort((a, b) => order(b) - order(a));
+  if (sort === 'oldest') out.sort((a, b) => order(a) - order(b));
+  if (sort === 'az') out.sort((a, b) => a.title.localeCompare(b.title));
+  if (sort === 'hearted') out.sort((a, b) => (hearts.has(b.id) - hearts.has(a.id)) || order(b) - order(a));
+  return out;
+}
+
+const matches = (s, filters) => Object.entries(filters).every(([f, vals]) => !vals.length || vals.some((v) => s[f]?.includes(v)));
+
+function Jar({ slips, hearts, folder, onFolder, onHeart, onOpen }) {
+  const [sort, setSort] = useState('newest');
+  const [filters, setFilters] = useState({});
+  const [sheet, setSheet] = useState(null); // 'sort' | a filter field
+
+  const open = FOLDERS.find((f) => f.key === folder);
+  const inFolder = slips.filter((s) => s.category === folder);
+  const shown = sortSlips(inFolder.filter((s) => matches(s, filters)), sort, hearts);
+  const anyFilter = Object.values(filters).some((v) => v.length);
+  const switchFolder = (key) => {
+    onFolder(key);
+    setFilters({});
+  };
 
   return (
-    <div className="mem-scroll">
+    <div className="mem-scroll mem-ideas">
       <header className="mem-title">
-        <div>
-          <span className="mem-eyebrow">Jar · Mia &amp; Sam</span>
-          <h1>Ideas</h1>
-        </div>
-        <span className="mem-count">{String(slips.length).padStart(2, '0')}</span>
+        <span className="mem-eyebrow mem-eyebrow-quiet">Mia &amp; Sam</span>
+        <h1>Ideas</h1>
       </header>
 
-      {lastPull && (
-        <section className="mem-lastpull">
-          <span className="mem-lastpull-eyebrow">Your last pull</span>
-          <div className="mem-lastpull-row">
-            <div>
-              <h2>{lastPull.title}</h2>
-              <p>How’d it go? Add a photo and it becomes a memory.</p>
-            </div>
-            <button className="mem-pill hint" onClick={onAddPhotos}>Add photos</button>
-          </div>
-          <button className="mem-notnow" onClick={onNotNow}>Not now</button>
-        </section>
-      )}
-
-      {dust.length > 0 && (
-        <section className="mem-dust">
-          <h3>Not looked at in a while</h3>
-          <div className="mem-dust-rail">
-            {dust.map((s) => (
-              <button key={s.id} className="mem-dust-card" onClick={() => onOpen(s)}>
-                <span className={`mem-dust-tile ${s.img ? 'has-photo' : ''}`} style={s.img ? { '--photo': `url(${s.img})` } : undefined}>
-                  <span className="mem-dust-age">{s.dust}</span>
-                  <span className="mem-dust-title">{s.title}</span>
-                </span>
-                <span className="mem-dust-meta">{[...s.spend, ...s.weather].join(' · ')}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <div className="mem-filters">
-        <span className="mem-filter"><Icon name="energy" />Energy {count('energy')}</span>
-        <span className="mem-filter"><Icon name="price" />Price {count('spend')}</span>
-        <span className="mem-filter"><Icon name="weather" />Weather {count('weather')}</span>
+      <div className="mem-folders" role="tablist">
+        {FOLDERS.map((f) => {
+          const list = slips.filter((s) => s.category === f.key);
+          return (
+            <button
+              key={f.key}
+              role="tab"
+              aria-selected={f.key === folder}
+              className={`mem-folder-tab ${f.key === folder ? 'is-on' : ''}`}
+              onClick={() => switchFolder(f.key)}
+            >
+              {f.label}
+              <span>{String(list.length).padStart(2, '0')}</span>
+              {list.some((s) => s.newFrom) && <i className="mem-folder-dot" aria-label="New from Sam" />}
+            </button>
+          );
+        })}
       </div>
 
-      <ul className="mem-rows">
-        {slips.map((s) => (
-          <li key={s.id} className={`mem-row ${s.fresh ? 'is-fresh' : ''}`}>
-            <button className="mem-row-main" onClick={() => onOpen(s)}>
-              {s.img ? <img className="mem-thumb" src={s.img} alt="" /> : s.link && <span className="mem-thumb mem-stripes" />}
-              <span className="mem-row-text">
-                <span className="mem-row-title">{s.title}</span>
-                <span className="mem-row-meta">{meta(s)}</span>
-              </span>
+      <div className="mem-folder">
+        {inFolder.length > 1 && (
+          <div className="mem-pills">
+            <button className="mem-pill-sort" onClick={() => setSheet('sort')}>
+              <Icon name="sort" size={14} />
+              {SORTS.find((x) => x.key === sort).label}
             </button>
-            <button className={`mem-heart ${hearts.has(s.id) ? 'is-on' : ''}`} onClick={() => onHeart(s.id)} aria-label={hearts.has(s.id) ? 'Unheart' : 'Heart'}>
-              <svg viewBox="0 0 20 20" width="22" height="22"><path d="M10 17.2S2.5 12.6 2.5 7.3A4 4 0 0 1 10 5a4 4 0 0 1 7.5 2.3C17.5 12.6 10 17.2 10 17.2z" strokeWidth="1.6" strokeLinejoin="round" /></svg>
-            </button>
-          </li>
-        ))}
-      </ul>
+            <span className="mem-pills-rule" />
+            {open.filters.map((f) => {
+              const picked = filters[f] ?? [];
+              const label = FIELD_LABEL[f];
+              return (
+                <button key={f} className={`mem-pill-filter ${picked.length ? 'is-on' : ''}`} onClick={() => setSheet(f)}>
+                  {picked.length === 0 ? label : picked.length === 1 ? `${label} · ${tagLabel(picked[0])}` : `${label} · ${picked.length}`}
+                  <Icon name="chev" size={12} />
+                </button>
+              );
+            })}
+            {anyFilter && <button className="mem-pill-clear" onClick={() => setFilters({})}>Clear</button>}
+          </div>
+        )}
+
+        {inFolder.length === 0 ? (
+          <p className="mem-folder-empty">Nothing in {open.label} yet.</p>
+        ) : shown.length === 0 ? (
+          <p className="mem-folder-empty">No ideas match.</p>
+        ) : (
+          <ul className="mem-slips">
+            {shown.map((s, i) => (
+              <li key={s.id} className={`mem-slip ${s.fresh ? 'is-fresh' : ''}`} style={{ '--r': `${[-0.5, 0.4, -0.3, 0.5][i % 4]}deg` }}>
+                <button className="mem-slip-open" onClick={() => onOpen(s)} aria-label={s.title} />
+                <div className="mem-slip-text">
+                  <span className="mem-slip-top">
+                    {s.newFrom && <span className="mem-slip-new">New · from {s.by}</span>}
+                    <span className="mem-slip-added">Added {addedLabel(s)}</span>
+                  </span>
+                  <span className="mem-slip-title">{s.title}</span>
+                  <span className="mem-slip-meta">
+                    <button className={`mem-heart ${hearts.has(s.id) ? 'is-on' : ''}`} onClick={() => onHeart(s.id)} aria-label={hearts.has(s.id) ? 'Unheart' : 'Heart'}>
+                      <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 17.2S2.5 12.6 2.5 7.3A4 4 0 0 1 10 5a4 4 0 0 1 7.5 2.3C17.5 12.6 10 17.2 10 17.2z" strokeWidth="1.6" strokeLinejoin="round" /></svg>
+                    </button>
+                    <button className="mem-slip-comments" onClick={() => onOpen(s, true)} aria-label={s.comments.length ? `${s.comments.length} comments` : 'Comments'}>
+                      <Icon name="comment" size={19} />
+                      {s.comments.length > 0 && <b>{s.comments.length}</b>}
+                    </button>
+                    <span className="mem-slip-tags">
+                      {tagsOf(s).map((t) => {
+                        const on = FIELDS.some((f) => filters[f]?.includes(t));
+                        return <span key={t} className={on ? 'is-on' : ''}>{tagLabel(t)}</span>;
+                      })}
+                    </span>
+                  </span>
+                </div>
+                {s.img && <img className="mem-slip-photo" src={s.img} alt="" />}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {sheet === 'sort' && <SortSheet value={sort} onClose={() => setSheet(null)} onPick={setSort} />}
+      {sheet && sheet !== 'sort' && (
+        <FilterSheet
+          field={sheet}
+          value={filters[sheet] ?? []}
+          countFor={(draft) => inFolder.filter((s) => matches(s, { ...filters, [sheet]: draft })).length}
+          optionCount={(v) => inFolder.filter((s) => s[sheet]?.includes(v)).length}
+          onClose={() => setSheet(null)}
+          onApply={(draft) => setFilters((f) => ({ ...f, [sheet]: draft }))}
+        />
+      )}
     </div>
+  );
+}
+
+function SortSheet({ value, onClose, onPick }) {
+  return (
+    <BottomSheet onClose={onClose}>
+      {(close) => (
+        <div className="mem-sort">
+          <h2>Sort ideas</h2>
+          {SORTS.map((o) => (
+            <button key={o.key} className={value === o.key ? 'is-on' : ''} onClick={() => { onPick(o.key); close(); }}>
+              <span>
+                {o.label}
+                <small>{o.sub}</small>
+              </span>
+              {value === o.key && <Icon name="check" size={16} />}
+            </button>
+          ))}
+        </div>
+      )}
+    </BottomSheet>
+  );
+}
+
+function FilterSheet({ field, value, countFor, optionCount, onClose, onApply }) {
+  const [draft, setDraft] = useState(value);
+  const cells = ['', ...FIELD_OPTIONS[field]];
+  while (cells.length % 3) cells.push(null);
+  const n = countFor(draft);
+  const toggle = (v) => {
+    if (v === '') setDraft([]);
+    else setDraft((d) => (d.includes(v) ? d.filter((x) => x !== v) : [...d, v]));
+  };
+  return (
+    <BottomSheet onClose={onClose}>
+      {(close) => (
+        <div className="mem-filter-sheet">
+          <h2>{FIELD_LABEL[field]}</h2>
+          <div className="mem-filter-grid">
+            {cells.map((v, i) => {
+              if (v === null) return <span key={`blank-${i}`} />;
+              const on = v === '' ? draft.length === 0 : draft.includes(v);
+              const empty = v !== '' && optionCount(v) === 0;
+              return (
+                <button key={v || 'any'} className={`${on ? 'is-on' : ''} ${empty ? 'is-empty' : ''}`} onClick={() => toggle(v)}>
+                  {v === '' ? 'Any' : tagLabel(v)}
+                  {on && <i><Icon name="check" size={10} /></i>}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mem-filter-actions">
+            <button onClick={close}>Cancel</button>
+            <button disabled={n === 0} onClick={() => { onApply(draft); close(); }}>
+              {n === 0 ? 'No matches' : `Show ${n} result${n === 1 ? '' : 's'}`}
+            </button>
+          </div>
+        </div>
+      )}
+    </BottomSheet>
   );
 }
 
@@ -323,6 +476,21 @@ function PlusMenu({ open, onToggle, onIdea, onMemory }) {
 
 /* ---------- Sheets ---------- */
 
+function FolderPicker({ value, onChange }) {
+  return (
+    <div className="mem-folder-pick">
+      <p>Folder</p>
+      <div role="radiogroup">
+        {FOLDERS.map((f) => (
+          <button key={f.key} role="radio" aria-checked={value === f.key} className={value === f.key ? 'is-on' : ''} onClick={() => onChange(f.key)}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Categories({ values, onChange }) {
   return (
     <div className="mem-cats">
@@ -345,12 +513,15 @@ function Categories({ values, onChange }) {
   );
 }
 
-function IdeaSheet({ onClose, onToss }) {
+function IdeaSheet({ folder, onClose, onAdd }) {
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
   const [tags, setTags] = useState({});
+  const [picked, setPicked] = useState(null);
   const [closing, setClosing] = useState(false);
   const close = () => { setClosing(true); setTimeout(onClose, 220); };
+  // Untouched, the folder follows the open one, except a cuisine files it under Food & drink.
+  const category = picked ?? (tags.food?.length ? 'food' : folder);
 
   return (
     <div className={`mem-dim ${closing ? 'is-closing' : ''}`} onClick={close}>
@@ -366,14 +537,15 @@ function IdeaSheet({ onClose, onToss }) {
           placeholder="That rooftop mini-golf place"
           aria-label="Idea"
         />
-        <span className="mem-helper">Currently only Google Maps and TikTok links are supported</span>
+        <span className="mem-helper">Currently only Google Maps, Apple Maps, and TikTok links are supported</span>
         <button className="mem-add-photos">
           <b>+</b>
           Add photos
         </button>
         <textarea className="mem-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="A line to jog your memory… (optional)" />
+        <FolderPicker value={category} onChange={setPicked} />
         <Categories values={tags} onChange={(k, v) => setTags((t) => ({ ...t, [k]: v }))} />
-        <button className="mem-primary" disabled={!title.trim()} onMouseDown={(e) => e.preventDefault()} onClick={() => onToss({ title: title.trim(), ...tags })}>
+        <button className="mem-primary" disabled={!title.trim()} onMouseDown={(e) => e.preventDefault()} onClick={() => onAdd({ title: title.trim(), category, ...tags })}>
           Toss it in
         </button>
       </div>
@@ -394,23 +566,63 @@ function BottomSheet({ onClose, children, className = '' }) {
   );
 }
 
-function DetailSheet({ slip: s, onClose, onEdit, onDelete }) {
-  const tags = [...s.energy, ...s.spend, ...s.weather, ...(s.food ?? []), ...(s.duration ?? [])];
+function DetailSheet({ slip: s, focusComments, onClose, onComment, onDid, onEdit, onDelete }) {
+  const [draft, setDraft] = useState('');
+  const tags = tagsOf(s);
   const who = s.by === 'You' ? 'You' : s.by === 'starter set' ? 'From the starter set' : s.by;
+  const tossed = `${who} ${s.by === 'starter set' ? '' : 'tossed this in '}· ${MONTH_NAMES[s.at[0]]}${s.link ? `, from ${s.link}` : ''}`;
+  const post = () => {
+    if (!draft.trim()) return;
+    onComment(draft.trim());
+    setDraft('');
+  };
   return (
-    <BottomSheet onClose={onClose}>
+    <BottomSheet onClose={onClose} className="mem-detail-sheet">
       {(close) => (
         <div className="mem-detail">
           {s.img && <img className="mem-detail-photo" src={s.img} alt="" />}
           <h2>{s.title}</h2>
           {tags.length > 0 && (
             <div className="mem-chips">
-              {tags.map((t) => <span key={t} className="mem-chip">{t}</span>)}
+              {tags.map((t) => <span key={t} className="mem-chip">{tagLabel(t)}</span>)}
             </div>
           )}
-          <p className="mem-detail-who">{who} tossed this in · {s.tossed}</p>
-          <button className="mem-soft-btn" onClick={onEdit}>Edit this idea</button>
-          <button className="mem-danger" onClick={() => { close(); setTimeout(onDelete, 260); }}>Delete this idea</button>
+          <p className="mem-detail-who">{tossed}</p>
+          {s.link && <span className="mem-detail-link">Open {s.link} ↗</span>}
+
+          <div className="mem-comments" ref={(el) => focusComments && el?.scrollIntoView({ block: 'nearest' })}>
+            <h3>{s.comments.length ? `Comments · ${s.comments.length}` : 'Comments'}</h3>
+            {s.comments.map((c, i) => (
+              <div key={i} className="mem-comment">
+                <span className="mem-comment-face">{c.by === 'You' ? 'M' : c.by[0]}</span>
+                <p>
+                  <b>{c.by === 'You' ? 'Mia' : c.by}</b>
+                  <small>{c.when}</small>
+                  <span>{c.text}</span>
+                </p>
+              </div>
+            ))}
+            <div className="mem-comment-new">
+              <input
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && post()}
+                placeholder="Add a comment…"
+                aria-label="Add a comment"
+              />
+              <button disabled={!draft.trim()} onClick={post}>Post</button>
+            </div>
+          </div>
+
+          <div className="mem-detail-actions">
+            <button className="mem-did hint" onClick={() => { close(); setTimeout(onDid, 260); }}>We did this</button>
+            <button className="mem-round" onClick={() => { close(); setTimeout(onEdit, 260); }} aria-label="Edit this idea">
+              <svg viewBox="0 0 20 20" width="20" height="20"><path d="M13.5 3.5l3 3L7 16H4v-3z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+            <button className="mem-round is-danger" onClick={() => { close(); setTimeout(onDelete, 260); }} aria-label="Delete this idea">
+              <svg viewBox="0 0 20 20" width="20" height="20"><path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.5 5.5l.8 11h7.4l.8-11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+          </div>
         </div>
       )}
     </BottomSheet>
@@ -420,7 +632,8 @@ function DetailSheet({ slip: s, onClose, onEdit, onDelete }) {
 function EditSheet({ slip: s, onClose, onSave }) {
   const [title, setTitle] = useState(s.title);
   const [note, setNote] = useState('');
-  const [tags, setTags] = useState({ energy: s.energy, spend: s.spend, weather: s.weather, food: s.food ?? [], duration: s.duration ?? [] });
+  const [category, setCategory] = useState(s.category);
+  const [tags, setTags] = useState({ energy: s.energy, spend: s.spend, weather: s.weather, food: s.food, duration: s.duration });
   return (
     <BottomSheet onClose={onClose} className="mem-edit">
       {(close) => (
@@ -435,8 +648,9 @@ function EditSheet({ slip: s, onClose, onSave }) {
           </button>
           <input className="mem-edit-title" value={title} onChange={(e) => setTitle(e.target.value)} aria-label="Title" />
           <textarea className="mem-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="A line to jog your memory… (optional)" />
+          <FolderPicker value={category} onChange={setCategory} />
           <Categories values={tags} onChange={(k, v) => setTags((t) => ({ ...t, [k]: v }))} />
-          <button className="mem-primary" disabled={!title.trim()} onClick={() => { close(); setTimeout(() => onSave({ ...s, ...tags, title: title.trim() }), 260); }}>
+          <button className="mem-primary" disabled={!title.trim()} onClick={() => { close(); setTimeout(() => onSave({ ...s, ...tags, category, title: title.trim() }), 260); }}>
             Save changes
           </button>
         </>
@@ -477,7 +691,7 @@ function MakeMemory({ slip: s, onClose, onSeal }) {
           </button>
         )}
         <span className="mem-make-title">{s.title}</span>
-        <span className="mem-make-date">{sealing ? 'OCTOBER 20' : <>OCTOBER 20 &nbsp;· tap to change date</>}</span>
+        <span className="mem-make-date">{sealing ? 'NOVEMBER 18' : <>NOVEMBER 18 &nbsp;· tap to change date</>}</span>
         <input className="mem-make-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="add a note…" aria-label="Note" disabled={sealing} />
         <span className="mem-make-rule" />
         {sealing && <p className="mem-make-upload">Uploading 1 of 1… Safe either way.</p>}
@@ -529,7 +743,7 @@ function Log({ memories, onOpen }) {
   const tagCounts = {};
   memories.forEach((m) => (m.tags ?? []).forEach((t) => { tagCounts[t] = (tagCounts[t] ?? 0) + 1; }));
   const shown = filter === 'all' ? memories : memories.filter((m) => m.tags?.includes(filter));
-  const onThisDay = memories.find((m) => m.month === 'October' && m.day === 21 && m.year === 2025);
+  const onThisDay = memories.find((m) => m.month === 'November' && m.day === TODAY.day && m.year === 2025);
 
   const groups = [];
   shown.forEach((m) => {
@@ -579,23 +793,20 @@ function Log({ memories, onOpen }) {
       {groups.map((g) => (
         <section key={g.h} className="mem-month">
           <h2>— {g.h} —</h2>
-          <div className="mem-shoebox">
-            {[0, 1].map((col) => (
-              <div key={col} className="mem-shoebox-col">
-                {g.items.filter((_, i) => i % 2 === col).map((m) => (
-                  <button
-                    key={m.id}
-                    className={`mem-print ${m.fresh ? 'is-fresh' : ''}`}
-                    style={{ '--r': `${((m.no * 37) % 5) * 0.5 - 1.2}deg` }}
-                    onClick={() => onOpen(m)}
-                  >
-                    {m.no % 2 === 0 && <span className="mem-tape mem-print-tape" />}
-                    <img src={m.img} alt="" />
-                    <span className="mem-print-caption">{m.title}</span>
-                    <Stamp className="mem-print-stamp" m={m} />
-                  </button>
-                ))}
-              </div>
+          {/* Uniform square prints, two to a row, like the app's default grid. */}
+          <div className="mem-grid">
+            {g.items.map((m) => (
+              <button
+                key={m.id}
+                className={`mem-print ${m.fresh ? 'is-fresh' : ''}`}
+                style={{ '--r': `${((m.no * 37) % 5) * 0.5 - 1}deg` }}
+                onClick={() => onOpen(m)}
+              >
+                {m.no % 2 === 0 && <span className="mem-tape mem-print-tape" />}
+                <img src={m.img} alt="" />
+                <span className="mem-print-caption">{m.title}</span>
+                <Stamp className="mem-print-stamp" m={m} />
+              </button>
             ))}
           </div>
         </section>
@@ -631,9 +842,14 @@ function PrintDetail({ memory: m, onClose }) {
   );
 }
 
+
 /* ---------- Us ---------- */
 
-function Us({ memories, slips }) {
+const QUESTION = { no: 42, text: 'A free Saturday and fifty bucks. What are we doing?' };
+const SAM_ANSWER = 'Farmers market, then a picnic at the lookout';
+const BOOK = { no: 41, when: 'YESTERDAY · 11.17.26', text: 'What did you notice about me first?', mine: 'your laugh, from across the room', theirs: 'the terrible umbrella' };
+
+function Us({ memories, onToss }) {
   return (
     <div className="mem-scroll mem-us">
       <div className="mem-us-prints">
@@ -650,26 +866,109 @@ function Us({ memories, slips }) {
         </div>
       </div>
       <span className="mem-us-est">Mia &amp; Sam · Est. 2025</span>
-      <h2 className="mem-us-title">{numWord(memories.length)} dates in, {numWord(slips.length).toLowerCase()} waiting</h2>
-      <div className="mem-us-card mem-us-name-row">
-        <span>Your name</span>
-        <span>
-          Mia ›
-          <small>mia@demo.datejar</small>
-        </span>
-      </div>
       <div className="mem-us-card mem-us-story">
-        <span className="mem-us-story-head">Your story so far</span>
         <div>
           <span><b>{memories.length}</b><small>dates sealed</small></span>
-          <span><b className="is-dash">—</b><small>together since</small></span>
+          <span><b className="is-small">10.03.25</b><small>together since</small></span>
+          <span><b className="is-small">411</b><small>days together</small></span>
         </div>
       </div>
+      <TodayQuestion onToss={onToss} />
+      <div className="mem-book">
+        <div className="mem-book-head">
+          <span>The answer book</span>
+          <small>Latest page</small>
+        </div>
+        <BookRow />
+        <span className="mem-book-open">Open the whole book · 41 pages ›</span>
+      </div>
       <button className="mem-us-keepsake">Get Keepsake+</button>
-      <button className="mem-us-card mem-us-settings">Settings <span>›</span></button>
-      <p className="mem-us-foot">Memori · made for two</p>
+      <div className="mem-us-card mem-us-rows">
+        <span>Your name <i>Mia ›</i></span>
+        <span>Settings <i>›</i></span>
+      </div>
     </div>
   );
+}
+
+function TodayQuestion({ onToss }) {
+  const [draft, setDraft] = useState('');
+  const [mine, setMine] = useState(null);
+  const [heart, setHeart] = useState(false);
+  const [tossed, setTossed] = useState({});
+  const toss = (who, text) => {
+    onToss(text);
+    setTossed((t) => ({ ...t, [who]: true }));
+  };
+  const answer = (who, text, opts = {}) => (
+    <div className="mem-q-answer">
+      <div className="mem-q-who">
+        <span>{who}</span>
+        {opts.heart && (
+          <button className={`mem-heart ${heart ? 'is-on' : ''}`} onClick={() => setHeart((h) => !h)} aria-label={heart ? 'Unlike' : `Like ${who}'s answer`}>
+            <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 17.2S2.5 12.6 2.5 7.3A4 4 0 0 1 10 5a4 4 0 0 1 7.5 2.3C17.5 12.6 10 17.2 10 17.2z" strokeWidth="1.6" strokeLinejoin="round" /></svg>
+          </button>
+        )}
+      </div>
+      <p>{text}</p>
+      {tossed[who] ? (
+        <span className="mem-q-stamp">In the jar</span>
+      ) : (
+        <button className="mem-q-toss" onClick={() => toss(who, text)}>Toss into the jar</button>
+      )}
+    </div>
+  );
+
+  return (
+    <section className="mem-us-card mem-q">
+      <div className="mem-q-head">
+        <span>Today's question</span>
+        <Numero n={QUESTION.no} />
+      </div>
+      <h3>{QUESTION.text}</h3>
+      {mine ? (
+        <div className="mem-q-open">
+          {answer('Sam', SAM_ANSWER, { heart: true })}
+          {answer('Mia', mine)}
+        </div>
+      ) : (
+        <>
+          <div className="mem-q-sealed">
+            <span>S</span>
+            Sam answered. It stays sealed until you do.
+          </div>
+          <textarea value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Yours…" aria-label="Your answer" maxLength={280} />
+          <button className="mem-q-seal hint" disabled={!draft.trim()} onClick={() => setMine(draft.trim())}>Seal &amp; open Sam's</button>
+        </>
+      )}
+    </section>
+  );
+}
+
+function BookRow() {
+  const [open, setOpen] = useState(false);
+  return (
+    <button className="mem-us-card mem-book-row" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+      <span className="mem-book-line">
+        <Numero n={BOOK.no} />
+        <span>
+          <small>{BOOK.when}</small>
+          {BOOK.text}
+        </span>
+        <i>{open ? '–' : '+'}</i>
+      </span>
+      {open && (
+        <span className="mem-book-answers">
+          <span><small>Mia</small>{BOOK.mine}</span>
+          <span><small>Sam</small>{BOOK.theirs}</span>
+        </span>
+      )}
+    </button>
+  );
+}
+
+function Numero({ n }) {
+  return <span className="mem-numero">N<em>º</em> {n}</span>;
 }
 
 /* ---------- Icons (paths copied from the app) ---------- */
@@ -725,6 +1024,10 @@ function Icon({ name, size = 15, className }) {
         <rect x="11" y="11" width="7" height="7" rx="1.5" />
       </g>
     ),
+    sort: <path d="M6 3.5v13M3 13.5l3 3 3-3M14 16.5v-13M11 6.5l3-3 3 3" {...common} strokeWidth="1.9" />,
+    chev: <path d="M5 7.5 10 12.5 15 7.5" {...common} strokeWidth="2.2" />,
+    check: <path d="M4 10.4 8.2 14.4 16 6" {...common} strokeWidth="2.4" />,
+    comment: <path d="M3.5 9.5c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5S13.6 15 10 15c-.8 0-1.6-.1-2.3-.3L4 16.5l1-3.2C4 12.3 3.5 11 3.5 9.5z" {...common} strokeWidth="1.6" />,
     list: <path d="M2 4h16M2 10h16M2 16h16" {...common} strokeWidth="1.7" />,
     cal: (
       <g {...common} strokeWidth="1.7">
