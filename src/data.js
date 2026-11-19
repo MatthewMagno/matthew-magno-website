@@ -15,7 +15,7 @@ export const apps = [
     name: 'Reservations',
     icon: './icons/reservations.png',
     color: '#1d1d1f',
-    status: 'In App Store review',
+    status: 'On the App Store',
     tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
     different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
     points: [
@@ -26,6 +26,7 @@ export const apps = [
       { value: '6', label: 'MCP tools' },
     ],
     stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
+    link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/reservations-booking-timeline/id6818042877' },
   },
   {
     id: 'memori',
