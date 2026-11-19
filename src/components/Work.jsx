@@ -14,10 +14,20 @@ export default function Work() {
       <ol className="timeline">
         {work.map((entry) => <TimelineEntry key={entry.org} entry={entry} />)}
       </ol>
+    </section>
+  );
+}
+
+// Education and the toolbox, shown after the apps.
+export function Education() {
+  return (
+    <section className="section" id="education" aria-labelledby="education-title">
+      <div className="section-head">
+        <h2 id="education-title">Education</h2>
+      </div>
 
       <div className="work-columns">
         <div>
-          <h3 className="work-subhead">Education</h3>
           <div className="edu-grid">
             {school.map((s) => (
               <div key={s.org} className={`edu-card ${s.minor ? 'is-minor' : ''}`}>

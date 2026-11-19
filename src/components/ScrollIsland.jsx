@@ -96,6 +96,13 @@ function SectionGlyph({ id }) {
         <path d="M8.5 7V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V7" fill="none" strokeWidth="1.8" stroke="currentColor" />
       </>
     ),
+    education: (
+      <>
+        <path d="M12 3.5 1.5 8.8 12 14.1l10.5-5.3z" />
+        <path d="M5.5 11.6v4.6c0 1.9 2.9 3.6 6.5 3.6s6.5-1.7 6.5-3.6v-4.6L12 14.9z" />
+        <path d="M21.2 9.5v5.5" fill="none" strokeWidth="1.6" stroke="currentColor" strokeLinecap="round" />
+      </>
+    ),
     about: (
       <>
         <circle cx="12" cy="8" r="4.2" />

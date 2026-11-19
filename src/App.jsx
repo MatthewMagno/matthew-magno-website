@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import ScrollIsland from './components/ScrollIsland.jsx';
 import Hero from './components/Hero.jsx';
 import WalletStack from './components/WalletStack.jsx';
-import Work from './components/Work.jsx';
+import Work, { Education } from './components/Work.jsx';
 import About from './components/About.jsx';
 
 const SECTIONS = [
   { id: 'work', label: 'Work' },
   { id: 'apps', label: 'Apps' },
+  { id: 'education', label: 'Education' },
   { id: 'about', label: 'About' },
 ];
 
@@ -31,6 +32,7 @@ export default function App() {
         <Hero />
         <Work />
         <WalletStack openIds={openApps} onToggle={toggleApp} />
+        <Education />
         <About />
       </main>
       <footer className="footer">
