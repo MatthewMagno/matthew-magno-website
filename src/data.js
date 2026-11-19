@@ -43,7 +43,7 @@ export const apps = [
     facts: [
       { value: '7', label: 'MCP tools' },
       { value: '1.7', label: 'current version' },
-      { value: '29', label: 'downloads' },
+      { value: '50+', label: 'downloads' },
     ],
     stack: ['React Native', 'Expo', 'Node.js'],
     link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/memori-for-two/id6792543667' },
