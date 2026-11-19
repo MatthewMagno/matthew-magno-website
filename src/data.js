@@ -11,24 +11,6 @@ export const profile = {
 
 export const apps = [
   {
-    id: 'reservations',
-    name: 'Reservations',
-    icon: './icons/reservations.png',
-    color: '#1d1d1f',
-    status: 'On the App Store',
-    tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
-    different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
-    points: [
-      'Checks every AI-imported booking on the server, matching confirmation codes, flight numbers and titles so nothing is added twice.',
-      'Runs its own OAuth 2.1 sign-in server (PKCE, dynamic client registration), so the connector installs in Claude from a single URL.',
-    ],
-    facts: [
-      { value: '6', label: 'MCP tools' },
-    ],
-    stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
-    link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/reservations-booking-timeline/id6818042877' },
-  },
-  {
     id: 'memori',
     name: 'Memori',
     icon: './icons/memori.png',
@@ -47,6 +29,24 @@ export const apps = [
     ],
     stack: ['React Native', 'Expo', 'Node.js'],
     link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/memori-for-two/id6792543667' },
+  },
+  {
+    id: 'reservations',
+    name: 'Reservations',
+    icon: './icons/reservations.png',
+    color: '#1d1d1f',
+    status: 'On the App Store',
+    tagline: 'Flights, hotels, dinners and deliveries on one timeline, filled in from your confirmation emails.',
+    different: 'Most travel apps fill your trips in by reading your whole inbox. Reservations never asks for email access. Your own Claude reads the confirmations through the app’s MCP connector and sends back only the booking details.',
+    points: [
+      'Checks every AI-imported booking on the server, matching confirmation codes, flight numbers and titles so nothing is added twice.',
+      'Runs its own OAuth 2.1 sign-in server (PKCE, dynamic client registration), so the connector installs in Claude from a single URL.',
+    ],
+    facts: [
+      { value: '6', label: 'MCP tools' },
+    ],
+    stack: ['React Native', 'TypeScript', 'Node.js', 'MCP', 'OAuth 2.1'],
+    link: { label: 'View on the App Store', href: 'https://apps.apple.com/us/app/reservations-booking-timeline/id6818042877' },
   },
   {
     id: 'splitit',
